@@ -1,5 +1,11 @@
 package processors.clients.impl;
 
-public class ChatGPTClient {
+import processors.clients.Client;
+
+public class ChatGPTClient implements Client {
+	
+	public String makeRequest(String input) {
+		return "dummy result";
+	}
 
 }
