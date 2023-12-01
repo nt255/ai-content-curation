@@ -1,7 +1,7 @@
 package processors.impl;
 
 import processors.Processor;
-import processors.clients.impl.ChatGPTClient;
+import processors.clients.ChatGPTClient;
 import processors.models.JobRequest;
 import processors.models.JobResponse;
 
@@ -15,11 +15,13 @@ public class TextOnlyProcessor implements Processor {
 
 	@Override
 	public JobResponse doWork(JobRequest request) {
+		
 		String prompt = request.getInput();
 		String result = chatGPTClient.makeRequest(prompt);
 		
-		JobResponse jobResponse = new JobResponse();
-		jobResponse.setResult(result);
+		JobResponse jobResponse = JobResponse.builder()
+				.result(result)
+				.build();
 		
 		return jobResponse;
 	}

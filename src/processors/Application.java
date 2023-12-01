@@ -3,7 +3,7 @@
  */
 package processors;
 
-import processors.clients.impl.ChatGPTClient;
+import processors.clients.ChatGPTClient;
 import processors.impl.TextOnlyProcessor;
 import processors.models.JobRequest;
 import processors.models.JobResponse;
@@ -27,8 +27,10 @@ public class Application {
 		
 		init();
 		
-		JobRequest jobRequest = new JobRequest();
-		jobRequest.setInput("Write me a nice story about a girl on a farm.");
+		JobRequest jobRequest = JobRequest.builder()
+				.input("Write me a nice story about a girl on a farm.")
+				.build();
+		
 		JobResponse jobResponse = textOnlyProcessor.doWork(jobRequest);
 		
 		System.out.println(jobResponse.getResult());

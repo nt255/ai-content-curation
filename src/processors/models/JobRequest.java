@@ -1,15 +1,12 @@
 package processors.models;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+@Getter
 public class JobRequest {
 	
 	private String input;
-
-	public String getInput() {
-		return input;
-	}
-
-	public void setInput(String input) {
-		this.input = input;
-	}
 
 }
