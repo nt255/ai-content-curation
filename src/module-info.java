@@ -5,4 +5,5 @@
  * 
  */
 module aicontentcuration {
+	requires lombok;
 }
