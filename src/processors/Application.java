@@ -11,6 +11,7 @@ import processors.clients.ChatGPTClient;
 import processors.impl.TextOnlyProcessor;
 import processors.models.JobRequest;
 import processors.models.JobResponse;
+import processors.clients.ComfyClient;
 
 /**
  * 
@@ -46,6 +47,8 @@ public class Application {
 				.build();
 		
 		JobResponse jobResponse = textOnlyProcessor.doWork(jobRequest);
+		
+		ComfyClient.queuePrompt();
 		
 		System.out.println(jobResponse.getResult());
 
