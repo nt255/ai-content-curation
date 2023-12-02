@@ -8,14 +8,14 @@ import processors.impl.TextOnlyProcessor;
 
 public class ProcessorModule extends AbstractModule {
 
-	@Override
-	protected void configure() {
+    @Override
+    protected void configure() {
 
-		// clients
-		bind(ChatGPTClient.class).in(Singleton.class);
+        // clients
+        bind(ChatGPTClient.class).in(Singleton.class);
 
-		// processors
-		bind(TextOnlyProcessor.class).in(Singleton.class);
-	}
+        // processors
+        bind(TextOnlyProcessor.class).in(Singleton.class);
+    }
 
 }
