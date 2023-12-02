@@ -3,6 +3,9 @@
   <groupId>aicontentcuration</groupId>
   <artifactId>aicontentcuration</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <properties>
+	  <lombok.version>1.18.30</lombok.version>
+  </properties>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -19,6 +22,13 @@
         <version>3.8.1</version>
         <configuration>
           <release>17</release>
+          <annotationProcessorPaths>
+			  <path>
+				  <groupId>org.projectlombok</groupId>
+			      <artifactId>lombok</artifactId>
+			      <version>${lombok.version}</version>
+			  </path>
+		  </annotationProcessorPaths>
         </configuration>
       </plugin>
     </plugins>
@@ -27,7 +37,7 @@
 	<dependency>
 		<groupId>org.projectlombok</groupId>
 		<artifactId>lombok</artifactId>
-		<version>1.18.30</version>
+		<version>${lombok.version}</version>
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
@@ -39,6 +49,11 @@
 	    <groupId>com.google.inject</groupId>
 	    <artifactId>guice</artifactId>
 	    <version>5.0.1</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.zeromq</groupId>
+	    <artifactId>jeromq</artifactId>
+	    <version>0.5.4</version>
 	</dependency>
 </dependencies>
 </project>
