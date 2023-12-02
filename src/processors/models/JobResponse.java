@@ -6,8 +6,8 @@ import lombok.Getter;
 @Builder
 @Getter
 public class JobResponse {
-	
-	private String result;
+
+    private String result;
 
 
 }
