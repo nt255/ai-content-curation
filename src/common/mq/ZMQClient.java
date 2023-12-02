@@ -6,35 +6,35 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import common.mq.models.MessageQueueModel;
-import common.mq.models.MessageQueueModel.JobType;
 
 public class ZMQClient {
-    
+
     @Inject private Properties properties;
-    
+    @Inject private ZContext context;
+
     private ZMQ.Socket socket;
 
     public void connectSocket() {
-        try (ZContext context = new ZContext()) {
-            socket = context.createSocket(SocketType.REQ);
-            socket.connect(properties.getProperty("zmq.socket.connect.address"));
-        }
+        socket = context.createSocket(SocketType.REP);
+        socket.connect(properties.getProperty("zmq.socket.address"));
     }
-    
+
     public void closeSocket() {
         if (socket != null) {
             socket.close();
         }
     }
 
-
     public MessageQueueModel receive() {
-        return MessageQueueModel.builder()
-                .jobType(JobType.TEXT_ONLY)
-                .build();
+        byte[] reply = socket.recv();
+        String s = new String(reply, ZMQ.CHARSET);
+        System.out.println("Received payload: " + s);
+        MessageQueueModel model = new Gson().fromJson(s, MessageQueueModel.class);
+        return model;
     }
 
 }
