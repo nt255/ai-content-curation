@@ -1,57 +1,37 @@
-/**
- * 
- */
 package processors;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 
-import processors.clients.ChatGPTClient;
+import common.CommonModule;
 import processors.impl.TextOnlyProcessor;
 import processors.models.JobRequest;
 import processors.models.JobResponse;
 import processors.clients.ComfyClient;
 
-/**
- * 
- */
+
 public class Application {
-	
-	private static Properties properties;
-	private static Processor textOnlyProcessor;
-	
-	public static void init() {
-				
-		properties = new Properties();
-		try {
-			properties.load(new FileInputStream("src/config.properties"));
-		} catch (IOException e) {
-			System.err.println("failed to open properties file");
-			e.printStackTrace();
-		}
-		
-		ChatGPTClient chatGPTClient = new ChatGPTClient();
-		textOnlyProcessor = new TextOnlyProcessor(chatGPTClient);
-	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-		init();
-		
-		JobRequest jobRequest = JobRequest.builder()
-				.input("Write me a nice story about a girl on a farm.")
-				.build();
-		
-		JobResponse jobResponse = textOnlyProcessor.doWork(jobRequest);
-		
-		ComfyClient.queuePrompt();
-		
-		System.out.println(jobResponse.getResult());
+    @Inject private TextOnlyProcessor textOnlyProcessor;
+    
 
-	}
+    public static void main(String[] args) {
+        Injector injector = Guice.createInjector(
+                new CommonModule(),
+                new ProcessorModule());
+        Application application = injector.getInstance(Application.class);
+        application.start(args);
+    }
+
+    public void start(String[] args) {
+        JobRequest jobRequest = JobRequest.builder()
+                .input("Write me a nice story about a girl on a farm.")
+                .build();
+
+        JobResponse jobResponse = textOnlyProcessor.doWork(jobRequest);
+
+        System.out.println(jobResponse.getResult());
+    }
 
 }
