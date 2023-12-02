@@ -2,22 +2,21 @@ package processors.clients;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.json.JSONObject;
+
+import com.google.inject.Inject;
+
 import org.json.JSONArray;
 
-import common.PropertiesReader;
 import common.clients.HttpClient;
 import common.clients.HttpClient.RequestMethod;
 
 public class ChatGPTClient {
 
-	private PropertiesReader properties = PropertiesReader.getInstance();
-	private HttpClient httpClient;
-
-	public ChatGPTClient() {
-		httpClient = new HttpClient();
-	}
+	@Inject private Properties properties;
+	@Inject private HttpClient httpClient;
 
 	public String makeRequest(String prompt) {
 		String url = properties.getProperty("openai.url");
@@ -37,6 +36,5 @@ public class ChatGPTClient {
 
 		return httpClient.makeRequest(RequestMethod.POST, url, headers, body);
 	}
-
 
 }
