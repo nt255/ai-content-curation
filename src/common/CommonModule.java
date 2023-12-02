@@ -4,12 +4,18 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.zeromq.ZMQ;
+import org.zeromq.SocketType;
+import org.zeromq.ZContext;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import common.clients.HttpClient;
-import common.mq.ZeroMQImpl;
+
+import common.mq.ZMQClient;
+import common.mq.ZMQServer;
 
 public class CommonModule extends AbstractModule {
 
@@ -19,10 +25,13 @@ public class CommonModule extends AbstractModule {
         // clients
         bind(HttpClient.class).in(Singleton.class);
         
-        // message queue
-        bind(ZeroMQImpl.class).in(Singleton.class);
+        // ZMQ
+        bind(ZMQClient.class).in(Singleton.class);
+        bind(ZMQServer.class).in(Singleton.class);
+
     }
 
+    
     @Provides
     public Properties provideProperties() {
         Properties properties = new Properties();
