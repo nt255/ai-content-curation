@@ -14,7 +14,7 @@ import processors.clients.ComfyClient;
 public class Application {
 
     @Inject private TextOnlyProcessor textOnlyProcessor;
-    
+    @Inject ComfyClient comfyclient;
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -25,13 +25,14 @@ public class Application {
     }
 
     public void start(String[] args) {
-        JobRequest jobRequest = JobRequest.builder()
-                .input("Write me a nice story about a girl on a farm.")
-                .build();
+        //JobRequest jobRequest = JobRequest.builder()
+               // .input("Write me a nice story about a girl on a farm.")
+               // .build();
 
-        JobResponse jobResponse = textOnlyProcessor.doWork(jobRequest);
+        //JobResponse jobResponse = textOnlyProcessor.doWork(jobRequest);
 
-        System.out.println(jobResponse.getResult());
+        // System.out.println(jobResponse.getResult());
+    	
+    	// comfyClient.queuePrompt();
     }
-
 }

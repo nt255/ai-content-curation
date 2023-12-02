@@ -1,9 +1,8 @@
-module-info.class
-common\PropertiesReader.class
-processors\clients\ComfyClient.class
 processors\Processor.class
+processors\models\JobResponse.class
+module-info.class
+processors\clients\ComfyClient.class
 common\clients\HttpClient.class
+processors\clients\ChatGPTClient.class
 processors\models\JobRequest.class
 common\clients\HttpClient$RequestMethod.class
-processors\clients\ChatGPTClient.class
-processors\models\JobResponse.class

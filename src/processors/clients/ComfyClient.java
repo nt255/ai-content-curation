@@ -1,9 +1,12 @@
 package processors.clients;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 
-import common.PropertiesReader;
+import java.util.Properties;
 import common.clients.HttpClient;
 
 import java.util.HashMap;
@@ -11,16 +14,33 @@ import java.util.Map;
 
 public class ComfyClient {
 	
-	private PropertiesReader properties = PropertiesReader.getInstance();
-	private HttpClient httpClient;
+	@Inject private static Properties properties;
+    @Inject private static HttpClient httpClient;
+    
+    private Map<String, String> loadConfigs() {
+    	Map<String, String> configs = new HashMap<String, String>();
+    	configs.put("checkpoint", properties.getProperty("comfyui.checkpoint"));
+    	configs.put("latentHeight", properties.getProperty("comfyui.latent.height"));
+    	configs.put("latentWidth", properties.getProperty("comfyui.latent.width"));
+    	configs.put("loraOne", properties.getProperty("comfyui.loras.one"));
+    	configs.put("loraTwo", properties.getProperty("comfyui.loras.two"));
+    	configs.put("loraThree", properties.getProperty("comfyui.loras.three"));
+    	configs.put("prompt", properties.getProperty("comfyui.prompt.default"));
+    	configs.put("savePath", properties.getProperty("comfyui.output.path"));
+    	
+    	return configs;
+    }
+    
 	
 	// will load in default options when queued without arguments
-	public static void queuePrompt() {
+	public void queuePrompt() {
 		System.out.println("this is queuePrompt with no args.");
+		Map<String, String> configs = loadConfigs();
 		
+		configs.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 	}
 
-	public static void queuePrompt(String[] args) {
+	public void queuePrompt(String[] args) {
 		System.out.println("this is queuePrompt with string[] args.");
 		
 		// parsing arguments as key-value pairs. we can manage more settings if needed.
