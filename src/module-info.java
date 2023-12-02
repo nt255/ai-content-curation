@@ -9,4 +9,5 @@ open module aicontentcuration {
     requires org.json;
     requires com.google.guice;
     requires jeromq;
+    requires com.google.gson;
 }

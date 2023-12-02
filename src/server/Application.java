@@ -22,18 +22,8 @@ public class Application {
         Application application = injector.getInstance(Application.class);
         application.start(args);
     }
-    
-    private void addShutdownHooks() {
-        Runtime.getRuntime().addShutdownHook(new Thread() { 
-            public void run() {
-                ZMQServer.closeSocket();
-                System.out.println("Closing ZMQServer socket. Exiting Server.");
-            }
-        });
-    }
 
     private void start(String[] args) {
-        addShutdownHooks();
 
         System.out.println("Starting Server.");
         ZMQServer.bindSocket();
@@ -42,14 +32,25 @@ public class Application {
                 .jobType(JobType.TEXT_ONLY)
                 .id(UUID.randomUUID())
                 .build());
-
-        Thread thread = new Thread(() -> {
-            while (true) {
-                MessageQueueModel model = ZMQServer.receive();
-                System.out.println("received model: " + model.toString());
-            }
-        });
-        thread.start();
+        
+        ZMQServer.send(MessageQueueModel.builder()
+                .jobType(JobType.TEXT_ONLY)
+                .id(UUID.randomUUID())
+                .build());
+        
+        
+        ZMQServer.closeSocket();
+        System.out.println("Closing Server.");
+        
+        // TODO: receiver code
+        
+//        Thread thread = new Thread(() -> {
+//            while (true) {
+//                MessageQueueModel model = ZMQServer.receive();
+//                System.out.println("received model: " + model.toString());
+//            }
+//        });
+//        thread.start();
     }
 
 }

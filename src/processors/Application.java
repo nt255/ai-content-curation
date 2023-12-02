@@ -25,29 +25,19 @@ public class Application {
         application.start(args);
     }
 
-    private void addShutdownHooks() {
-        Runtime.getRuntime().addShutdownHook(new Thread() { 
-            public void run() {
-                ZMQClient.closeSocket();
-                System.out.println("Closing ZMQClient socket. Exiting Processor.");
-            }
-        });
-    }
-
     private void start(String[] args) {
-        addShutdownHooks();
-
+        
         System.out.println("Starting Processor.");
         ZMQClient.connectSocket();
 
         while (!Thread.currentThread().isInterrupted()) {
+            System.out.println("Waiting for payload...");
             MessageQueueModel model = ZMQClient.receive();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
+        
+        
+        ZMQClient.closeSocket();
+        System.out.println("Closing Processor.");
 
         JobRequest jobRequest = JobRequest.builder()
                 .input("Write me a nice story about a girl on a farm.")
