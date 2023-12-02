@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class MessageQueueModel {
+public class ZMQModel {
     
     public enum JobType {
         TEXT_ONLY, IMAGE

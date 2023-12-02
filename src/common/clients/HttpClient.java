@@ -8,8 +8,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import common.CommonModule;
 
 public class HttpClient {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
 
     public enum RequestMethod {
         GET, POST, PATCH, DELETE
@@ -19,6 +25,8 @@ public class HttpClient {
             Map<String, String> headers, JSONObject body) {
 
         try {
+            LOG.info("Calling URL: {}", url);
+            
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
             connection.setRequestMethod(requestMethod.name());
