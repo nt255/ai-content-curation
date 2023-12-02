@@ -1,6 +1,7 @@
 package common.mq.models;
 
 import java.util.Map;
+import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,8 @@ public class MessageQueueModel {
     }
     
     private JobType jobType;
+    
+    private UUID id;
     
     private Map<String, String> parameters;
 
