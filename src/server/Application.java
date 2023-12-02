@@ -1,7 +1,7 @@
 package server;
 
-import java.util.UUID;
 
+import java.util.UUID;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;

@@ -13,6 +13,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import common.clients.HttpClient;
+
 import common.mq.ZMQClient;
 import common.mq.ZMQServer;
 
@@ -27,6 +28,7 @@ public class CommonModule extends AbstractModule {
         // ZMQ
         bind(ZMQClient.class).in(Singleton.class);
         bind(ZMQServer.class).in(Singleton.class);
+
     }
 
     
