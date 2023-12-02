@@ -13,7 +13,7 @@ import processors.models.JobResponse;
 public class Application {
 
     @Inject private TextOnlyProcessor textOnlyProcessor;
-
+    
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(

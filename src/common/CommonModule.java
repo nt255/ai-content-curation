@@ -9,6 +9,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import common.clients.HttpClient;
+import common.mq.ZeroMQImpl;
 
 public class CommonModule extends AbstractModule {
 
@@ -17,6 +18,9 @@ public class CommonModule extends AbstractModule {
 
         // clients
         bind(HttpClient.class).in(Singleton.class);
+        
+        // message queue
+        bind(ZeroMQImpl.class).in(Singleton.class);
     }
 
     @Provides
