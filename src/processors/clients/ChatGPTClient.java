@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -14,6 +16,8 @@ import common.clients.HttpClient;
 import common.clients.HttpClient.RequestMethod;
 
 public class ChatGPTClient {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(ChatGPTClient.class);
 
     @Inject private Properties properties;
     @Inject private HttpClient httpClient;

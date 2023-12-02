@@ -1,18 +1,23 @@
 package processors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import common.CommonModule;
 import common.mq.ZMQClient;
-import common.mq.models.MessageQueueModel;
+import common.mq.models.ZMQModel;
 import processors.impl.TextOnlyProcessor;
 import processors.models.JobRequest;
 import processors.models.JobResponse;
 
 
 public class Application {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     @Inject private TextOnlyProcessor textOnlyProcessor;
     @Inject private ZMQClient ZMQClient;
@@ -26,18 +31,17 @@ public class Application {
     }
 
     private void start(String[] args) {
-        
-        System.out.println("Starting Processor.");
+        LOG.info("Starting Processor");
         ZMQClient.connectSocket();
 
         while (!Thread.currentThread().isInterrupted()) {
-            System.out.println("Waiting for payload...");
-            MessageQueueModel model = ZMQClient.receive();
+            LOG.info("Waiting for payload...");
+            ZMQModel model = ZMQClient.receive();
         }
         
         
         ZMQClient.closeSocket();
-        System.out.println("Closing Processor.");
+        LOG.info("Closing Processor.");
 
         JobRequest jobRequest = JobRequest.builder()
                 .input("Write me a nice story about a girl on a farm.")
@@ -45,7 +49,7 @@ public class Application {
 
         JobResponse jobResponse = textOnlyProcessor.doWork(jobRequest);
 
-        System.out.println(jobResponse.getResult());
+        LOG.info(jobResponse.getResult());
     }
 
 }

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.zeromq.ZMQ;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 
@@ -18,6 +20,8 @@ import common.mq.ZMQClient;
 import common.mq.ZMQServer;
 
 public class CommonModule extends AbstractModule {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(CommonModule.class);
 
     @Override
     protected void configure() {
@@ -38,7 +42,7 @@ public class CommonModule extends AbstractModule {
         try {
             properties.load(new FileInputStream("src/config.properties"));
         } catch (IOException e) {
-            System.err.println("failed to open properties file");
+            LOG.error("failed to open properties file");
             e.printStackTrace();
         }
         return properties;
