@@ -4,11 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.zeromq.ZMQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zeromq.SocketType;
-import org.zeromq.ZContext;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -16,11 +13,11 @@ import com.google.inject.Singleton;
 
 import common.clients.HttpClient;
 
-import common.mq.ZMQClient;
-import common.mq.ZMQServer;
+import common.mq.ZMQSubscriber;
+import common.mq.ZMQPublisher;
 
 public class CommonModule extends AbstractModule {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(CommonModule.class);
 
     @Override
@@ -28,14 +25,14 @@ public class CommonModule extends AbstractModule {
 
         // clients
         bind(HttpClient.class).in(Singleton.class);
-        
+
         // ZMQ
-        bind(ZMQClient.class).in(Singleton.class);
-        bind(ZMQServer.class).in(Singleton.class);
+        bind(ZMQSubscriber.class).in(Singleton.class);
+        bind(ZMQPublisher.class).in(Singleton.class);
 
     }
 
-    
+
     @Provides
     public Properties provideProperties() {
         Properties properties = new Properties();

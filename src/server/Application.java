@@ -11,15 +11,15 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import common.CommonModule;
-import common.mq.ZMQServer;
-import common.mq.models.ZMQModel;
-import common.mq.models.ZMQModel.JobType;
+import common.mq.ZMQModel;
+import common.mq.ZMQPublisher;
+import common.mq.ZMQModel.JobType;
 
 public class Application {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-    @Inject private ZMQServer ZMQServer;
+    @Inject private ZMQPublisher publisher;
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -32,20 +32,16 @@ public class Application {
     private void start(String[] args) {
 
         LOG.info("Starting Server.");
-        ZMQServer.bindSocket();
+        publisher.bindSocket();
 
-        ZMQServer.send(ZMQModel.builder()
-                .jobType(JobType.TEXT_ONLY)
-                .id(UUID.randomUUID())
-                .build());
-        
-        ZMQServer.send(ZMQModel.builder()
-                .jobType(JobType.TEXT_ONLY)
-                .id(UUID.randomUUID())
-                .build());
-        
-        
-        ZMQServer.closeSocket();
+        for (int i = 0; i != 10; ++i) {
+            publisher.send(ZMQModel.builder()
+                    .jobType(JobType.TEXT_ONLY)
+                    .id(UUID.randomUUID())
+                    .build());
+        }
+
+        publisher.closeSocket();
         LOG.info("Closing Server.");
     }
 

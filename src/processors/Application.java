@@ -1,5 +1,7 @@
 package processors;
 
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,19 +10,19 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import common.CommonModule;
-import common.mq.ZMQClient;
-import common.mq.models.ZMQModel;
+import common.mq.ZMQSubscriber;
+import common.mq.ZMQModel;
 import processors.impl.TextOnlyProcessor;
 import processors.models.JobRequest;
 import processors.models.JobResponse;
 
 
 public class Application {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     @Inject private TextOnlyProcessor textOnlyProcessor;
-    @Inject private ZMQClient ZMQClient;
+    @Inject private ZMQSubscriber subscriber;
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -31,16 +33,21 @@ public class Application {
     }
 
     private void start(String[] args) {
-        LOG.info("Starting Processor");
-        ZMQClient.connectSocket();
+        LOG.info("Starting Processor.");
+        subscriber.connectSocket();
 
         while (!Thread.currentThread().isInterrupted()) {
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             LOG.info("Waiting for payload...");
-            ZMQModel model = ZMQClient.receive();
+            ZMQModel model = subscriber.receive();
         }
-        
-        
-        ZMQClient.closeSocket();
+
+
+        subscriber.closeSocket();
         LOG.info("Closing Processor.");
 
         JobRequest jobRequest = JobRequest.builder()
