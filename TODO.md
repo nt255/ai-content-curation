@@ -19,7 +19,7 @@
 - [ ] CompoundProcessor Design
 
 # Message Queue
-- [ ] local message queue setup
+- [x] local message queue setup
 - [ ] two pay pub sub
 
 # Data Store
