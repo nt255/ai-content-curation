@@ -13,7 +13,7 @@
 
 # Processor
 - [x] initial setup
-- [X] Initial ChatGPT integration
+- [x] Initial ChatGPT integration
 - [ ] Extend ChatGPT integration
 - [ ] ControlNet investigation and integration
 - [ ] CompoundProcessor Design
