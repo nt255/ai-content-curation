@@ -1,6 +1,7 @@
 package server;
 
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class Application {
             publisher.send(ZMQModel.builder()
                     .jobType(JobType.TEXT_ONLY)
                     .id(UUID.randomUUID())
+                    .parameters(Map.of("prompt", "Write me a nice story about a distinguished gardener."))
                     .build());
         }
 
