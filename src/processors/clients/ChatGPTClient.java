@@ -16,7 +16,7 @@ import common.clients.HttpClient;
 import common.clients.HttpClient.RequestMethod;
 
 public class ChatGPTClient {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(ChatGPTClient.class);
 
     @Inject private Properties properties;
