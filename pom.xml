@@ -8,6 +8,7 @@
 	<properties>
 		<lombok.version>1.18.30</lombok.version>
 		<logback.version>1.4.14</logback.version>
+		<mongo.version>4.11.1</mongo.version>
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -77,6 +78,16 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-core</artifactId>
+			<version>${mongo.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-sync</artifactId>
+			<version>${mongo.version}</version>
 		</dependency>
 	</dependencies>
 </project>
