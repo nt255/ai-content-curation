@@ -3,10 +3,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
 import java.util.Properties;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,12 +60,25 @@ public class ComfyClient {
     	Map<String, Object> chkpointLoaderNode = getMapNode(workflow, "1");
          Map<String, Object> latentImageNode = getMapNode(workflow, "6");
          Map<String, Object> posNode = getMapNode(workflow, "9");
+         Map<String, Object> ksamplerNode = getMapNode(workflow, "2");
          // Map<String, Object> loraTwoNode = getMapNode(promptWorkflow, "7");
          // Map<String, Object> loraThreeNode = getMapNode(promptWorkflow, "8");
          // Map<String, Object> loraOneNode = getMapNode(promptWorkflow, "4");
          // Map<String, Object> negNode = getMapNode(promptWorkflow, "10");
          // Map<String, Object> ksamplerNode = getMapNode(promptWorkflow, "2");
-         // Map<String, Object> saveImageNode = getMapNode(promptWorkflow, "14");
+         // Map<String, Object> saveImageNode = getMapNode(promptWorkflow, "14";
+         // setting random seed for generation
+         Map<String, Object> ksamplerInputs = (Map<String, Object>) ksamplerNode.get("inputs");
+         Random random = new Random();
+         BigInteger min = BigInteger.ONE;
+         BigInteger max = new BigInteger("18446744073709551614");
+         BigInteger randomBigInt = new BigInteger(max.bitLength(), random);
+         while (randomBigInt.compareTo(min) < 0 || randomBigInt.compareTo(max) >= 0) {
+             randomBigInt = new BigInteger(max.bitLength(), random);
+         }
+         ksamplerInputs.put("noise_seed", randomBigInt);
+
+         System.out.println("Random number: " + randomBigInt);
          Map<String, Object> checkpointInputs = (Map<String, Object>) chkpointLoaderNode.get("inputs");
          Map<String, Object> latentInputs = (Map<String, Object>) latentImageNode.get("inputs");
          Map<String, Object> positivePromptInputs = (Map<String, Object>) posNode.get("inputs");
@@ -97,6 +117,39 @@ public class ComfyClient {
      *  and the output images will be saved to a directory, which by default is [comfyUi's drive]://comfyclient_output/
      *  **/
     
+    private void sendTask(Map<String, Object> workflow) {
+    	try {
+    		ObjectMapper objectMapper = new ObjectMapper();
+    		Map<String, Map<String, Object>> payloadMap = new HashMap<>();
+            payloadMap.put("prompt", workflow);
+            String jsonPayload = objectMapper.writeValueAsString(payloadMap);
+            URL url = new URL("http://127.0.0.1:8188/prompt");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            byte[] taskData = jsonPayload.getBytes(StandardCharsets.UTF_8);
+
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("charset", "utf-8");
+            connection.setRequestProperty("Content-Length", String.valueOf(taskData.length));
+
+            // Enable output and send the POST request
+            connection.setDoOutput(true);
+            try (OutputStream outputStream = connection.getOutputStream()) {
+                outputStream.write(taskData);
+            }
+
+            // Get and print the response (if needed)
+            int responseCode = connection.getResponseCode();
+            String responseMessage = connection.getResponseMessage();
+            System.out.println("Response Code: " + responseCode);
+            System.out.println("Response Message: " + responseMessage);
+
+            connection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 	// will load in default options when queued without arguments
     // currently simply prints out the error, but should be updated to update relevant JobResponse
 	public void queuePrompt() {
@@ -109,6 +162,7 @@ public class ComfyClient {
         }
 
         applyConfigs(workflow, Collections.emptyMap());
+        sendTask(workflow);
 	}
 
 	public void queuePrompt(String workflowPrefix, String[] args) {
@@ -144,7 +198,7 @@ public class ComfyClient {
 		}
 		
 		applyConfigs(workflow, keyValuePairs);
-		
+		sendTask(workflow);
 	}
 
 }

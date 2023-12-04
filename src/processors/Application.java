@@ -41,7 +41,7 @@ public class Application {
         catch(Exception e) {
         	e.printStackTrace();
         }
-        String[] promptParams = {"name: mark", "checkpoint: analogMadness", "height:512", "sakdmas"};
+        String[] promptParams = {"name: mark", "height:512", "sakdmas"};
         try {
         	// this should have a default res of 512x512
         	comfyClient.queuePrompt("test", promptParams); 
