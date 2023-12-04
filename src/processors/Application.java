@@ -1,5 +1,4 @@
 package processors;
-
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -17,13 +16,13 @@ import common.mq.ZMQModel;
 import processors.models.JobResponse;
 import processors.clients.ComfyClient;
 
-
 public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     @Inject private ZMQSubscriber subscriber;
     @Inject private ProcessorRouter router;
+    private ComfyClient comfyClient = new ComfyClient();
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -35,6 +34,20 @@ public class Application {
 
     private void start(String[] args) {
         LOG.info("Starting Processor.");
+
+        try {
+        	comfyClient.queuePrompt();
+        } 
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+        String[] promptParams = {"name: mark", "checkpoint: analogMadness", "height:512", "sakdmas"};
+        try {
+        	// this should have a default res of 512x512
+        	comfyClient.queuePrompt("test", promptParams); 
+        } catch (Exception e) {
+        	LOG.error("Could not queue prompt!"); e.printStackTrace();
+        }
         subscriber.connectSocket();
 
         while (!Thread.currentThread().isInterrupted()) {
@@ -61,7 +74,5 @@ public class Application {
 
         subscriber.closeSocket();
         LOG.info("Closing Processor.");
-
-        try {comfyClient.queuePrompt();} catch(Exception e) {e.printStackTrace();}
     }
 }
