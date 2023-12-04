@@ -132,13 +132,11 @@ public class ComfyClient {
             connection.setRequestProperty("charset", "utf-8");
             connection.setRequestProperty("Content-Length", String.valueOf(taskData.length));
 
-            // Enable output and send the POST request
             connection.setDoOutput(true);
             try (OutputStream outputStream = connection.getOutputStream()) {
                 outputStream.write(taskData);
             }
 
-            // Get and print the response (if needed)
             int responseCode = connection.getResponseCode();
             String responseMessage = connection.getResponseMessage();
             System.out.println("Response Code: " + responseCode);
@@ -169,7 +167,6 @@ public class ComfyClient {
 		LOG.info("A prompt was queued with the following arguments: " + args);
 		Map<String, Object> workflow = new HashMap<>();
 		
-		// overwrites defaults 
 		try {
 			workflow = loadWorkflow(workflowPrefix);
 		} catch (IOException e) {
