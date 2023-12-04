@@ -30,10 +30,10 @@ public class CommonModule extends AbstractModule {
         // ZMQ
         bind(ZMQSubscriber.class).in(Singleton.class);
         bind(ZMQPublisher.class).in(Singleton.class);
-        
+
         // db
-        bind(MongoDBClient.class).in(Singleton.class);
-        bind(JobDAO.class).in(Singleton.class);
+        bind(MongoDBClient.class).asEagerSingleton();
+        bind(JobDAO.class).asEagerSingleton();
     }
 
 
