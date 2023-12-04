@@ -12,9 +12,9 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import common.CommonModule;
+import common.enums.JobType;
 import common.mq.ZMQModel;
 import common.mq.ZMQPublisher;
-import common.mq.ZMQModel.JobType;
 
 public class Application {
 

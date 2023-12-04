@@ -11,4 +11,7 @@ open module aicontentcuration {
     requires jeromq;
     requires com.google.gson;
     requires org.slf4j;
+    requires org.mongodb.driver.sync.client;
+    requires org.mongodb.driver.core;
+    requires org.mongodb.bson;
 }

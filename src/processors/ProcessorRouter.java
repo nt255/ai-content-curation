@@ -11,17 +11,16 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import common.mq.ZMQModel;
-import common.mq.ZMQModel.JobType;
+import common.enums.JobType;
 import processors.impl.TextOnlyProcessor;
 import processors.models.JobRequest;
 import processors.models.JobResponse;
 
 public class ProcessorRouter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProcessorRouter.class);
 
-    private final Map<ZMQModel.JobType, BiFunction<UUID, Map<String, String>, JobResponse>> processorMap;
+    private final Map<JobType, BiFunction<UUID, Map<String, String>, JobResponse>> processorMap;
 
     @Inject
     public ProcessorRouter(TextOnlyProcessor textOnlyProcessor) {

@@ -12,7 +12,8 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import common.clients.HttpClient;
-
+import common.db.client.MongoDBClient;
+import common.db.dao.JobDAO;
 import common.mq.ZMQSubscriber;
 import common.mq.ZMQPublisher;
 
@@ -29,7 +30,10 @@ public class CommonModule extends AbstractModule {
         // ZMQ
         bind(ZMQSubscriber.class).in(Singleton.class);
         bind(ZMQPublisher.class).in(Singleton.class);
-
+        
+        // db
+        bind(MongoDBClient.class).in(Singleton.class);
+        bind(JobDAO.class).in(Singleton.class);
     }
 
 

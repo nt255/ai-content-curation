@@ -14,8 +14,6 @@ import common.CommonModule;
 import common.mq.ZMQSubscriber;
 import common.mq.ZMQModel;
 
-import processors.impl.TextOnlyProcessor;
-import processors.models.JobRequest;
 import processors.models.JobResponse;
 
 

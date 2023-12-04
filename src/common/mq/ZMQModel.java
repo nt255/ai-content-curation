@@ -3,6 +3,7 @@ package common.mq;
 import java.util.Map;
 import java.util.UUID;
 
+import common.enums.JobType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,10 +11,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ZMQModel {
-
-    public enum JobType {
-        TEXT_ONLY, IMAGE
-    }
 
     private JobType jobType;
 
