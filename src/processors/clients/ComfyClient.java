@@ -135,6 +135,8 @@ public class ComfyClient {
             connection.setDoOutput(true);
             try (OutputStream outputStream = connection.getOutputStream()) {
                 outputStream.write(taskData);
+            } catch (Exception e) {
+            	e.printStackTrace();
             }
 
             int responseCode = connection.getResponseCode();
