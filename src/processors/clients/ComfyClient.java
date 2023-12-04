@@ -14,10 +14,10 @@ import java.util.Map;
 
 public class ComfyClient {
 	
-	@Inject private static Properties properties;
-    @Inject private static HttpClient httpClient;
+	@Inject private Properties properties;
+    @Inject private HttpClient httpClient;
     
-    private Map<String, String> loadConfigs() {
+    private Map<String, String> loadDefaultConfigs() {
     	Map<String, String> configs = new HashMap<String, String>();
     	configs.put("checkpoint", properties.getProperty("comfyui.checkpoint"));
     	configs.put("latentHeight", properties.getProperty("comfyui.latent.height"));
@@ -27,15 +27,51 @@ public class ComfyClient {
     	configs.put("loraThree", properties.getProperty("comfyui.loras.three"));
     	configs.put("prompt", properties.getProperty("comfyui.prompt.default"));
     	configs.put("savePath", properties.getProperty("comfyui.output.path"));
-    	
     	return configs;
+    }
+    
+    // applies configurations to a given workflow.
+    private void applyConfigs(Map<String, Object> promptWorkflow, Map<String, String> configs) {
+    	 Map<String, Object> chkpointLoaderNode = (Map<String, Object>) promptWorkflow.get("1");
+         Map<String, Object> latentImageNode = (Map<String, Object>) promptWorkflow.get("6");
+         Map<String, Object> loraOneNode = (Map<String, Object>) promptWorkflow.get("4");
+         Map<String, Object> loraTwoNode = (Map<String, Object>) promptWorkflow.get("7");
+         Map<String, Object> loraThreeNode = (Map<String, Object>) promptWorkflow.get("8");
+         Map<String, Object> posNode = (Map<String, Object>) promptWorkflow.get("9");
+         Map<String, Object> negNode = (Map<String, Object>) promptWorkflow.get("10");
+         Map<String, Object> ksamplerNode = (Map<String, Object>) promptWorkflow.get("2");
+         Map<String, Object> saveImageNode = (Map<String, Object>) promptWorkflow.get("14");
+         if (chkpointLoaderNode != null) {
+             Map<String, Object> inputs = (Map<String, Object>) chkpointLoaderNode.get("inputs");
+             if (inputs != null) {
+                 inputs.put("ckpt_name", configs.get("checkpoint"));
+             }
+         }
     }
     
 	
 	// will load in default options when queued without arguments
-	public void queuePrompt() {
+	public void queuePrompt() throws IOException {
 		System.out.println("this is queuePrompt with no args.");
-		Map<String, String> configs = loadConfigs();
+		Map<String, String> configs = loadDefaultConfigs();
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			File jsonFile = new File("src/processors/clients/workflow.json");
+            Map<String, Object> promptWorkflow = objectMapper.readValue(jsonFile, Map.class);
+            System.out.println(promptWorkflow);
+            try {
+                // Accessing specific nodes based on their keys
+               applyConfigs(promptWorkflow, configs);
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
 		
 		configs.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 	}

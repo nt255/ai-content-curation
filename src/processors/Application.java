@@ -14,7 +14,7 @@ import processors.clients.ComfyClient;
 public class Application {
 
     @Inject private TextOnlyProcessor textOnlyProcessor;
-    @Inject ComfyClient comfyclient;
+    @Inject ComfyClient comfyClient;
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -33,6 +33,6 @@ public class Application {
 
         // System.out.println(jobResponse.getResult());
     	
-    	// comfyClient.queuePrompt();
+    	try {comfyClient.queuePrompt();} catch(Exception e) {e.printStackTrace();}
     }
 }
