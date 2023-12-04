@@ -15,11 +15,14 @@ import common.CommonModule;
 import common.enums.JobType;
 import common.mq.ZMQModel;
 import common.mq.ZMQPublisher;
+import server.request.RequestHandler;
+
 
 public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
+    @Inject private RequestHandler requestHandler;
     @Inject private ZMQPublisher publisher;
 
     public static void main(String[] args) {
@@ -31,9 +34,11 @@ public class Application {
     }
 
     private void start(String[] args) {
-
         LOG.info("Starting Server.");
         publisher.bindSocket();
+        
+        requestHandler.start();
+
 
         for (int i = 0; i != 10; ++i) {
             publisher.send(ZMQModel.builder()

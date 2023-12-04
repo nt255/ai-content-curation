@@ -14,4 +14,5 @@ open module aicontentcuration {
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.driver.core;
     requires org.mongodb.bson;
+    requires io.javalin;
 }
