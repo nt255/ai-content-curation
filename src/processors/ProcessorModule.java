@@ -1,10 +1,12 @@
 package processors;
 
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
 import processors.clients.ChatGPTClient;
 import processors.impl.TextOnlyProcessor;
+
 
 public class ProcessorModule extends AbstractModule {
 
@@ -15,7 +17,9 @@ public class ProcessorModule extends AbstractModule {
         bind(ChatGPTClient.class).in(Singleton.class);
 
         // processors
+        bind(ProcessorRouter.class).in(Singleton.class);
         bind(TextOnlyProcessor.class).in(Singleton.class);
     }
+    
 
 }
