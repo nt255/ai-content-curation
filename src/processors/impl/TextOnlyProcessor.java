@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import common.db.dao.JobDAO;
+import common.db.dao.JobDao;
 import common.db.models.Job;
 import common.enums.JobState;
 import common.enums.JobType;
@@ -22,7 +22,7 @@ public class TextOnlyProcessor implements Processor {
     private static final Logger LOG = LoggerFactory.getLogger(TextOnlyProcessor.class);
 
     @Inject private ChatGPTClient chatGPTClient;
-    @Inject private JobDAO dao;
+    @Inject private JobDao dao;
 
     @Override
     public JobResponse doWork(JobRequest request) {
