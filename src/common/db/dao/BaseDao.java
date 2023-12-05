@@ -10,18 +10,19 @@ import com.mongodb.client.MongoCollection;
 import common.db.client.MongoDBClient;
 import common.db.models.BaseModel;
 
-public abstract class BaseDAO<T extends BaseModel> {
+public abstract class BaseDao<T extends BaseModel> {
+
+    private static final String ID_FIELD = "_id";
 
     @Inject private MongoDBClient mongoDBClient;
 
     private final Class<T> typeParameterClass;
     private final String collectionName;
 
-    public BaseDAO(Class<T> typeParameterClass, String collectionName) {
+    public BaseDao(Class<T> typeParameterClass, String collectionName) {
         this.typeParameterClass = typeParameterClass;
         this.collectionName = collectionName;
     }
-    
 
     public MongoCollection<T> getCollection() {
         return mongoDBClient.getDatabase()
@@ -30,17 +31,20 @@ public abstract class BaseDAO<T extends BaseModel> {
 
     public T get(UUID id) {
         return mongoDBClient.getDatabase()
-                .getCollection(collectionName, typeParameterClass).find(eq("id", id)).first();
+                .getCollection(collectionName, typeParameterClass)
+                .find(eq(ID_FIELD, id)).first();
     }
 
     public void insert(T document) {
         mongoDBClient.getDatabase()
-        .getCollection(collectionName, typeParameterClass).insertOne(document);
+        .getCollection(collectionName, typeParameterClass)
+        .insertOne(document);
     }
 
     public void delete(UUID id) {
         mongoDBClient.getDatabase()
-        .getCollection(collectionName, typeParameterClass).deleteOne(eq("id", id));
+        .getCollection(collectionName, typeParameterClass)
+        .deleteOne(eq(ID_FIELD, id));
     }
 
 }
