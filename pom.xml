@@ -94,5 +94,10 @@
 			<artifactId>mongodb-driver-sync</artifactId>
 			<version>${mongo.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.javalin</groupId>
+			<artifactId>javalin</artifactId>
+			<version>5.6.3</version>
+		</dependency>
 	</dependencies>
 </project>

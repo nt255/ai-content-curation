@@ -30,6 +30,7 @@
 - [x] lombok integration
 - [x] dependency injections
 - [x] logging
+- [ ] is logback the best logger?
 
 # Discussion
 - [ ] package naming convention

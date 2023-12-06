@@ -12,9 +12,9 @@ import lombok.Getter;
 @Getter
 public class ZMQModel {
 
-    private JobType jobType;
-
     private UUID id;
+
+    private JobType jobType;
 
     private Map<String, String> parameters;
 

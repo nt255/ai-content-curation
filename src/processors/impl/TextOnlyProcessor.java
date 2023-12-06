@@ -1,5 +1,6 @@
 package processors.impl;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,10 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import common.db.dao.JobDAO;
+import common.db.dao.JobDao;
 import common.db.models.Job;
 import common.enums.JobState;
-import common.enums.JobType;
 import processors.Processor;
 import processors.clients.ChatGPTClient;
 import processors.models.JobRequest;
@@ -22,23 +22,24 @@ public class TextOnlyProcessor implements Processor {
     private static final Logger LOG = LoggerFactory.getLogger(TextOnlyProcessor.class);
 
     @Inject private ChatGPTClient chatGPTClient;
-    @Inject private JobDAO dao;
+    @Inject private JobDao dao;
 
     @Override
     public JobResponse doWork(JobRequest request) {
 
         UUID id = request.getId();
-        String prompt = request.getPrompt().get();
+        String prompt = request.getPrompt();
         String result = chatGPTClient.makeRequest(prompt);
 
         LOG.info("produced result: {} from ChatGPT client..", result);
         
-        dao.insert(Job.builder()
-                .jobType(JobType.TEXT_ONLY)
-                .jobState(JobState.COMPLETED)
-                .id(id)
-                .textOnlyResult(result)
-                .build());
+        // TODO: do this correctly
+        Job existing = dao.get(id).get();
+        existing.setLastModifiedOn(Instant.now());
+        existing.setState(JobState.COMPLETED);
+        existing.setTextResult(result);
+        dao.delete(id);
+        dao.insert(existing);
 
         JobResponse jobResponse = JobResponse.builder()
                 .id(request.getId())

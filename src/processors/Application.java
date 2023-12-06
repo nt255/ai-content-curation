@@ -48,7 +48,6 @@ public class Application {
         } catch (Exception e) {
         	LOG.error("Could not queue prompt!"); e.printStackTrace();
         }
-        subscriber.connectSocket();
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
@@ -68,11 +67,6 @@ public class Application {
                 LOG.info("Succesfully processed job with id: {}.", id);
             else
                 LOG.warn("Unable to process job with id: {}.", id);
-
-            // TODO: send back job status to Server. until then, poll
         }
-
-        subscriber.closeSocket();
-        LOG.info("Closing Processor.");
     }
 }
