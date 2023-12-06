@@ -20,8 +20,7 @@ public abstract class BaseService<S extends BaseModel, T extends common.db.model
     }
 
     public Optional<S> get(UUID id) {
-        return Optional.ofNullable(
-                mapper.mapFromDBModel(dao.get(id)));
+        return dao.get(id).map(model -> mapper.mapFromDBModel(model));
     }
 
     public void insert(S model) {

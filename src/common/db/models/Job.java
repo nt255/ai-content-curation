@@ -1,5 +1,8 @@
 package common.db.models;
 
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import common.enums.JobState;
@@ -11,21 +14,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class Job extends BaseModel {
-    
-    private JobType jobType;
-    
-    private JobState jobState;
 
     private UUID id;
     
-    private String prompt;
+    private Instant createdOn;
     
-    private String textOnlyResult;
+    private Instant lastModifiedOn;
+
+    private JobType type;
+
+    private JobState state;
+
+    private Map<String, String> parameters;
+    
+    private String textResult;
+    
+    private String imageResult;
+    
+    private List<String> processingNotes;
 
 }

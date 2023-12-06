@@ -34,7 +34,6 @@ public class Application {
 
     private void start(String[] args) {
         LOG.info("Starting Processor.");
-        subscriber.connectSocket();
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
@@ -54,12 +53,7 @@ public class Application {
                 LOG.info("Succesfully processed job with id: {}.", id);
             else
                 LOG.warn("Unable to process job with id: {}.", id);
-
-            // TODO: send back job status to Server. until then, poll
         }
-
-        subscriber.closeSocket();
-        LOG.info("Closing Processor.");
     }
 
 }

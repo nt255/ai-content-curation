@@ -1,5 +1,6 @@
 package server.request;
 
+import java.time.Instant;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -9,9 +10,10 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 
+import common.enums.JobState;
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 import io.javalin.validation.JavalinValidation;
+
 import server.models.Job;
 import server.service.JobService;
 
@@ -20,47 +22,60 @@ public class RequestHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RequestHandler.class);
 
     private final int port;
-    private final JobService jobService;
     private final Javalin javalin;
 
     @Inject
-    public RequestHandler(Properties properties, JobService jobService) {
+    public RequestHandler(Properties properties, Gson gson, JobService jobService) {
         this.port = Integer.parseInt(properties.getProperty("javalin.port"));
-        this.jobService = jobService;
 
         // todo: move elsewhere
         JavalinValidation.register(UUID.class, s -> UUID.fromString(s));
 
         javalin = Javalin.create()
+                .get("/", ctx -> ctx.result("ai-content-curation"))
 
-                .get("/", ctx -> ctx.result("Hello World"))
-                
-                .get("/jobs/{id}", ctx -> getJob(ctx))
+                .get("/jobs/{id}", ctx -> {
+                    LOG.info("Received GET request to: {}", ctx.fullUrl());
+                    UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
+
+                    jobService.get(id).ifPresentOrElse(
+                            job -> ctx.json(gson.toJson(job)), 
+                            () -> ctx.status(404));
+                })
 
                 .post("/jobs", ctx -> {
-                    jobService.insert(ctx.bodyAsClass(Job.class));
+                    String bodyString = ctx.body();
+                    LOG.info("Received POST request to: {}, body: {}", ctx.fullUrl(), bodyString);
+                    Job body = gson.fromJson(bodyString, Job.class);
+
+                    body.setId(UUID.randomUUID());
+                    body.setCreatedOn(Instant.now());
+                    body.setLastModifiedOn(Instant.now());
+                    body.setState(JobState.WAITING);
+
+                    jobService.insert(body);
+                    ctx.json(gson.toJson(body));
                 })
 
-                .delete("/jobs", ctx -> {
-                    jobService.delete(ctx.pathParamAsClass("{id}", UUID.class).get());
+                .delete("/jobs/{id}", ctx -> {
+                    LOG.info("Received DELETE request to: {}", ctx.fullUrl());
+                    UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
+
+                    jobService.delete(id);
+                    ctx.status(204);
                 })
 
-                .post("/submit/{job-id}", ctx -> {
-                    jobService.submitJob(ctx.pathParamAsClass("{job-id}", UUID.class).get());
+                .post("/submit/{id}", ctx -> {
+                    LOG.info("Received POST request to: {}", ctx.fullUrl());
+                    UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
+
+                    jobService.submit(id);
+                    ctx.status(202);
                 });
-
     }
 
     public void start() {
         javalin.start(port);
-    }
-    
-    private void getJob(Context ctx) {
-        LOG.info("Received GET request to: {}", ctx.fullUrl());
-        UUID jobId = ctx.pathParamAsClass("{id}", UUID.class).get();
-        jobService.get(jobId).ifPresentOrElse(
-                job -> ctx.json(new Gson().toJson(job)), 
-                () -> ctx.status(400));
     }
 
 }

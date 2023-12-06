@@ -2,7 +2,6 @@ package processors;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -47,7 +46,7 @@ public class ProcessorRouter {
     private JobRequest getGenericJobRequest(UUID id, Map<String, String> params) {
         return JobRequest.builder()
                 .id(id)
-                .prompt(Optional.of(params.get("prompt")))
+                .prompt(params.get("prompt"))
                 .build();
     }
 

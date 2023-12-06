@@ -1,5 +1,7 @@
 package server.models;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,19 +11,28 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder
+
 @Getter
 @Setter
+@Builder
 public class Job extends BaseModel {
     
-    private JobType jobType;
-    
-    private JobState jobState;
-
     private UUID id;
+    
+    private Instant createdOn;
+    
+    private Instant lastModifiedOn;
+    
+    private JobType type;
+    
+    private JobState state;
     
     private Map<String, String> parameters;
     
-    private String textOnlyResult;
-
+    private String textResult;
+    
+    private String imageResult;
+    
+    private List<String> processingNotes;
+    
 }

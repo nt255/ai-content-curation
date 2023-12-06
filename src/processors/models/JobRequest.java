@@ -1,6 +1,5 @@
 package processors.models;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import lombok.Builder;
@@ -12,6 +11,6 @@ public class JobRequest {
     
     private UUID id;
 
-    private Optional<String> prompt;
+    private String prompt;
 
 }

@@ -2,6 +2,7 @@ package common.db.dao;
 
 import static com.mongodb.client.model.Filters.eq;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.google.inject.Inject;
@@ -12,7 +13,7 @@ import common.db.models.BaseModel;
 
 public abstract class BaseDao<T extends BaseModel> {
 
-    private static final String ID_FIELD = "_id";
+    private static final String ID = "_id";
 
     @Inject private MongoDBClient mongoDBClient;
 
@@ -29,10 +30,10 @@ public abstract class BaseDao<T extends BaseModel> {
                 .getCollection(collectionName, typeParameterClass);
     }
 
-    public T get(UUID id) {
-        return mongoDBClient.getDatabase()
+    public Optional<T> get(UUID id) {
+        return Optional.ofNullable(mongoDBClient.getDatabase()
                 .getCollection(collectionName, typeParameterClass)
-                .find(eq(ID_FIELD, id)).first();
+                .find(eq(ID, id)).first());
     }
 
     public void insert(T document) {
@@ -44,7 +45,7 @@ public abstract class BaseDao<T extends BaseModel> {
     public void delete(UUID id) {
         mongoDBClient.getDatabase()
         .getCollection(collectionName, typeParameterClass)
-        .deleteOne(eq(ID_FIELD, id));
+        .deleteOne(eq(ID, id));
     }
 
 }
