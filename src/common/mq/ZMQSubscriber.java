@@ -15,34 +15,28 @@ public class ZMQSubscriber {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZMQSubscriber.class);
 
-    @Inject private Properties properties;
-    @Inject private ZContext context;
-
+    private Gson gson;
     private ZMQ.Socket subscriber;
     private String topic;
 
-    public void connectSocket() {
+    
+    @Inject
+    public void connectSocket(Gson gson, Properties properties, ZContext context) {
+        this.gson = gson;
         topic = properties.getProperty("zmq.topic");
 
-        SocketType type = SocketType.SUB;
         String address = properties.getProperty("zmq.address");
 
         LOG.info("Creating subscriber with address: {}, topic: {}", address, topic);
-        subscriber = context.createSocket(type);
+        subscriber = context.createSocket(SocketType.SUB);
         subscriber.connect(address);
         subscriber.subscribe(topic);
-    }
-
-    public void closeSocket() {
-        if (subscriber != null) {
-            subscriber.close();
-        }
     }
 
     public ZMQModel receive() {
         String s = subscriber.recvStr().replaceFirst(topic, "");
         LOG.info("Received message: {}", s);
-        ZMQModel model = new Gson().fromJson(s, ZMQModel.class);
+        ZMQModel model = gson.fromJson(s, ZMQModel.class);
         return model;
     }
 

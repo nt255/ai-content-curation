@@ -9,7 +9,6 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import common.CommonModule;
-import common.mq.ZMQPublisher;
 import server.request.RequestHandler;
 
 
@@ -18,7 +17,6 @@ public class Application {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     @Inject private RequestHandler requestHandler;
-    @Inject private ZMQPublisher publisher;
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -30,12 +28,8 @@ public class Application {
 
     private void start(String[] args) {
         LOG.info("Starting Server.");
-        publisher.bindSocket();
         
         requestHandler.start();
-
-        publisher.closeSocket(); // TODO: handle this better
-        LOG.info("Closing Server.");
     }
 
 }

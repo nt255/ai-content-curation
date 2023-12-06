@@ -14,32 +14,26 @@ import com.google.inject.Inject;
 public class ZMQPublisher {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZMQPublisher.class);
-
-    @Inject private Properties properties;
-    @Inject private ZContext context;
-
-    private ZMQ.Socket publisher;
+    
+    private Gson gson;
     private String topic;
-
-    public void bindSocket() {
+    private ZMQ.Socket publisher;
+    
+    
+    @Inject
+    public ZMQPublisher(Gson gson, Properties properties, ZContext context) {
+        this.gson = gson;
         topic = properties.getProperty("zmq.topic");
 
-        SocketType type = SocketType.PUB;
         String address = properties.getProperty("zmq.address");
 
         LOG.info("Creating publisher with address: {}, topic: {}", address, topic);
-        publisher = context.createSocket(type);
+        publisher = context.createSocket(SocketType.PUB);
         publisher.bind(address);
     }
 
-    public void closeSocket() {
-        if (publisher != null) {
-            publisher.close();
-        }
-    }
-
     public void send(ZMQModel model) {
-        String s = new Gson().toJson(model);
+        String s = gson.toJson(model);
         LOG.info("Sending message: {}", s);
         publisher.send(topic + s);
     }
