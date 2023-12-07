@@ -23,6 +23,4 @@ public class LocalApplication {
 
         CompletableFuture.allOf(serverFuture, processorFuture).toCompletableFuture().join();
     }
-
-
 }

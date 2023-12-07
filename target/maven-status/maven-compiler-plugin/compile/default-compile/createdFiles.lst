@@ -1,8 +1,8 @@
 processors\Processor.class
 processors\models\JobResponse.class
+processors\clients\ChatGPTClient.class
+processors\models\JobRequest.class
 module-info.class
 processors\clients\ComfyClient.class
 common\clients\HttpClient.class
-processors\clients\ChatGPTClient.class
-processors\models\JobRequest.class
 common\clients\HttpClient$RequestMethod.class

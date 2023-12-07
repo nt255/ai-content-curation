@@ -22,7 +22,7 @@ public class Application {
 
     @Inject private ZMQSubscriber subscriber;
     @Inject private ProcessorRouter router;
-    private ComfyClient comfyClient = new ComfyClient();
+    private ComfyClient comfyClient;
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -34,19 +34,11 @@ public class Application {
 
     private void start(String[] args) {
         LOG.info("Starting Processor.");
-
         try {
         	comfyClient.queuePrompt();
-        } 
-        catch(Exception e) {
-        	e.printStackTrace();
-        }
-        String[] promptParams = {"name: mark", "height:512", "sakdmas"};
-        try {
-        	// this should have a default res of 512x512
-        	comfyClient.queuePrompt("test", promptParams); 
-        } catch (Exception e) {
-        	LOG.error("Could not queue prompt!"); e.printStackTrace();
+        } catch (IllegalStateException e) {
+        	LOG.error("Could not queue prompt!");
+        	LOG.error(e.getMessage());
         }
 
         while (!Thread.currentThread().isInterrupted()) {
