@@ -1,11 +1,11 @@
 package common.db.dao;
 
-import common.db.models.Job;
+import common.db.models.JobDbModel;
 
-public class JobDao extends BaseDao<Job> {
+public class JobDao extends BaseDao<JobDbModel> {
 
     public JobDao() {
-        super(Job.class, "job");    
+        super(JobDbModel.class, "job");    
     }
 
 }

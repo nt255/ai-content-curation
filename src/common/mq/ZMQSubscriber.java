@@ -27,10 +27,10 @@ public class ZMQSubscriber {
 
         String address = properties.getProperty("zmq.address");
 
-        LOG.info("Creating subscriber with address: {}, topic: {}", address, topic);
         subscriber = context.createSocket(SocketType.SUB);
         subscriber.connect(address);
         subscriber.subscribe(topic);
+        LOG.info("Created subscriber with address: {}, topic: {}", address, topic);
     }
 
     public ZMQModel receive() {

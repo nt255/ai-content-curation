@@ -1,15 +1,16 @@
 package server.mappers;
 
 
+import common.db.models.JobDbModel;
 import common.mq.ZMQModel;
 import server.models.Job;
 
 
-public class JobMapper implements Mapper<Job, common.db.models.Job> {
+public class JobMapper implements Mapper<Job, JobDbModel> {
 
     @Override
-    public common.db.models.Job mapToDBModel(Job model) {
-        return common.db.models.Job.builder()
+    public JobDbModel mapToDBModel(Job model) {
+        return JobDbModel.builder()
                 .id(model.getId())
                 .createdOn(model.getCreatedOn())
                 .lastModifiedOn(model.getLastModifiedOn())
@@ -22,7 +23,7 @@ public class JobMapper implements Mapper<Job, common.db.models.Job> {
     }
 
     @Override
-    public Job mapFromDBModel(common.db.models.Job model) {
+    public Job mapFromDBModel(JobDbModel model) {
         return Job.builder()
                 .id(model.getId())
                 .createdOn(model.getCreatedOn())

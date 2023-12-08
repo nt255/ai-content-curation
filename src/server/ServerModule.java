@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 
+import common.db.models.JobDbModel;
 import server.mappers.JobMapper;
 import server.mappers.Mapper;
 import server.models.Job;
@@ -17,7 +18,7 @@ public class ServerModule extends AbstractModule {
         bind(RequestHandler.class).in(Singleton.class);
         
         // mappers
-        bind(new TypeLiteral<Mapper<Job, common.db.models.Job>>(){}).to(JobMapper.class);
+        bind(new TypeLiteral<Mapper<Job, JobDbModel>>(){}).to(JobMapper.class);
         
     }
 

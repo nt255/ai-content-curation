@@ -27,9 +27,9 @@ public class ZMQPublisher {
 
         String address = properties.getProperty("zmq.address");
 
-        LOG.info("Creating publisher with address: {}, topic: {}", address, topic);
         publisher = context.createSocket(SocketType.PUB);
         publisher.bind(address);
+        LOG.info("Created publisher with address: {}, topic: {}", address, topic);
     }
 
     public void send(ZMQModel model) {

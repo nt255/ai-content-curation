@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import common.db.dao.JobDao;
-import common.db.models.Job;
+import common.db.models.JobDbModel;
 import common.enums.JobState;
 import processors.Processor;
 import processors.clients.ChatGPTClient;
@@ -34,7 +34,7 @@ public class TextOnlyProcessor implements Processor {
         LOG.info("produced result: {} from ChatGPT client..", result);
         
         // TODO: do this correctly
-        Job existing = dao.get(id).get();
+        JobDbModel existing = dao.get(id).get();
         existing.setLastModifiedOn(Instant.now());
         existing.setState(JobState.COMPLETED);
         existing.setTextResult(result);
