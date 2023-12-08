@@ -6,9 +6,9 @@ C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\CommonModule.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\adapters\GsonInstantTypeAdapter.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\processors\clients\ComfyClient.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\db\client\MongoDBClient.java
+C:\Users\SeHNNG\Desktop\ai-content-curation\src\test\TestWithInjections.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\module-info.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\processors\ProcessorRouter.java
-C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\db\models\Job.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\filters\LogbackFilter.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\processors\Application.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\processors\clients\ChatGPTClient.java
@@ -30,9 +30,11 @@ C:\Users\SeHNNG\Desktop\ai-content-curation\src\server\mappers\Mapper.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\server\Application.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\processors\models\ComfyNode.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\server\models\BaseModel.java
-C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\db\models\BaseModel.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\mq\ZMQPublisher.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\server\ServerModule.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\processors\models\ComfyConfigs.java
+C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\db\models\BaseDbModel.java
+C:\Users\SeHNNG\Desktop\ai-content-curation\src\test\local\LocalApplicationTests.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\processors\clients\WorkflowLoader.java
 C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\mq\ZMQSubscriber.java
+C:\Users\SeHNNG\Desktop\ai-content-curation\src\common\db\models\JobDbModel.java

@@ -66,6 +66,7 @@ public class ComfyClient {
 		LOG.info("Verifying that workflow has been loaded...");
 		if (currentWorkflowLoader.getWorkflow() != null) {
 			LOG.info(String.format("Workflow %s has been verified, proceeding...", currentWorkflowLoader.getWorkflowName()));
+			LOG.info(currentWorkflowLoader.toString());
 			sendTask(currentWorkflowLoader.getWorkflow());
 		} else {
 			LOG.error("Error! Workflow is null!");

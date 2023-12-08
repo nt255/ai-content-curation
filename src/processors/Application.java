@@ -27,7 +27,7 @@ public class Application {
 
     @Inject private ZMQSubscriber subscriber;
     @Inject private ProcessorRouter router;
-    private ComfyClient comfyClient;
+    @Inject private ComfyClient comfyClient;
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -40,6 +40,15 @@ public class Application {
     private void start(String[] args) {
 
         LOG.info("Starting Processor.");
+        
+        try {
+        	comfyClient.queuePrompt();
+        } catch (IllegalStateException e) {
+        	LOG.error("Could not queue prompt!");
+        	LOG.error(e.getMessage());
+        } catch(Exception e) {
+        	LOG.error(e.getMessage());
+        }
         
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<?> future = executorService.submit(() -> {

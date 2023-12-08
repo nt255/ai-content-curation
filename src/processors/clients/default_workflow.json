@@ -16,22 +16,10 @@
       "start_at_step": 0,
       "end_at_step": 10000,
       "return_with_leftover_noise": "disable",
-      "model": [
-        "1",
-        0
-      ],
-      "positive": [
-        "9",
-        0
-      ],
-      "negative": [
-        "10",
-        0
-      ],
-      "latent_image": [
-        "6",
-        0
-      ]
+      "model": ["1", 0],
+      "positive": ["9", 0],
+      "negative": ["10", 0],
+      "latent_image": ["6", 0]
     },
     "class_type": "KSamplerAdvanced"
   },
@@ -40,14 +28,8 @@
       "lora_name": "ReaLora.safetensors",
       "strength_model": 0.5,
       "strength_clip": 1,
-      "model": [
-        "1",
-        0
-      ],
-      "clip": [
-        "1",
-        1
-      ]
+      "model": ["1", 0],
+      "clip": ["1", 1]
     },
     "class_type": "LoraLoader"
   },
@@ -70,63 +52,39 @@
       "lora_name": "add_sharpness.safetensors",
       "strength_model": 0.5,
       "strength_clip": 1,
-      "model": [
-        "4",
-        0
-      ],
-      "clip": [
-        "4",
-        1
-      ]
+      "model": ["4", 0],
+      "clip": ["4", 1]
     },
     "class_type": "LoraLoader"
   },
   "8": {
     "inputs": {
-      "lora_name": "head_slider_v10.safetensors",
+      "lora_name": "InstantPhotoX3.safetensors",
       "strength_model": 0.3,
       "strength_clip": 1,
-      "model": [
-        "7",
-        0
-      ],
-      "clip": [
-        "7",
-        1
-      ]
+      "model": ["7", 0],
+      "clip": ["7", 1]
     },
     "class_type": "LoraLoader"
   },
   "9": {
     "inputs": {
       "text": "cool, athletic asian woman running",
-      "clip": [
-        "8",
-        1
-      ]
+      "clip": ["8", 1]
     },
     "class_type": "CLIPTextEncode"
   },
   "10": {
     "inputs": {
       "text": "ugly, eerie, bad proportions, ",
-      "clip": [
-        "8",
-        1
-      ]
+      "clip": ["8", 1]
     },
     "class_type": "CLIPTextEncode"
   },
   "12": {
     "inputs": {
-      "samples": [
-        "2",
-        0
-      ],
-      "vae": [
-        "5",
-        0
-      ]
+      "samples": ["2", 0],
+      "vae": ["5", 0]
     },
     "class_type": "VAEDecode"
   },
@@ -145,10 +103,7 @@
       "show_history_by_prefix": "true",
       "embed_workflow": "false",
       "show_previews": "true",
-      "images": [
-        "12",
-        0
-      ]
+      "images": ["12", 0]
     },
     "class_type": "Image Save"
   },
@@ -172,26 +127,11 @@
       "seam_fix_mask_blur": 8,
       "seam_fix_padding": 32,
       "force_uniform_tiles": "enable",
-      "model": [
-        "1",
-        0
-      ],
-      "positive": [
-        "9",
-        0
-      ],
-      "negative": [
-        "10",
-        0
-      ],
-      "vae": [
-        "5",
-        0
-      ],
-      "upscale_model": [
-        "16",
-        0
-      ]
+      "model": ["1", 0],
+      "positive": ["9", 0],
+      "negative": ["10", 0],
+      "vae": ["5", 0],
+      "upscale_model": ["16", 0]
     },
     "class_type": "UltimateSDUpscale"
   },

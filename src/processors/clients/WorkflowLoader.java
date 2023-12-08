@@ -52,6 +52,7 @@ public class WorkflowLoader {
 			Gson gson = new Gson();
 			String content = new String(Files.readAllBytes(Paths.get(workflowPath)));
 			LOG.info("Successfully loaded.");
+			LOG.info(content);
 			return gson.fromJson(content, ComfyWorkflow.class);
 		} catch (IOException e) {
 			LOG.info("Unable to fetch workflow. Leaving reference as null.");
