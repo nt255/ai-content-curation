@@ -78,8 +78,8 @@ public class ComfyClient {
     
     private void sendTask(ComfyWorkflow workflow) {
     	try {
-    		Map<String, ComfyWorkflow> payloadMap = new HashMap<>();
-            payloadMap.put("prompt", workflow);
+    		Map<String, Object> payloadMap = new HashMap<>();
+            payloadMap.put("prompt", workflow.getWorkflow());
             String jsonPayload = gson.toJson(payloadMap);
             byte[] jsonBytes = jsonPayload.toString().getBytes(StandardCharsets.UTF_8);
             LOG.info(jsonPayload); 

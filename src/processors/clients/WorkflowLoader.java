@@ -41,7 +41,7 @@ public class WorkflowLoader {
 
 	@SuppressWarnings("unchecked")
 	private ComfyNode getMapNode(ComfyWorkflow workflow, String key) {
-		Map<String, Map<String, Object>> workflowMap = workflow.getWorkflow();
+		Map<String, Object> workflowMap = workflow.getWorkflow();
 		Object node = workflowMap.get(key);
 		if (node instanceof Map<?, ?>) {
 			Map<String, Object> mapNode = (Map<String, Object>) node;
@@ -69,33 +69,25 @@ public class WorkflowLoader {
 	}
 	
 	private ComfyWorkflow parseWorkflow(JSONObject json) {
-		ComfyWorkflow comfyWorkflow = new ComfyWorkflow();
-		Map<String, Map<String, Object>> workflowMap = new HashMap<>();
-		
 		try {
-			 // Iterate through the keys ("1", "2", etc.) in the JSON object
-	        for (String key : json.keySet()) {
-	            JSONObject workflowObj = json.getJSONObject(key);
+            Map<String, Object> workflowMap = new HashMap<>();
 
-	            // Here, you can extract values for each element in the workflow and populate the Map
-	            // For example:
-	            Map<String, Object> elementData = new HashMap<>();
+            for (String key : json.keySet()) {
+                JSONObject workflowObj = json.getJSONObject(key);
 
-	            JSONObject inputsObj = workflowObj.getJSONObject("inputs");
-	            elementData.put("inputs", inputsObj.toMap());
+                Map<String, Object> elementData = new HashMap<>();
+                JSONObject inputsObj = workflowObj.getJSONObject("inputs");
+                elementData.put("inputs", inputsObj.toMap());
 
-	            elementData.put("class_type", workflowObj.getString("class_type"));
+                elementData.put("class_type", workflowObj.getString("class_type"));
 
-	            workflowMap.put(key, elementData);
-	        }
-
-	        // Set the populated workflow Map to the ComfyWorkflow instance
-	        comfyWorkflow.setWorkflow(workflowMap);
-	    } catch (JSONException e) {
-	        LOG.error("Error parsing workflow data: " + e.getMessage());
-	    }
-		
-		return comfyWorkflow;
+                workflowMap.put(key, elementData);
+            }
+            return new ComfyWorkflow(workflowMap);
+        } catch (JSONException e) {
+            LOG.error("Error parsing workflow data: " + e.getMessage());
+            return null;
+        }
 	}
 
 	@SuppressWarnings("unchecked")

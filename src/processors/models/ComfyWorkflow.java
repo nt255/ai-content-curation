@@ -12,9 +12,9 @@ import com.google.gson.GsonBuilder;
 @Builder
 @Getter
 public class ComfyWorkflow {
-	private Map<String, Map<String, Object>> workflow;
+	private Map<String, Object> workflow;
 	
-	public ComfyWorkflow(Map<String, Map<String, Object>> workflow) {
+	public ComfyWorkflow(Map<String, Object> workflow) {
 		this.workflow = workflow;
 	}
 	
@@ -23,7 +23,7 @@ public class ComfyWorkflow {
         return workflow != null ? workflow.toString() : "ComfyWorkflow is null";
     }
 
-    public void setWorkflow(Map<String, Map<String, Object>> workflow) {
+    public void setWorkflow(Map<String, Object> workflow) {
         this.workflow = workflow;
     }
 }
