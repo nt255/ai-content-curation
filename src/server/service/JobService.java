@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 import common.mq.ZMQPublisher;
 import server.models.Job;
 
-public class JobService extends BaseService<Job, common.db.models.Job> {
+public class JobService extends BaseService<Job, common.db.models.JobDbModel> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobService.class);
 

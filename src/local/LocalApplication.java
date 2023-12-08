@@ -11,9 +11,7 @@ public class LocalApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LocalApplication.class);
 
     public static void main(String[] args) {
-
         LOG.info("Starting LocalApplication.");
-
 
         CompletableFuture<Void> serverFuture =
                 CompletableFuture.runAsync(() -> server.Application.main(args));
@@ -23,6 +21,5 @@ public class LocalApplication {
 
         CompletableFuture.allOf(serverFuture, processorFuture).toCompletableFuture().join();
     }
-
 
 }

@@ -5,11 +5,11 @@ import common.mq.ZMQModel;
 import server.models.Job;
 
 
-public class JobMapper implements Mapper<Job, common.db.models.Job> {
+public class JobMapper implements Mapper<Job, common.db.models.JobDbModel> {
 
     @Override
-    public common.db.models.Job mapToDBModel(Job model) {
-        return common.db.models.Job.builder()
+    public common.db.models.JobDbModel mapToDBModel(Job model) {
+        return common.db.models.JobDbModel.builder()
                 .id(model.getId())
                 .createdOn(model.getCreatedOn())
                 .lastModifiedOn(model.getLastModifiedOn())
@@ -22,7 +22,7 @@ public class JobMapper implements Mapper<Job, common.db.models.Job> {
     }
 
     @Override
-    public Job mapFromDBModel(common.db.models.Job model) {
+    public Job mapFromDBModel(common.db.models.JobDbModel model) {
         return Job.builder()
                 .id(model.getId())
                 .createdOn(model.getCreatedOn())

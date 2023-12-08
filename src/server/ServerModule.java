@@ -17,7 +17,7 @@ public class ServerModule extends AbstractModule {
         bind(RequestHandler.class).in(Singleton.class);
         
         // mappers
-        bind(new TypeLiteral<Mapper<Job, common.db.models.Job>>(){}).to(JobMapper.class);
+        bind(new TypeLiteral<Mapper<Job, common.db.models.JobDbModel>>(){}).to(JobMapper.class);
         
     }
 
