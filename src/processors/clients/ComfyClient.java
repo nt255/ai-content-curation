@@ -1,5 +1,6 @@
 package processors.clients;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -14,6 +15,7 @@ import common.clients.HttpClient;
 import processors.ProcessorRouter;
 import processors.models.ComfyWorkflow;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +81,9 @@ public class ComfyClient {
     		Map<String, ComfyWorkflow> payloadMap = new HashMap<>();
             payloadMap.put("prompt", workflow);
             String jsonPayload = gson.toJson(payloadMap);
-
+            byte[] jsonBytes = jsonPayload.toString().getBytes(StandardCharsets.UTF_8);
+            LOG.info(jsonPayload); 
+            
             String url = "http://127.0.0.1:8188/prompt";
 
             Map<String, String> headers = new HashMap<>();
@@ -88,8 +92,9 @@ public class ComfyClient {
 
             // Make POST request using HttpClient
             HttpClient httpClient = new HttpClient();
-            String response = httpClient.makeRequest(HttpClient.RequestMethod.POST, url, headers, new JSONObject(jsonPayload));
+            String response = httpClient.makeRequest(HttpClient.RequestMethod.POST, url, headers, jsonBytes);
 
+            
             // Process response or handle as needed
             System.out.println("Response from server: " + response);
         } catch (Exception e) {

@@ -1,8 +1,10 @@
 package common.clients;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,7 +22,6 @@ public class HttpClient {
 	}
 
 	public String makeRequest(RequestMethod requestMethod, String url, Map<String, String> headers, JSONObject body) {
-
 		try {
 			LOG.info("Calling URL: {}", url);
 
@@ -56,5 +57,41 @@ public class HttpClient {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public String makeRequest(RequestMethod requestMethod, String url, Map<String, String> headers, byte[] body) {
+	    try {
+	        LOG.info("Calling URL: {}", url);
 
+	        URL obj = new URL(url);
+	        HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+	        connection.setRequestMethod(requestMethod.name());
+
+	        headers.forEach(connection::setRequestProperty);
+
+	        // Set content type to indicate JSON data
+	        connection.setRequestProperty("Content-Type", "application/json");
+
+	        if (RequestMethod.POST.equals(requestMethod) || RequestMethod.PATCH.equals(requestMethod)) {
+	            connection.setDoOutput(true);
+	            try (OutputStream outputStream = connection.getOutputStream()) {
+	                outputStream.write(body);
+	                outputStream.flush();
+	            }
+	        }
+
+	        // Read the response
+	        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+	            StringBuilder response = new StringBuilder();
+	            String line;
+
+	            while ((line = br.readLine()) != null) {
+	                response.append(line);
+	            }
+	            return response.toString();
+	        }
+
+	    } catch (IOException e) {
+	        throw new RuntimeException(e);
+	    }
+	}
 }

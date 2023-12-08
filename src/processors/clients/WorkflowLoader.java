@@ -9,11 +9,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.MapType;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -36,7 +41,7 @@ public class WorkflowLoader {
 
 	@SuppressWarnings("unchecked")
 	private ComfyNode getMapNode(ComfyWorkflow workflow, String key) {
-		Map<String, Object> workflowMap = workflow.getWorkflow();
+		Map<String, Map<String, Object>> workflowMap = workflow.getWorkflow();
 		Object node = workflowMap.get(key);
 		if (node instanceof Map<?, ?>) {
 			Map<String, Object> mapNode = (Map<String, Object>) node;
@@ -49,15 +54,48 @@ public class WorkflowLoader {
 		try {
 			String workflowPath = generateWorkflowPath();
 			LOG.info(String.format("Loading workflow from path '%s'", workflowPath));
-			Gson gson = new Gson();
 			String content = new String(Files.readAllBytes(Paths.get(workflowPath)));
 			LOG.info("Successfully loaded.");
 			LOG.info(content);
-			return gson.fromJson(content, ComfyWorkflow.class);
+            JSONObject json = new JSONObject(content);
+			LOG.info(json.toString());
+			ComfyWorkflow comfyWorkflow = parseWorkflow(json);
+			return comfyWorkflow;
 		} catch (IOException e) {
+			LOG.error(e.getMessage());
 			LOG.info("Unable to fetch workflow. Leaving reference as null.");
 			return null;
 		}
+	}
+	
+	private ComfyWorkflow parseWorkflow(JSONObject json) {
+		ComfyWorkflow comfyWorkflow = new ComfyWorkflow();
+		Map<String, Map<String, Object>> workflowMap = new HashMap<>();
+		
+		try {
+			 // Iterate through the keys ("1", "2", etc.) in the JSON object
+	        for (String key : json.keySet()) {
+	            JSONObject workflowObj = json.getJSONObject(key);
+
+	            // Here, you can extract values for each element in the workflow and populate the Map
+	            // For example:
+	            Map<String, Object> elementData = new HashMap<>();
+
+	            JSONObject inputsObj = workflowObj.getJSONObject("inputs");
+	            elementData.put("inputs", inputsObj.toMap());
+
+	            elementData.put("class_type", workflowObj.getString("class_type"));
+
+	            workflowMap.put(key, elementData);
+	        }
+
+	        // Set the populated workflow Map to the ComfyWorkflow instance
+	        comfyWorkflow.setWorkflow(workflowMap);
+	    } catch (JSONException e) {
+	        LOG.error("Error parsing workflow data: " + e.getMessage());
+	    }
+		
+		return comfyWorkflow;
 	}
 
 	@SuppressWarnings("unchecked")
