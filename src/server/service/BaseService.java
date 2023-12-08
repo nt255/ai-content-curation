@@ -7,10 +7,11 @@ import java.util.UUID;
 import com.google.inject.Inject;
 
 import common.db.dao.BaseDao;
+import common.db.models.BaseDbModel;
 import server.mappers.Mapper;
 import server.models.BaseModel;
 
-public abstract class BaseService<S extends BaseModel, T extends common.db.models.BaseModel> {
+public abstract class BaseService<S extends BaseModel, T extends BaseDbModel> {
 
     @Inject private BaseDao<T> dao;
     @Inject protected Mapper<S, T> mapper;
