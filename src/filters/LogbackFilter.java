@@ -14,7 +14,15 @@ public class LogbackFilter extends Filter<ILoggingEvent> {
                     "org.mongodb.driver.cluster", 
                     Set.of(
                             "Updating cluster description to",
-                            "Checking status of"));
+                            "Checking status of"),
+                    "org.mongodb.driver.connection", 
+                    Set.of(
+                            "Checkout started for",
+                            "Connection checked in:",
+                            "Connection checked out:"),
+                    "org.mongodb.driver.operation", 
+                    Set.of(
+                            "retryWrites set to true but the server is a standalone server"));
 
     @Override
     public FilterReply decide(ILoggingEvent event) {

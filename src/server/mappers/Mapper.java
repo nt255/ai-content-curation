@@ -1,10 +1,11 @@
 package server.mappers;
 
+import common.db.models.BaseDbModel;
 import common.mq.ZMQModel;
 import server.models.BaseModel;
 
 
-public interface Mapper<S extends BaseModel, T extends common.db.models.BaseModel> {
+public interface Mapper<S extends BaseModel, T extends BaseDbModel> {
     
     public T mapToDBModel(S model);
     

@@ -30,12 +30,15 @@ public class HttpClient {
 
 			headers.entrySet().stream().forEach(e -> connection.setRequestProperty(e.getKey(), e.getValue()));
 
-			// request body
-			connection.setDoOutput(true);
-			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-			writer.write(body.toString());
-			writer.flush();
-			writer.close();
+            // request body
+            if (RequestMethod.POST.equals(requestMethod) || 
+                    RequestMethod.PATCH.equals(requestMethod)) {
+                connection.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+                writer.write(body.toString());
+                writer.flush();
+                writer.close();
+            }
 
 			// response
 			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -43,24 +46,15 @@ public class HttpClient {
 
 			StringBuffer response = new StringBuffer();
 
-			while ((line = br.readLine()) != null) {
-				response.append(line);
-			}
-			br.close();
+            while ((line = br.readLine()) != null)
+                response.append(line);
+            br.close();
 
-			// calls the method to extract the message.
-			return extractMessageFromJSONResponse(response.toString());
+            return response.toString();
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public String extractMessageFromJSONResponse(String response) {
-		int start = response.indexOf("content") + 11;
-		int end = response.indexOf("\"", start);
-
-		return response.substring(start, end);
 	}
 
 }

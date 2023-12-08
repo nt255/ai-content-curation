@@ -19,7 +19,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Job extends BaseModel {
+public class JobDbModel extends BaseDbModel {
 
     private UUID id;
     

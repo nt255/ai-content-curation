@@ -9,9 +9,9 @@ import com.google.inject.Inject;
 import com.mongodb.client.MongoCollection;
 
 import common.db.client.MongoDBClient;
-import common.db.models.BaseModel;
+import common.db.models.BaseDbModel;
 
-public abstract class BaseDao<T extends BaseModel> {
+public abstract class BaseDao<T extends BaseDbModel> {
 
     private static final String ID = "_id";
 

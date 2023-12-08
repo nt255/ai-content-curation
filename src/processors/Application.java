@@ -1,6 +1,11 @@
 package processors;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,21 +38,11 @@ public class Application {
     }
 
     private void start(String[] args) {
+
         LOG.info("Starting Processor.");
-        try {
-        	comfyClient.queuePrompt();
-        } catch (IllegalStateException e) {
-        	LOG.error("Could not queue prompt!");
-        	LOG.error(e.getMessage());
-        }
-
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                TimeUnit.SECONDS.sleep(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+        
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<?> future = executorService.submit(() -> {
             LOG.info("Waiting for payload...");
             ZMQModel model = subscriber.receive();
 
@@ -59,6 +54,19 @@ public class Application {
                 LOG.info("Succesfully processed job with id: {}.", id);
             else
                 LOG.warn("Unable to process job with id: {}.", id);
+        });
+
+        try {
+            if (args.length == 1) {
+                Long timeout = Long.parseLong(args[0]);
+                future.get(timeout, TimeUnit.MILLISECONDS);
+            } else {
+                future.get();
+            }
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
         }
+
+        LOG.info("Exiting Processor.");
     }
 }
