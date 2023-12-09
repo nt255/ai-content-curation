@@ -40,7 +40,7 @@ public class Application {
     private void start(String[] args) {
 
         LOG.info("Starting Processor.");
-        
+
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<?> future = executorService.submit(() -> {
             LOG.info("Waiting for payload...");
@@ -63,7 +63,9 @@ public class Application {
             } else {
                 future.get();
             }
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+        } catch (TimeoutException e) {
+            LOG.info("timeout has been reached");
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
