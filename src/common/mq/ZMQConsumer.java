@@ -22,7 +22,7 @@ public class ZMQConsumer {
     public void connectSocket(Gson gson, Properties properties, ZContext context) {
         this.gson = gson;
 
-        String address = properties.getProperty("zmq.address");
+        String address = properties.getProperty("zmq.socket.address");
 
         consumer = context.createSocket(SocketType.PULL);
         consumer.connect(address);
