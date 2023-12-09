@@ -4,6 +4,7 @@ package processors;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
+import common.mq.ZMQConsumer;
 import processors.clients.ChatGPTClient;
 import processors.clients.GPT4AllLoader;
 import processors.impl.TextOnlyProcessor;
@@ -13,6 +14,8 @@ public class ProcessorModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        
+        bind(ZMQConsumer.class).asEagerSingleton();
 
         // clients
         bind(ChatGPTClient.class).in(Singleton.class);

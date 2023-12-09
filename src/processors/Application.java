@@ -43,18 +43,19 @@ public class Application {
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<?> future = executorService.submit(() -> {
-            LOG.info("Waiting for payload...");
-            ZMQModel model = consumer.receive();
+            while (!Thread.currentThread().isInterrupted()) {
+                LOG.info("Waiting for payload...");
+                ZMQModel model = consumer.receive();
 
-            JobResponse response = router.route(
-                    model.getJobType(), model.getId(), model.getParameters());
-            UUID id = response.getId();
+                JobResponse response = router.route(
+                        model.getJobType(), model.getId(), model.getParameters());
+                UUID id = response.getId();
 
-            if (response.isSuccessful())
-                LOG.info("Succesfully processed job with id: {}.", id);
-            else
-                LOG.warn("Unable to process job with id: {}.", id);
-
+                if (response.isSuccessful())
+                    LOG.info("Succesfully processed job with id: {}.", id);
+                else
+                    LOG.warn("Unable to process job with id: {}.", id);
+            }
         });
 
         try {
