@@ -21,8 +21,8 @@ import common.db.client.MongoDBClient;
 import common.db.dao.BaseDao;
 import common.db.dao.JobDao;
 import common.db.models.JobDbModel;
-import common.mq.ZMQSubscriber;
-import common.mq.ZMQPublisher;
+import common.mq.ZMQConsumer;
+import common.mq.ZMQProducer;
 
 public class CommonModule extends AbstractModule {
 
@@ -35,8 +35,8 @@ public class CommonModule extends AbstractModule {
         bind(HttpClient.class).in(Singleton.class);
 
         // ZMQ
-        bind(ZMQSubscriber.class).in(Singleton.class);
-        bind(ZMQPublisher.class).in(Singleton.class);
+        bind(ZMQConsumer.class).in(Singleton.class);
+        bind(ZMQProducer.class).in(Singleton.class);
 
         // dao
         bind(MongoDBClient.class).asEagerSingleton();   // eager singleton needed here to avoid possible deadlock

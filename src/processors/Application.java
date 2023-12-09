@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import common.CommonModule;
-import common.mq.ZMQSubscriber;
+import common.mq.ZMQConsumer;
 import common.mq.ZMQModel;
 
 import processors.models.JobResponse;
@@ -26,7 +26,7 @@ public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-    @Inject private ZMQSubscriber subscriber;
+    @Inject private ZMQConsumer consumer;
     @Inject private ProcessorRouter router;
 
     public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class Application {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<?> future = executorService.submit(() -> {
             LOG.info("Waiting for payload...");
-            ZMQModel model = subscriber.receive();
+            ZMQModel model = consumer.receive();
 
             JobResponse response = router.route(
                     model.getJobType(), model.getId(), model.getParameters());
