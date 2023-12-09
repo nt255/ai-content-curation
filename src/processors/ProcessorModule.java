@@ -5,6 +5,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
 import processors.clients.ChatGPTClient;
+import processors.clients.GPT4AllLoader;
 import processors.impl.TextOnlyProcessor;
 
 
@@ -19,6 +20,9 @@ public class ProcessorModule extends AbstractModule {
         // processors
         bind(ProcessorRouter.class).in(Singleton.class);
         bind(TextOnlyProcessor.class).in(Singleton.class);
+        
+        // loaders
+        bind(GPT4AllLoader.class).in(Singleton.class);
     }
     
 

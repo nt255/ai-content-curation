@@ -107,8 +107,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         try {
-            LOG.info("waiting half a second..");
-            TimeUnit.MILLISECONDS.sleep(500);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

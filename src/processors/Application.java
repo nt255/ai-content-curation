@@ -54,6 +54,7 @@ public class Application {
                 LOG.info("Succesfully processed job with id: {}.", id);
             else
                 LOG.warn("Unable to process job with id: {}.", id);
+
         });
 
         try {

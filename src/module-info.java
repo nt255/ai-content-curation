@@ -19,4 +19,5 @@ open module aicontentcuration {
     requires ch.qos.logback.core;
     requires org.jetbrains.annotations;
     requires org.junit.jupiter.api;
+    requires gpt4all.java.binding;
 }
