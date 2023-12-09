@@ -38,7 +38,7 @@ public class LocalApplicationTests extends TestWithInjections {
     
 
     @BeforeEach
-    void startApplications() {
+    void startApplication() {
         CompletableFuture<Void> processorWithTimeout =
                 CompletableFuture.runAsync(() -> {
                     processors.Application.main(new String[]{"500"});
