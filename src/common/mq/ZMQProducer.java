@@ -11,31 +11,27 @@ import org.zeromq.ZMQ;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 
-public class ZMQPublisher {
+public class ZMQProducer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ZMQPublisher.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ZMQProducer.class);
     
     private Gson gson;
-    private String topic;
-    private ZMQ.Socket publisher;
-    
+    private ZMQ.Socket producer;
     
     @Inject
-    public ZMQPublisher(Gson gson, Properties properties, ZContext context) {
+    public ZMQProducer(Gson gson, Properties properties, ZContext context) {
         this.gson = gson;
-        topic = properties.getProperty("zmq.topic");
 
         String address = properties.getProperty("zmq.address");
 
-        publisher = context.createSocket(SocketType.PUB);
-        publisher.bind(address);
-        LOG.info("Created publisher with address: {}, topic: {}", address, topic);
+        producer = context.createSocket(SocketType.PUSH);
+        producer.bind(address);
+        LOG.info("Created producer with address: {}", address);
     }
 
     public void send(ZMQModel model) {
         String s = gson.toJson(model);
         LOG.info("Sending message: {}", s);
-        publisher.send(topic + s);
+        producer.send(s);
     }
-
 }
