@@ -1,5 +1,6 @@
 package processors;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -18,9 +19,9 @@ import com.google.inject.Injector;
 import common.CommonModule;
 import common.mq.ZMQConsumer;
 import common.mq.ZMQModel;
-
+import processors.models.ComfyConfigs;
 import processors.models.JobResponse;
-
+import processors.clients.ComfyClient;
 
 public class Application {
 
@@ -28,6 +29,7 @@ public class Application {
 
     @Inject private ZMQConsumer consumer;
     @Inject private ProcessorRouter router;
+    @Inject private ComfyClient comfyClient;
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -40,7 +42,24 @@ public class Application {
     private void start(String[] args) {
 
         LOG.info("Starting Processor.");
-
+        try {
+        	Map<String, String> map = new HashMap<String, String>();
+        	map.put("height", "768");
+        	map.put("checkpoint", "realDream_9.safetensors");
+        	map.put("prompt", "realistic photo, film grain, (upper body photo of a confident, muscular asian male model ((looking at viewer))). handsome. wearing gym shorts, topless. curly hair.");
+        	ComfyConfigs configs = new ComfyConfigs(map);
+        	comfyClient.applyConfigs(configs);
+        	comfyClient.queuePrompt(2);
+        	comfyClient.switchWorkflow("dailyAffirmations");
+        	map.put("prompt", "cool lady riding the subway, realistic.");
+        	comfyClient.applyConfigs(configs);
+        	comfyClient.queuePrompt(2);
+        } catch (IllegalStateException e) {
+        	LOG.error("Could not queue prompt!");
+        	LOG.error(e.getMessage());
+        } catch(Exception e) {
+        	LOG.error(e.getMessage());
+        }
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<?> future = executorService.submit(() -> {
             while (!Thread.currentThread().isInterrupted()) {
@@ -73,5 +92,4 @@ public class Application {
 
         LOG.info("Exiting Processor.");
     }
-
 }

@@ -1,0 +1,144 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "consistentFactorEuclid_euclidV61.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple"
+  },
+  "2": {
+    "inputs": {
+      "add_noise": "enable",
+      "noise_seed": 65844881760508,
+      "steps": 25,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m_sde_gpu",
+      "scheduler": "karras",
+      "start_at_step": 0,
+      "end_at_step": 10000,
+      "return_with_leftover_noise": "disable",
+      "model": ["1", 0],
+      "positive": ["9", 0],
+      "negative": ["10", 0],
+      "latent_image": ["6", 0]
+    },
+    "class_type": "KSamplerAdvanced"
+  },
+  "4": {
+    "inputs": {
+      "lora_name": "ReaLora.safetensors",
+      "strength_model": 0.5,
+      "strength_clip": 1,
+      "model": ["1", 0],
+      "clip": ["1", 1]
+    },
+    "class_type": "LoraLoader"
+  },
+  "5": {
+    "inputs": {
+      "vae_name": "vae-ft-mse-840000-ema-pruned.safetensors"
+    },
+    "class_type": "VAELoader"
+  },
+  "6": {
+    "inputs": {
+      "width": 512,
+      "height": 768,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage"
+  },
+  "7": {
+    "inputs": {
+      "lora_name": "add_sharpness.safetensors",
+      "strength_model": 0.5,
+      "strength_clip": 1,
+      "model": ["4", 0],
+      "clip": ["4", 1]
+    },
+    "class_type": "LoraLoader"
+  },
+  "8": {
+    "inputs": {
+      "lora_name": "InstantPhotoX3.safetensors",
+      "strength_model": 0.3,
+      "strength_clip": 1,
+      "model": ["7", 0],
+      "clip": ["7", 1]
+    },
+    "class_type": "LoraLoader"
+  },
+  "9": {
+    "inputs": {
+      "text": "cool, athletic asian woman running",
+      "clip": ["8", 1]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "10": {
+    "inputs": {
+      "text": "ugly, eerie, bad proportions, ",
+      "clip": ["8", 1]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "12": {
+    "inputs": {
+      "samples": ["2", 0],
+      "vae": ["5", 0]
+    },
+    "class_type": "VAEDecode"
+  },
+  "14": {
+    "inputs": {
+      "output_path": "/comfyclient_output",
+      "filename_prefix": "test",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "quality": 100,
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "false",
+      "show_previews": "true",
+      "images": ["12", 0]
+    },
+    "class_type": "Image Save"
+  },
+  "15": {
+    "inputs": {
+      "upscale_by": 2,
+      "seed": 489885769593197,
+      "steps": 30,
+      "cfg": 10,
+      "sampler_name": "dpmpp_3m_sde_gpu",
+      "scheduler": "karras",
+      "denoise": 0.3,
+      "mode_type": "Linear",
+      "tile_width": 512,
+      "tile_height": 512,
+      "mask_blur": 8,
+      "tile_padding": 32,
+      "seam_fix_mode": "Half Tile",
+      "seam_fix_denoise": 0.5,
+      "seam_fix_width": 64,
+      "seam_fix_mask_blur": 8,
+      "seam_fix_padding": 32,
+      "force_uniform_tiles": "enable",
+      "model": ["1", 0],
+      "positive": ["9", 0],
+      "negative": ["10", 0],
+      "vae": ["5", 0],
+      "upscale_model": ["16", 0]
+    },
+    "class_type": "UltimateSDUpscale"
+  },
+  "16": {
+    "inputs": {
+      "model_name": "4x_foolhardy_Remacri.pth"
+    },
+    "class_type": "UpscaleModelLoader"
+  }
+}

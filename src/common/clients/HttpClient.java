@@ -3,6 +3,7 @@ package common.clients;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,24 +14,21 @@ import org.slf4j.LoggerFactory;
 
 public class HttpClient {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
 
-    public enum RequestMethod {
-        GET, POST, PATCH, DELETE
-    }
+	public enum RequestMethod {
+		GET, POST, PATCH, DELETE
+	}
 
-    public String makeRequest(RequestMethod requestMethod, String url,	
-            Map<String, String> headers, JSONObject body) {
+	public String makeRequest(RequestMethod requestMethod, String url, Map<String, String> headers, JSONObject body) {
+		try {
+			LOG.info("Calling URL: {}", url);
 
-        try {
-            LOG.info("Calling URL: {}", url);
+			URL obj = new URL(url);
+			HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+			connection.setRequestMethod(requestMethod.name());
 
-            URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-            connection.setRequestMethod(requestMethod.name());
-
-            headers.entrySet().stream()
-            .forEach(e -> connection.setRequestProperty(e.getKey(), e.getValue()));
+			headers.entrySet().stream().forEach(e -> connection.setRequestProperty(e.getKey(), e.getValue()));
 
             // request body
             if (RequestMethod.POST.equals(requestMethod) || 
@@ -42,11 +40,11 @@ public class HttpClient {
                 writer.close();
             }
 
-            // response
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line;
+			// response
+			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String line;
 
-            StringBuffer response = new StringBuffer();
+			StringBuffer response = new StringBuffer();
 
             while ((line = br.readLine()) != null)
                 response.append(line);
@@ -54,9 +52,45 @@ public class HttpClient {
 
             return response.toString();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public String makeRequest(RequestMethod requestMethod, String url, Map<String, String> headers, byte[] body) {
+	    try {
+	        LOG.info("Calling URL: {}", url);
 
+	        URL obj = new URL(url);
+	        HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+	        connection.setRequestMethod(requestMethod.name());
+
+	        headers.forEach(connection::setRequestProperty);
+
+	        // Set content type to indicate JSON data
+	        connection.setRequestProperty("Content-Type", "application/json");
+
+	        if (RequestMethod.POST.equals(requestMethod) || RequestMethod.PATCH.equals(requestMethod)) {
+	            connection.setDoOutput(true);
+	            try (OutputStream outputStream = connection.getOutputStream()) {
+	                outputStream.write(body);
+	                outputStream.flush();
+	            }
+	        }
+
+	        // Read the response
+	        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+	            StringBuilder response = new StringBuilder();
+	            String line;
+
+	            while ((line = br.readLine()) != null) {
+	                response.append(line);
+	            }
+	            return response.toString();
+	        }
+
+	    } catch (IOException e) {
+	        throw new RuntimeException(e);
+	    }
+	}
 }
