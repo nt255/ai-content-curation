@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import common.CommonModule;
-import common.mq.ZMQSubscriber;
+import common.mq.ZMQConsumer;
 import common.mq.ZMQModel;
 import processors.models.ComfyConfigs;
 import processors.models.JobResponse;
@@ -27,7 +27,7 @@ public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-    @Inject private ZMQSubscriber subscriber;
+    @Inject private ZMQConsumer consumer;
     @Inject private ProcessorRouter router;
     @Inject private ComfyClient comfyClient;
 
@@ -42,7 +42,6 @@ public class Application {
     private void start(String[] args) {
 
         LOG.info("Starting Processor.");
-        
         try {
         	Map<String, String> map = new HashMap<String, String>();
         	map.put("height", "768");
@@ -61,20 +60,21 @@ public class Application {
         } catch(Exception e) {
         	LOG.error(e.getMessage());
         }
-        
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<?> future = executorService.submit(() -> {
-            LOG.info("Waiting for payload...");
-            ZMQModel model = subscriber.receive();
+            while (!Thread.currentThread().isInterrupted()) {
+                LOG.info("Waiting for payload...");
+                ZMQModel model = consumer.receive();
 
-            JobResponse response = router.route(
-                    model.getJobType(), model.getId(), model.getParameters());
-            UUID id = response.getId();
+                JobResponse response = router.route(
+                        model.getJobType(), model.getId(), model.getParameters());
+                UUID id = response.getId();
 
-            if (response.isSuccessful())
-                LOG.info("Succesfully processed job with id: {}.", id);
-            else
-                LOG.warn("Unable to process job with id: {}.", id);
+                if (response.isSuccessful())
+                    LOG.info("Succesfully processed job with id: {}.", id);
+                else
+                    LOG.warn("Unable to process job with id: {}.", id);
+            }
         });
 
         try {
@@ -84,7 +84,9 @@ public class Application {
             } else {
                 future.get();
             }
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+        } catch (TimeoutException e) {
+            LOG.info("timeout has been reached");
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 

@@ -22,7 +22,8 @@ public class LogbackFilter extends Filter<ILoggingEvent> {
                             "Connection checked out:"),
                     "org.mongodb.driver.operation", 
                     Set.of(
-                            "retryWrites set to true but the server is a standalone server"));
+                            "retryWrites set to true but the server is a standalone server",
+                            "Received batch of"));
 
     @Override
     public FilterReply decide(ILoggingEvent event) {

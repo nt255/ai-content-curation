@@ -8,20 +8,20 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import common.db.models.JobDbModel;
-import common.mq.ZMQPublisher;
+import common.mq.ZMQProducer;
 import server.models.Job;
 
 public class JobService extends BaseService<Job, JobDbModel> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobService.class);
 
-    @Inject private ZMQPublisher publisher;
+    @Inject private ZMQProducer producer;
 
     public void submit(UUID id) {        
         get(id).ifPresentOrElse(
                 job -> {
                     LOG.info("submitting job with id: {} to queue", id);
-                    publisher.send(mapper.mapToZMQModel(job));
+                    producer.send(mapper.mapToZMQModel(job));
                 }, 
                 () -> LOG.warn("unable to find job with id: {}", id));
     }

@@ -13,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,27 +35,26 @@ public class LocalApplicationTests extends TestWithInjections {
     @Inject private HttpClient httpClient;
     @Inject private Properties properties;
     @Inject private Gson gson;
+    
 
-
-    @Test
-    void serverAndProcessorFullFlowTest() {
-
-        CompletableFuture<Void> applicationFuture =
+    @BeforeEach
+    void startApplication() {
+        CompletableFuture<Void> processorWithTimeout =
                 CompletableFuture.runAsync(() -> {
                     processors.Application.main(new String[]{"500"});
                 });
 
-        CompletableFuture<Void> testFuture =
+        CompletableFuture<Void> javalin =
                 CompletableFuture.runAsync(() -> {
                     server.Application.main(new String[0]);
-                    createSubmitAndDeleteJob();
                 });
 
-        CompletableFuture.allOf(applicationFuture, testFuture).toCompletableFuture().join();
+        CompletableFuture.allOf(
+                processorWithTimeout, javalin).toCompletableFuture().join();
     }
 
-
-    void createSubmitAndDeleteJob() {
+    @Test
+    void serverAndProcessorFullFlowTest() {
 
         // create
         String port = properties.getProperty("javalin.port");
@@ -107,8 +107,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         try {
-            LOG.info("waiting half a second..");
-            TimeUnit.MILLISECONDS.sleep(500);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -132,5 +131,7 @@ public class LocalApplicationTests extends TestWithInjections {
                 () -> httpClient.makeRequest(
                         RequestMethod.GET, getUrl, headers, new JSONObject()));
     }
+
+
 
 }
