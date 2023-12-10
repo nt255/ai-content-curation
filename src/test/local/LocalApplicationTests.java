@@ -63,7 +63,7 @@ public class LocalApplicationTests extends TestWithInjections {
         Map<String, String> headers = Map.of();
 
         JSONObject body = new JSONObject()
-                .put("type", "TEXT_ONLY")
+                .put("type", "TEXT")
                 .put("state", "COMPLETED")
                 .put("parameters", new JSONObject()
                         .put("prompt", "Write me a nice story about a farmer."));
