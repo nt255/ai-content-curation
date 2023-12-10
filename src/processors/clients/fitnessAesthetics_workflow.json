@@ -26,7 +26,7 @@
   "4": {
     "inputs": {
       "lora_name": "ReaLora.safetensors",
-      "strength_model": 0.5,
+      "strength_model": 0.8,
       "strength_clip": 1,
       "model": ["1", 0],
       "clip": ["1", 1]
@@ -50,7 +50,7 @@
   "7": {
     "inputs": {
       "lora_name": "add_sharpness.safetensors",
-      "strength_model": 0.5,
+      "strength_model": 0.3,
       "strength_clip": 1,
       "model": ["4", 0],
       "clip": ["4", 1]
@@ -60,7 +60,7 @@
   "8": {
     "inputs": {
       "lora_name": "InstantPhotoX3.safetensors",
-      "strength_model": 0.3,
+      "strength_model": 0.1,
       "strength_clip": 1,
       "model": ["7", 0],
       "clip": ["7", 1]

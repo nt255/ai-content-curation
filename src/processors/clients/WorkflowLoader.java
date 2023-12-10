@@ -91,6 +91,10 @@ public class WorkflowLoader {
         }
 	}
 
+	/* 
+	 * Currently only works to modify the following:
+	 * checkpoint, prompt, height, width.
+	 */
 	@SuppressWarnings("unchecked")
 	public void applyConfigs(ComfyConfigs configs) {
 		LOG.info("Applying arguments to override default configs, if applicable...");
@@ -109,6 +113,11 @@ public class WorkflowLoader {
 		LOG.info("DEBUG: and the arguments...");
 		System.out.println(configs);
 
+		/*
+		 * currently, we should all have the following checkpoints:
+		 * realDream_9.safetensors
+		 * consistentFactorEuclid_euclidV61.safetensors
+		 */
 		if (configs.containsKey("checkpoint")) {
 			LOG.info("'checkpoint' found. overwriting default...");
 			checkpointInputs.put("ckpt_name", configs.get("checkpoint"));

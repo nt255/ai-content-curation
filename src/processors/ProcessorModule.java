@@ -21,7 +21,7 @@ public class ProcessorModule extends AbstractModule {
         // WorkflowLoader instances
         bind(WorkflowLoader.class).annotatedWith(Names.named("fitnessAesthetics")).toInstance(new WorkflowLoader("fitnessAesthetics"));
         bind(WorkflowLoader.class).annotatedWith(Names.named("dailyAffirmations")).toInstance(new WorkflowLoader("dailyAffirmations"));
-        bind(WorkflowLoader.class).annotatedWith(Names.named("thirstTrap")).toInstance(new WorkflowLoader("thirstTrap"));
+        bind(WorkflowLoader.class).annotatedWith(Names.named("upscaler")).toInstance(new WorkflowLoader("upscaler"));
 
         // processors
         bind(ProcessorRouter.class).in(Singleton.class);

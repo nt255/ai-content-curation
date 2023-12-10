@@ -44,15 +44,17 @@ public class Application {
         LOG.info("Starting Processor.");
         
         try {
-        	comfyClient.queuePrompt();
-        	comfyClient.switchWorkflow("dailyAffirmations");
-        	comfyClient.queuePrompt();
         	Map<String, String> map = new HashMap<String, String>();
         	map.put("height", "768");
-        	map.put("prompt", "a strong, well-dressed man looking longingly at viewer.");
+        	map.put("checkpoint", "realDream_9.safetensors");
+        	map.put("prompt", "realistic photo, film grain, (upper body photo of a confident, muscular asian male model ((looking at viewer))). handsome. wearing gym shorts, topless. curly hair.");
         	ComfyConfigs configs = new ComfyConfigs(map);
         	comfyClient.applyConfigs(configs);
-        	comfyClient.queuePrompt();
+        	comfyClient.queuePrompt(2);
+        	comfyClient.switchWorkflow("dailyAffirmations");
+        	map.put("prompt", "cool lady riding the subway, realistic.");
+        	comfyClient.applyConfigs(configs);
+        	comfyClient.queuePrompt(2);
         } catch (IllegalStateException e) {
         	LOG.error("Could not queue prompt!");
         	LOG.error(e.getMessage());

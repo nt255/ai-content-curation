@@ -1,0 +1,164 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "realDream_9.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple"
+  },
+  "3": {
+    "inputs": {
+      "vae_name": "vae-ft-mse-840000-ema-pruned.safetensors"
+    },
+    "class_type": "VAELoader"
+  },
+  "4": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "14",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "5": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "14",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "6": {
+    "inputs": {
+      "image": "test_0005.jpg",
+      "choose file to upload": "image"
+    },
+    "class_type": "LoadImage"
+  },
+  "9": {
+    "inputs": {
+      "upscale_by": 2,
+      "seed": 810151462306571,
+      "steps": 30,
+      "cfg": 11,
+      "sampler_name": "dpmpp_sde_gpu",
+      "scheduler": "karras",
+      "denoise": 0.3,
+      "mode_type": "Linear",
+      "tile_width": 512,
+      "tile_height": 512,
+      "mask_blur": 8,
+      "tile_padding": 32,
+      "seam_fix_mode": "Half Tile",
+      "seam_fix_denoise": 0.5,
+      "seam_fix_width": 64,
+      "seam_fix_mask_blur": 8,
+      "seam_fix_padding": 32,
+      "force_uniform_tiles": "enable",
+      "image": [
+        "6",
+        0
+      ],
+      "model": [
+        "14",
+        0
+      ],
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "5",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ],
+      "upscale_model": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "UltimateSDUpscale"
+  },
+  "10": {
+    "inputs": {
+      "output_path": "/comfyclient_output",
+      "filename_prefix": "upscale",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "quality": 100,
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "9",
+        0
+      ]
+    },
+    "class_type": "Image Save"
+  },
+  "11": {
+    "inputs": {
+      "model_name": "4x_foolhardy_Remacri.pth"
+    },
+    "class_type": "UpscaleModelLoader"
+  },
+  "12": {
+    "inputs": {
+      "lora_name": "ReaLora.safetensors",
+      "strength_model": 0.5,
+      "strength_clip": 1,
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "LoraLoader"
+  },
+  "13": {
+    "inputs": {
+      "lora_name": "add_sharpness.safetensors",
+      "strength_model": 0.3,
+      "strength_clip": 1,
+      "model": [
+        "12",
+        0
+      ],
+      "clip": [
+        "12",
+        1
+      ]
+    },
+    "class_type": "LoraLoader"
+  },
+  "14": {
+    "inputs": {
+      "lora_name": "InstantPhotoX3.safetensors",
+      "strength_model": 0.3,
+      "strength_clip": 1,
+      "model": [
+        "13",
+        0
+      ],
+      "clip": [
+        "13",
+        1
+      ]
+    },
+    "class_type": "LoraLoader"
+  }
+}
