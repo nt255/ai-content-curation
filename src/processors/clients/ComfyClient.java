@@ -110,7 +110,7 @@ public class ComfyClient {
 			String comfyPromptUrl = "http://127.0.0.1:8188/prompt";
 			String comfyHistoryUrl = "http://127.0.0.1:8188/history";
 			String responseHistory = httpClient.makeRequest(HttpClient.RequestMethod.GET, comfyHistoryUrl, headers, jsonBytes);
-
+			
 			HttpClient httpClient = new HttpClient();
 			String response = httpClient.makeRequest(HttpClient.RequestMethod.POST, comfyPromptUrl, headers, jsonBytes);
 
