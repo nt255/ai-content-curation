@@ -72,7 +72,7 @@ public class LocalApplicationTests extends TestWithInjections {
                 RequestMethod.POST, jobsUrl, headers, body);
         Job postResponse = gson.fromJson(postResponseString, Job.class);
 
-        assertEquals(JobType.TEXT_ONLY, postResponse.getType());
+        assertEquals(JobType.TEXT, postResponse.getType());
         assertEquals(JobState.WAITING, postResponse.getState());
 
         String id = postResponse.getId().toString();
@@ -87,7 +87,7 @@ public class LocalApplicationTests extends TestWithInjections {
         Job getResponse = gson.fromJson(getResponseString, Job.class);
 
         assertEquals(postResponse.getId(), getResponse.getId());
-        assertEquals(JobType.TEXT_ONLY, getResponse.getType());
+        assertEquals(JobType.TEXT, getResponse.getType());
         assertEquals(JobState.WAITING, getResponse.getState());
 
         assertTrue(getResponse.getCreatedOn().isBefore(Instant.now()), 

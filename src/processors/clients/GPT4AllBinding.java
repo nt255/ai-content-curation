@@ -25,7 +25,9 @@ public class GPT4AllBinding {
                 .withNPredict(numTokens).build();
 
         // Will also stream to standard output
-        return loader.getDefaultModel().generate(prompt, config, true);
+        String fullGeneration = loader.getDefaultModel().generate(prompt, config, true);
+        System.out.println("\n");
+        return fullGeneration;
     }
     
     public String generate(String prompt) {

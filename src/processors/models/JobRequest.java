@@ -12,5 +12,10 @@ public class JobRequest {
     private UUID id;
 
     private String prompt;
+    
+    // image only
+    private Integer height;
+    private String checkpoint;
+    private String workflow;
 
 }

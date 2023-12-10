@@ -4,16 +4,14 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import common.clients.HttpClient;
-import processors.ProcessorRouter;
 import processors.models.ComfyConfigs;
 import processors.models.ComfyWorkflow;
 
-import java.lang.reflect.Array;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +26,7 @@ public class ComfyClient {
 	private WorkflowLoader dailyAffirmationsLoader;
 	private WorkflowLoader upscalerLoader;
 	private WorkflowLoader currentWorkflowLoader;
-	private static final Logger LOG = LoggerFactory.getLogger(ProcessorRouter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ComfyClient.class);
 
 	@Inject
 	public ComfyClient(@Named("fitnessAesthetics") WorkflowLoader fitnessAestheticsLoader,
@@ -102,17 +100,17 @@ public class ComfyClient {
 			Map<String, Object> payloadMap = new HashMap<>();
 			payloadMap.put("prompt", workflow.getWorkflow());
 			String jsonPayload = gson.toJson(payloadMap);
-			byte[] jsonBytes = jsonPayload.toString().getBytes(StandardCharsets.UTF_8);
+			JSONObject jsonObject = new JSONObject(jsonPayload);
 
 			Map<String, String> headers = new HashMap<>();
 			headers.put("Content-Type", "application/json");
 			headers.put("charset", "utf-8");
 			String comfyPromptUrl = "http://127.0.0.1:8188/prompt";
 			String comfyHistoryUrl = "http://127.0.0.1:8188/history";
-			String responseHistory = httpClient.makeRequest(HttpClient.RequestMethod.GET, comfyHistoryUrl, headers, jsonBytes);
+			String responseHistory = httpClient.makeRequest(HttpClient.RequestMethod.GET, comfyHistoryUrl, headers, jsonObject);
 			
 			HttpClient httpClient = new HttpClient();
-			String response = httpClient.makeRequest(HttpClient.RequestMethod.POST, comfyPromptUrl, headers, jsonBytes);
+			String response = httpClient.makeRequest(HttpClient.RequestMethod.POST, comfyPromptUrl, headers, jsonObject);
 
 			System.out.println("Response from server: " + response);
 			System.out.println(responseHistory);
@@ -128,12 +126,12 @@ public class ComfyClient {
 		Map<String, Boolean> options = new HashMap<String, Boolean>();
 		options.put("clear", true);
 		String jsonPayload = gson.toJson(options);
-		byte[] jsonBytes = jsonPayload.toString().getBytes(StandardCharsets.UTF_8);
+		JSONObject jsonObject = new JSONObject(jsonPayload);
 
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json");
 		headers.put("charset", "utf-8");
 
-		httpClient.makeRequest(HttpClient.RequestMethod.POST, comfyHistoryUrl, headers, jsonBytes);
+		httpClient.makeRequest(HttpClient.RequestMethod.POST, comfyHistoryUrl, headers, jsonObject);
 	}
 }

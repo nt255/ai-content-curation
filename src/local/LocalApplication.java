@@ -14,7 +14,6 @@ public class LocalApplication {
 
         LOG.info("Starting LocalApplication.");
 
-
         CompletableFuture<Void> serverFuture =
                 CompletableFuture.runAsync(() -> server.Application.main(args));
 

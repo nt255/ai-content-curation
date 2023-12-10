@@ -14,6 +14,10 @@ public class JobResponse {
     
     private boolean isSuccessful;
     
+    private String textResult;
+    
+    private String imageResultFilePath;
+    
     private List<String> errors;
 
 }
