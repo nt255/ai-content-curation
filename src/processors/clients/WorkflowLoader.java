@@ -1,6 +1,5 @@
 package processors.clients;
 
-import processors.ProcessorRouter;
 import processors.models.ComfyConfigs;
 import processors.models.ComfyNode;
 import processors.models.ComfyWorkflow;
@@ -19,15 +18,13 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapType;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 public class WorkflowLoader {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ProcessorRouter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(WorkflowLoader.class);
 	private String workflowName;
 	private ComfyWorkflow loadedWorkflow;
 

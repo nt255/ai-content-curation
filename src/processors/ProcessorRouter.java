@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import common.enums.JobType;
+import processors.impl.ImageProcessor;
 import processors.impl.TextOnlyProcessor;
 import processors.models.JobRequest;
 import processors.models.JobResponse;
@@ -22,9 +23,15 @@ public class ProcessorRouter {
     private final Map<JobType, BiFunction<UUID, Map<String, String>, JobResponse>> processorMap;
 
     @Inject
-    public ProcessorRouter(TextOnlyProcessor textOnlyProcessor) {
-        processorMap =  Map.of(JobType.TEXT_ONLY, 
-                (id, params) -> textOnlyProcessor.doWork(getGenericJobRequest(id, params)));
+    public ProcessorRouter(
+            TextOnlyProcessor textOnlyProcessor, 
+            ImageProcessor imageProcessor) {
+
+        processorMap = Map.of(
+                JobType.TEXT, (id, params) -> textOnlyProcessor.doWork(
+                        getGenericJobRequest(id, params)),
+                JobType.IMAGE, (id, params) -> imageProcessor.doWork(
+                        getImageJobRequest(id, params)));
     }
 
     public JobResponse route(JobType type, UUID id, Map<String, String> params) {
@@ -42,11 +49,20 @@ public class ProcessorRouter {
         }).apply(id, params);
     }
 
-    // eventually can have one of these per processor, when more parameters are needed
     private JobRequest getGenericJobRequest(UUID id, Map<String, String> params) {
         return JobRequest.builder()
                 .id(id)
                 .prompt(params.get("prompt"))
+                .build();
+    }
+
+    private JobRequest getImageJobRequest(UUID id, Map<String, String> params) {
+        return JobRequest.builder()
+                .id(id)
+                .prompt(params.get("prompt"))
+                .height(Integer.parseInt(params.get("height")))
+                .checkpoint(params.get("checkpoint"))
+                .workflow(params.get("workflow"))
                 .build();
     }
 
