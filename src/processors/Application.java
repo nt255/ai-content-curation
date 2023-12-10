@@ -1,4 +1,6 @@
 package processors;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +19,7 @@ import com.google.inject.Injector;
 import common.CommonModule;
 import common.mq.ZMQSubscriber;
 import common.mq.ZMQModel;
-
+import processors.models.ComfyConfigs;
 import processors.models.JobResponse;
 import processors.clients.ComfyClient;
 
@@ -42,6 +44,14 @@ public class Application {
         LOG.info("Starting Processor.");
         
         try {
+        	comfyClient.queuePrompt();
+        	comfyClient.switchWorkflow("dailyAffirmations");
+        	comfyClient.queuePrompt();
+        	Map<String, String> map = new HashMap<String, String>();
+        	map.put("height", "768");
+        	map.put("prompt", "a strong, well-dressed man looking longingly at viewer.");
+        	ComfyConfigs configs = new ComfyConfigs(map);
+        	comfyClient.applyConfigs(configs);
         	comfyClient.queuePrompt();
         } catch (IllegalStateException e) {
         	LOG.error("Could not queue prompt!");

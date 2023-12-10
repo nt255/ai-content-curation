@@ -7,10 +7,12 @@ import processors.models.ComfyWorkflow;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +58,6 @@ public class WorkflowLoader {
 			LOG.info(String.format("Loading workflow from path '%s'", workflowPath));
 			String content = new String(Files.readAllBytes(Paths.get(workflowPath)));
 			LOG.info("Successfully loaded.");
-			LOG.info(content);
             JSONObject json = new JSONObject(content);
 			LOG.info(json.toString());
 			ComfyWorkflow comfyWorkflow = parseWorkflow(json);
@@ -130,6 +131,21 @@ public class WorkflowLoader {
 
 		LOG.info("And here it is after the changes:");
 		System.out.println(this.loadedWorkflow);
+	}
+	
+	public void setRandomSeed () {
+		ComfyNode ksamplerNode = getMapNode(this.loadedWorkflow, "2");
+		Map<String, Object> ksamplerInputs = (Map<String, Object>) ksamplerNode.get("inputs");
+		
+		// generate random seed within expected SD range
+		Random random = new Random();
+		BigInteger maxSeed = new BigInteger("18446744073709551614");
+		BigInteger randomBigInt = new BigInteger(maxSeed.bitLength(), random);
+		while (randomBigInt.compareTo(maxSeed) >= 0) {
+	        randomBigInt = new BigInteger(maxSeed.bitLength(), random);
+	    }
+		
+		ksamplerInputs.put("noise_seed", randomBigInt);
 	}
 
 	public String getWorkflowName() {

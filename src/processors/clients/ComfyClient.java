@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import common.clients.HttpClient;
 import processors.ProcessorRouter;
+import processors.models.ComfyConfigs;
 import processors.models.ComfyWorkflow;
 
 import java.nio.charset.StandardCharsets;
@@ -55,6 +56,10 @@ public class ComfyClient {
     	}
     }
     
+    public void applyConfigs(ComfyConfigs configs) {
+    	this.currentWorkflowLoader.applyConfigs(configs);
+    }
+    
     /**
      * NOTE
      *  The methods below will NOT return anything. They will make a call to the localhost that hosts your instance of ComfyUI,
@@ -78,6 +83,7 @@ public class ComfyClient {
     
     private void sendTask(ComfyWorkflow workflow) {
     	try {
+    		currentWorkflowLoader.setRandomSeed();
     		Map<String, Object> payloadMap = new HashMap<>();
             payloadMap.put("prompt", workflow.getWorkflow());
             String jsonPayload = gson.toJson(payloadMap);
