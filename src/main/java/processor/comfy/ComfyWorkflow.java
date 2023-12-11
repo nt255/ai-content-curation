@@ -21,7 +21,7 @@ public class ComfyWorkflow {
 
     private JSONObject json;
 
-    public ComfyWorkflow(AlternativeWorkflowBuilder builder) {
+    public ComfyWorkflow(ComfyWorkflowBuilder builder) {
 
         String jsonString = "";
         try {
@@ -71,18 +71,18 @@ public class ComfyWorkflow {
 
 
     @NoArgsConstructor
-    public static class AlternativeWorkflowBuilder {
+    public static class ComfyWorkflowBuilder {
 
         private String baseWorkflowFile;
 
         private Map<String, String> params;
 
-        public AlternativeWorkflowBuilder setBaseWorkflowFile(String baseWorkflowFile) {
+        public ComfyWorkflowBuilder setBaseWorkflowFile(String baseWorkflowFile) {
             this.baseWorkflowFile = baseWorkflowFile;
             return this;
         }
 
-        public AlternativeWorkflowBuilder setParams(Map<String, String> params) {
+        public ComfyWorkflowBuilder setParams(Map<String, String> params) {
             this.params = params;
             return this;
         }
