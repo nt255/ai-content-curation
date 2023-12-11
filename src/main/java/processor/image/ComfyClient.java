@@ -19,7 +19,7 @@ public class ComfyClient {
     private static final String WF_FORMATTED_STRING = 
             "src/main/resources/workflows/%s_workflow.json";
 
-    @Inject private HttpClient httpClient;
+    private HttpClient httpClient;
 
     private String outputDirectory;
     private String promptUrl;
@@ -29,12 +29,15 @@ public class ComfyClient {
 
 
     @Inject
-    public ComfyClient(Properties properties) {
+    public ComfyClient(Properties properties, HttpClient httpClient) {
+        this.httpClient = httpClient;
         this.outputDirectory = properties.getProperty("comfy.output.directory");
         
         String baseUrl = properties.getProperty("comfy.server.address");
         this.promptUrl = baseUrl + "/prompt";
         this.historyUrl = baseUrl + "/history";
+        
+        checkConnection();
     }
 
     public void loadWorkflow(String wfname, Map<String, String> params) {
@@ -44,7 +47,6 @@ public class ComfyClient {
                 .setParams(params)
                 .setOutputDirectory(outputDirectory) // must always be set
                 .build();
-        workflow.generateNewSeed();
     }
 
     /**
@@ -93,6 +95,17 @@ public class ComfyClient {
             LOG.info("received back: {}", response);
             
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void checkConnection() {
+        LOG.info("Checking connection to Comfy.");
+        try {
+            httpClient.get(historyUrl);
+            LOG.info("Succesfully connected to comfy.");
+        } catch (RuntimeException e) {
+            LOG.error("Unable to connect to comfy.");
             e.printStackTrace();
         }
     }

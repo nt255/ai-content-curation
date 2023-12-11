@@ -33,7 +33,8 @@ public class ComfyWorkflow {
         }
 
         json = new JSONObject(jsonString);
-
+        generateNewSeed();
+        
         Map<String, String> params = builder.params;
 
         if (params.containsKey("height")) {
@@ -60,7 +61,6 @@ public class ComfyWorkflow {
             json.getJSONObject("14").getJSONObject("inputs")
             .put("output_path", builder.outputDirectory);
         }
-        
     }
 
     public void generateNewSeed() {

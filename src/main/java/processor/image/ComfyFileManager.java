@@ -26,7 +26,6 @@ public class ComfyFileManager {
     public ComfyFileManager(Properties properties) {
         this.outputDirectory = properties.getProperty("comfy.output.directory");
         this.files = getCurrentFiles();
-
     }
 
     private Set<String> getCurrentFiles() {
@@ -65,5 +64,6 @@ public class ComfyFileManager {
         File directory = new File(outputDirectory);
         for (File f: directory.listFiles())
             f.delete();
+        files = Set.of();
     }
 }

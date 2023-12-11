@@ -50,7 +50,7 @@ public class RequestHandler {
                     body.setId(UUID.randomUUID());
                     body.setCreatedOn(Instant.now());
                     body.setLastModifiedOn(Instant.now());
-                    body.setState(JobState.WAITING);
+                    body.setState(JobState.NEW);
 
                     jobService.insert(body);
                     ctx.json(gson.toJson(body));
