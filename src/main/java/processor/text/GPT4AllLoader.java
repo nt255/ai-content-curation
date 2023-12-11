@@ -16,7 +16,7 @@ public class GPT4AllLoader {
     @Inject
     public GPT4AllLoader(Properties properties) {
         String modelFilePath = 
-                properties.getProperty("resources.root") +
+                properties.getProperty("resources.directory") +
                 properties.getProperty("resources.gpt4all.model.default");
         
         this.defaultModel = new LLModel(Path.of(modelFilePath));

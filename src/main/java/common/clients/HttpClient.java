@@ -15,11 +15,27 @@ public class HttpClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
 
-    public enum RequestMethod {
+    private enum RequestMethod {
         GET, POST, PATCH, DELETE
     }
+    
+    public String get(String url) {
+        return makeRequest(RequestMethod.GET, url, Map.of(), new JSONObject());
+    }
+    
+    public String post(String url, Map<String, String> headers, JSONObject body) {
+        return makeRequest(RequestMethod.POST, url, headers, body);
+    }
+    
+    public String post(String url, JSONObject body) {
+        return post(url, Map.of(), body);
+    }
+    
+    public String delete(String url) {
+        return makeRequest(RequestMethod.DELETE, url, Map.of(), new JSONObject());
+    }
 
-    public String makeRequest(RequestMethod requestMethod, String url, Map<String, String> headers, JSONObject body) {
+    private String makeRequest(RequestMethod requestMethod, String url, Map<String, String> headers, JSONObject body) {
         try {
             LOG.info("Calling URL: {}", url);
 

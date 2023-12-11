@@ -10,7 +10,6 @@ import com.google.inject.Inject;
 
 import main.java.processor.Processor;
 import main.java.processor.comfy.ComfyClient;
-import main.java.processor.comfy.ComfyConfigs;
 import main.java.processor.models.JobRequest;
 import main.java.processor.models.JobResponse;
 
@@ -24,17 +23,14 @@ public class ImageProcessor implements Processor {
     public JobResponse doWork(JobRequest request) {
         
         try {
-            
-            Map<String, String> map = Map.of(
+            Map<String, String> params = Map.of(
                     "prompt", request.getPrompt(),
                     "height", request.getHeight().toString(),
+                    "width", request.getWidth().toString(),
                     "checkpoint", request.getCheckpoint());
-
             
-            ComfyConfigs configs = new ComfyConfigs(map);
-            comfyClient.applyConfigs(configs);
-            comfyClient.switchWorkflow(request.getWorkflow());
-            comfyClient.queuePrompt(1);
+            comfyClient.loadWorkflow(request.getWorkflow(), params);
+            comfyClient.queuePrompt();
 
         } catch (IllegalStateException e) {
             LOG.error("Could not queue prompt!");
