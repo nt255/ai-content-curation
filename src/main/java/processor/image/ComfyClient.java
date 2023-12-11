@@ -1,9 +1,9 @@
-package main.java.processor.comfy;
+package main.java.processor.image;
 
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
-import main.java.processor.comfy.ComfyWorkflow.ComfyWorkflowBuilder;
+import main.java.processor.image.ComfyWorkflow.ComfyWorkflowBuilder;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -21,14 +21,17 @@ public class ComfyClient {
 
     @Inject private HttpClient httpClient;
 
+    private String outputDirectory;
     private String promptUrl;
     private String historyUrl;
 
-    private ComfyWorkflow loadedWorkflow;
+    private ComfyWorkflow workflow;
 
 
     @Inject
     public ComfyClient(Properties properties) {
+        this.outputDirectory = properties.getProperty("comfy.output.directory");
+        
         String baseUrl = properties.getProperty("comfy.server.address");
         this.promptUrl = baseUrl + "/prompt";
         this.historyUrl = baseUrl + "/history";
@@ -36,11 +39,12 @@ public class ComfyClient {
 
     public void loadWorkflow(String wfname, Map<String, String> params) {
         String baseWfFile = String.format(WF_FORMATTED_STRING, wfname);
-        loadedWorkflow = new ComfyWorkflowBuilder()
+        workflow = new ComfyWorkflowBuilder()
                 .setBaseWorkflowFile(baseWfFile)
                 .setParams(params)
+                .setOutputDirectory(outputDirectory) // must always be set
                 .build();
-        loadedWorkflow.generateNewSeed();
+        workflow.generateNewSeed();
     }
 
     /**
@@ -58,7 +62,7 @@ public class ComfyClient {
         LOG.info("A prompt was queued with no arguments. Proceeding...");
         LOG.info("Verifying that workflow has been loaded...");
 
-        if (loadedWorkflow != null) {
+        if (workflow != null) {
             LOG.info("Workflow has been verified.");
             LOG.info("Deleting history.");
             clearQueueHistory();
@@ -76,18 +80,18 @@ public class ComfyClient {
 
     private void sendTask() {
         try {
-            loadedWorkflow.generateNewSeed();
+            workflow.generateNewSeed();
+            
             JSONObject request = new JSONObject()
-                    .put("prompt", loadedWorkflow.getJson());
-            LOG.info("sending over to comfy {}", request);
-
-            String responseHistory = httpClient.get(historyUrl);
-
-            HttpClient httpClient = new HttpClient();
-            String response = httpClient.post(promptUrl, request);
-
-            LOG.info("Response from server: " + response);
-            LOG.info(responseHistory);
+                    .put("prompt", workflow.getJson());
+            
+            LOG.info("sending prompt: {}", request);
+            
+            JSONObject response = new JSONObject(
+                    httpClient.post(promptUrl, request));
+            
+            LOG.info("received back: {}", response);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
