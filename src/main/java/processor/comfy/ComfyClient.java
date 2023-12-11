@@ -3,7 +3,7 @@ package main.java.processor.comfy;
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
-import main.java.processor.comfy.ComfyWorkflow.AlternativeWorkflowBuilder;
+import main.java.processor.comfy.ComfyWorkflow.ComfyWorkflowBuilder;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class ComfyClient {
 
     public void loadWorkflow(String wfname, Map<String, String> params) {
         String baseWfFile = String.format(WF_FORMATTED_STRING, wfname);
-        loadedWorkflow = new AlternativeWorkflowBuilder()
+        loadedWorkflow = new ComfyWorkflowBuilder()
                 .setBaseWorkflowFile(baseWfFile)
                 .setParams(params)
                 .build();
