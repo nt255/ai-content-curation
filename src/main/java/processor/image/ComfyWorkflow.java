@@ -1,4 +1,4 @@
-package main.java.processor.comfy;
+package main.java.processor.image;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class ComfyWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(ComfyWorkflow.class);
-
+    
     private JSONObject json;
 
     public ComfyWorkflow(ComfyWorkflowBuilder builder) {
@@ -56,6 +56,11 @@ public class ComfyWorkflow {
             .put("text", params.get("prompt"));
         }
         
+        if (builder.outputDirectory != null) {
+            json.getJSONObject("14").getJSONObject("inputs")
+            .put("output_path", builder.outputDirectory);
+        }
+        
     }
 
     public void generateNewSeed() {
@@ -76,6 +81,8 @@ public class ComfyWorkflow {
         private String baseWorkflowFile;
 
         private Map<String, String> params;
+        
+        private String outputDirectory;
 
         public ComfyWorkflowBuilder setBaseWorkflowFile(String baseWorkflowFile) {
             this.baseWorkflowFile = baseWorkflowFile;
@@ -84,6 +91,11 @@ public class ComfyWorkflow {
 
         public ComfyWorkflowBuilder setParams(Map<String, String> params) {
             this.params = params;
+            return this;
+        }
+        
+        public ComfyWorkflowBuilder setOutputDirectory(String outputDirectory) {
+            this.outputDirectory = outputDirectory;
             return this;
         }
 
