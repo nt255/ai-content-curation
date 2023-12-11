@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
-import main.java.common.clients.HttpClient.RequestMethod;
 import main.java.common.enums.JobState;
 import main.java.common.enums.JobType;
 import main.java.server.models.Job;
@@ -68,8 +67,8 @@ public class LocalApplicationTests extends TestWithInjections {
                 .put("parameters", new JSONObject()
                         .put("prompt", "Write me a nice story about a farmer."));
 
-        String postResponseString = httpClient.makeRequest(
-                RequestMethod.POST, jobsUrl, headers, body);
+        String postResponseString = httpClient.post(
+                jobsUrl, headers, body);
         Job postResponse = gson.fromJson(postResponseString, Job.class);
 
         assertEquals(JobType.TEXT, postResponse.getType());
@@ -82,8 +81,7 @@ public class LocalApplicationTests extends TestWithInjections {
         // get
         String getUrl = jobsUrl + "/" + postResponse.getId();
 
-        String getResponseString = httpClient.makeRequest(
-                RequestMethod.GET, getUrl, headers, new JSONObject());
+        String getResponseString = httpClient.get(getUrl);
         Job getResponse = gson.fromJson(getResponseString, Job.class);
 
         assertEquals(postResponse.getId(), getResponse.getId());
@@ -102,8 +100,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
         // submit
         String submitUrl = url + "/submit/" + getResponse.getId();
-        httpClient.makeRequest(
-                RequestMethod.POST, submitUrl, headers, new JSONObject());
+        httpClient.post(submitUrl, headers, new JSONObject());
 
 
         try {
@@ -114,8 +111,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         // make sure job is updated with results
-        String getResponseStringTwo = httpClient.makeRequest(
-                RequestMethod.GET, getUrl, headers, new JSONObject());
+        String getResponseStringTwo = httpClient.get(getUrl);
         Job getResponseTwo = gson.fromJson(getResponseStringTwo, Job.class);
 
         assertEquals(getResponse.getId(), getResponseTwo.getId());
@@ -123,13 +119,10 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         // delete
-        httpClient.makeRequest(
-                RequestMethod.DELETE, getUrl, headers, new JSONObject());
-
+        httpClient.delete(getUrl);
         assertThrows(
                 RuntimeException.class, // TODO: handle 404s in httpClient
-                () -> httpClient.makeRequest(
-                        RequestMethod.GET, getUrl, headers, new JSONObject()));
+                () -> httpClient.get(getUrl));
     }
 
 

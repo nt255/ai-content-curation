@@ -15,6 +15,7 @@ public class JobRequest {
     
     // image only
     private Integer height;
+    private Integer width;
     private String checkpoint;
     private String workflow;
 

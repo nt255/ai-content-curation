@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
-import main.java.common.clients.HttpClient.RequestMethod;
 
 import org.json.JSONArray;
 
@@ -36,7 +35,7 @@ public class ChatGPTClient {
                         .put("content", prompt))));
 
         return extractMessageFromJSONResponse(
-                httpClient.makeRequest(RequestMethod.POST, url, headers, body));
+                httpClient.post(url, headers, body));
     }
 
     private String extractMessageFromJSONResponse(String response) {
