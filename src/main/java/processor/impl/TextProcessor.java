@@ -30,9 +30,9 @@ public class TextProcessor implements Processor {
 
         UUID id = request.getId();
         String prompt = request.getPrompt();
-        String result = gpt4AllBinding.generate(prompt, Optional.of(16));
+        String result = gpt4AllBinding.generate(prompt, Optional.of(2));
 
-        LOG.info("produced result: {} from ChatGPT client..", result);
+        LOG.info("produced result: {} from GPT4All.", result);
 
         // TODO: do this correctly
         JobDbModel existing = dao.get(id).get();

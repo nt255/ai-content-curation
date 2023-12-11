@@ -31,6 +31,10 @@ public class HttpClient {
         return post(url, Map.of(), body);
     }
     
+    public String post(String url) {
+        return post(url, new JSONObject());
+    }
+    
     public String delete(String url) {
         return makeRequest(RequestMethod.DELETE, url, Map.of(), new JSONObject());
     }
