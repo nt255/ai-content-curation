@@ -116,7 +116,7 @@ public class LocalApplicationTests extends TestWithInjections {
         // TODO: check for submitted state as soon as this goes out
 
         
-        sleep(5L);
+        sleep(10L);
 
 
         // make sure job is updated with results
@@ -171,7 +171,7 @@ public class LocalApplicationTests extends TestWithInjections {
         });
         
         
-        sleep(5L);
+        sleep(10L);
         
         
         // get

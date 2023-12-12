@@ -18,6 +18,8 @@ import com.google.inject.Injector;
 import main.java.common.CommonModule;
 import main.java.common.mq.ZMQConsumer;
 import main.java.common.mq.ZMQModel;
+import main.java.processor.ProcessorModule;
+import main.java.processor.ProcessorRouter;
 import main.java.processor.models.JobResponse;
 
 public class Application {
