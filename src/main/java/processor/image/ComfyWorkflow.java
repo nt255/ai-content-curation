@@ -22,23 +22,33 @@ public class ComfyWorkflow {
 	private static final Logger LOG = LoggerFactory.getLogger(ComfyWorkflow.class);
 
 	private JSONObject json;
-	private Map<String, String> paramsToNodeClassTypeMap = Map.of(
-			"width", "EmptyLatentImage", 
-			"height", "EmptyLatentImage",
-			"checkpoint", "CheckpointLoaderSimple", 
-			"prompt", "CLIPTextEncode",
-			"output_path", "Image Save",
-			"kSteps", "KSamplerAdvanced",
-			"kCFG", "KSamplerAdvanced"
+	private Map<String, String> paramsToNodeClassTypeMap = Map.ofEntries(
+			Map.entry("width", "EmptyLatentImage"), 
+			Map.entry("height", "EmptyLatentImage"),
+			Map.entry("checkpoint", "CheckpointLoaderSimple"), 
+			Map.entry("prompt", "CLIPTextEncode"),
+			Map.entry("outputPath", "Image Save"),
+			Map.entry("kSteps", "KSamplerAdvanced"),
+			Map.entry("kCFG", "KSamplerAdvanced"),
+			Map.entry("kNoise", "KSamplerAdvanced"),
+			Map.entry("upscaleNoise", "UltimateSDUpscale"),
+			Map.entry("upscaleSteps", "UltimateSDUpscale"),
+			Map.entry("upscaleCFG", "UltimateSDUpscale"),
+			Map.entry("imagePath", "LoadImage")
 			);
-	private Map<String, String> semanticArgsToFieldsMap = Map.of(
-			"width", "width",
-			"height", "height",
-			"prompt", "text",
-			"checkpoint", "ckpt_name",
-			"output_path", "output_path",
-			"kSteps", "steps",
-			"kCFG", "cfg"
+	private Map<String, String> semanticArgsToFieldsMap = Map.ofEntries(
+			Map.entry("width", "width"),
+			Map.entry("height", "height"),
+			Map.entry("prompt", "text"),
+			Map.entry("checkpoint", "ckpt_name"),
+			Map.entry("outputPath", "output_path"),
+			Map.entry("kSteps", "steps"),
+			Map.entry("kCFG", "cfg"),
+			Map.entry("kNoise", "noise_seed"),
+			Map.entry("upscaleNoise", "noise_seed"),
+			Map.entry("upscaleSteps", "steps"),
+			Map.entry("upscaleCFG", "cfg"),
+			Map.entry("imagePath", "image")
 			);
 
 	public ComfyWorkflow(ComfyWorkflowBuilder builder) {
@@ -55,9 +65,7 @@ public class ComfyWorkflow {
 
 		// making a copy so that outputDirectory is also included.
 		Map<String, String> params = new HashMap<>(builder.params);
-		params.put("output_path", builder.outputDirectory);
-
-		generateNewSeed();
+		params.put("outputPath", builder.outputDirectory);
 		applyParams(params);
 	}
 
@@ -79,16 +87,6 @@ public class ComfyWorkflow {
 				json.getJSONObject(node).getJSONObject("inputs").put(semanticArgsToFieldsMap.get(key), value);
 			});
 		}
-	}
-
-	public void generateNewSeed() {
-		Random random = new Random();
-		BigInteger maxSeed = new BigInteger("18446744073709551614");
-		BigInteger seed = new BigInteger(maxSeed.bitLength(), random);
-		while (seed.compareTo(maxSeed) >= 0)
-			seed = new BigInteger(maxSeed.bitLength(), random);
-
-		json.getJSONObject("2").getJSONObject("inputs").put("noise_seed", seed);
 	}
 
 	@NoArgsConstructor

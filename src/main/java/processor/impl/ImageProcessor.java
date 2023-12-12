@@ -1,7 +1,9 @@
 package main.java.processor.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -27,8 +29,11 @@ public class ImageProcessor implements Processor {
     @Override
     public JobResult doWork(JobRequest request) {
         
+    	 BigInteger noise = generateNewSeed();
+    	
         try {
             Map<String, String> params = Map.of(
+            		"kNoise", noise.toString(),
                     "prompt", request.getPrompt(),
                     "height", request.getHeight().toString(),
                     "width", request.getWidth().toString(),
@@ -47,10 +52,29 @@ public class ImageProcessor implements Processor {
         Set<String> generatedFiles = waitForGeneratedFiles();
         assert(generatedFiles.size() == 1);     // temporary for now
         
+        String localImagePath = generatedFiles.iterator().next();
+        
+        try {
+        	Map<String, String> params = Map.of(
+        			"upscaleNoise", noise.toString(),
+        			"prompt", request.getPrompt(),
+        			"height", request.getHeight().toString(),
+        			"width", request.getWidth().toString(),
+        			"checkpoint", request.getCheckpoint(),
+        			"upscaleSteps", "25",
+        			"upscaleCFG", "7",
+        			"imagePath", localImagePath
+        			);
+        	comfyClient.loadWorkflow("upscaler", params);
+        	comfyClient.queuePrompt();
+        } catch (IllegalStateException e) {
+        	LOG.error(e.getMessage());
+        }
+        
         JobResult jobResult = JobResult.builder()
                 .id(request.getId())
                 .isSuccessful(true)
-                .localImagePath(generatedFiles.iterator().next())
+                .localImagePath(localImagePath)
                 .errors(List.of())
                 .build();
 
@@ -73,5 +97,13 @@ public class ImageProcessor implements Processor {
         
         return generatedFiles;
     }
-
+    
+	public BigInteger generateNewSeed() {
+		Random random = new Random();
+		BigInteger maxSeed = new BigInteger("18446744073709551614");
+		BigInteger seed = new BigInteger(maxSeed.bitLength(), random);
+		while (seed.compareTo(maxSeed) >= 0)
+			seed = new BigInteger(maxSeed.bitLength(), random);
+		return seed;
+	}
 }

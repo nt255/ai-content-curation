@@ -9,8 +9,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 
 public class ComfyClient {
 
@@ -78,8 +80,6 @@ public class ComfyClient {
 
     private void sendTask() {
         try {
-            workflow.generateNewSeed();
-            
             JSONObject request = new JSONObject()
                     .put("prompt", workflow.getJson());
             
