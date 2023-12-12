@@ -10,7 +10,6 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -41,18 +40,9 @@ public class LocalApplicationTests extends TestWithInjections {
 
     @BeforeAll
     void startApplication() {
-        CompletableFuture<Void> processorWithTimeout =
-                CompletableFuture.runAsync(() -> {
-                    main.java.processor.Application.main(new String[]{"500"});
-                });
-
-        CompletableFuture<Void> javalin =
-                CompletableFuture.runAsync(() -> {
-                    main.java.server.Application.main(new String[0]);
-                });
-
-        CompletableFuture.allOf(
-                processorWithTimeout, javalin).toCompletableFuture().join();
+                                    // TODO: investigate why this works
+        main.java.processor.Application.main(new String[]{"500"});
+        main.java.server.Application.main(new String[0]);
     }
     
     
@@ -105,9 +95,9 @@ public class LocalApplicationTests extends TestWithInjections {
         assertTrue(getResponse.getLastModifiedOn().isBefore(Instant.now()), 
                 "lastModified is not before current time");
 
-        assertNull(getResponse.getTextResult());
-        assertNull(getResponse.getImageResult());
-        assertNull(getResponse.getProcessingNotes());
+        assertNull(getResponse.getOutputText());
+        assertNull(getResponse.getOutputImagePath());
+        assertNull(getResponse.getErrors());
 
 
         // submit
@@ -124,7 +114,7 @@ public class LocalApplicationTests extends TestWithInjections {
         Job getResponseTwo = gson.fromJson(getResponseStringTwo, Job.class);
 
         assertEquals(getResponse.getId(), getResponseTwo.getId());
-        assertNotNull(getResponseTwo.getTextResult());
+        assertNotNull(getResponseTwo.getOutputText());
 
 
         // delete

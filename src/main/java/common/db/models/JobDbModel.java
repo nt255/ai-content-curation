@@ -24,19 +24,16 @@ public class JobDbModel extends BaseDbModel {
     private UUID id;
     
     private Instant createdOn;
-    
     private Instant lastModifiedOn;
 
     private JobType type;
-
     private JobState state;
 
     private Map<String, String> parameters;
     
-    private String textResult;
-    
-    private String imageResult;
-    
-    private List<String> processingNotes;
+    // output
+    private String outputText;
+    private String outputImagePath;
+    private List<String> errors;
 
 }

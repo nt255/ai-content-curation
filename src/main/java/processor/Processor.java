@@ -1,10 +1,10 @@
 package main.java.processor;
 
 import main.java.processor.models.JobRequest;
-import main.java.processor.models.JobResponse;
+import main.java.processor.models.JobResult;
 
 public interface Processor {
 
-    public JobResponse doWork(JobRequest request);
+    public JobResult doWork(JobRequest request);
 
 }

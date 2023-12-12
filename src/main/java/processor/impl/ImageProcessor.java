@@ -14,7 +14,7 @@ import main.java.processor.Processor;
 import main.java.processor.image.ComfyClient;
 import main.java.processor.image.ComfyFileManager;
 import main.java.processor.models.JobRequest;
-import main.java.processor.models.JobResponse;
+import main.java.processor.models.JobResult;
 
 public class ImageProcessor implements Processor {
     
@@ -25,7 +25,7 @@ public class ImageProcessor implements Processor {
     
 
     @Override
-    public JobResponse doWork(JobRequest request) {
+    public JobResult doWork(JobRequest request) {
         
         try {
             Map<String, String> params = Map.of(
@@ -44,7 +44,7 @@ public class ImageProcessor implements Processor {
         // TODO: see if there is a better way to get files
         Set<String> generatedFiles = waitForGeneratedFiles();
         
-        JobResponse jobResponse = JobResponse.builder()
+        JobResult jobResponse = JobResult.builder()
                 .id(request.getId())
                 .isSuccessful(true)
                 .errors(List.of())
