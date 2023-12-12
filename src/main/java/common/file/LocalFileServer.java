@@ -1,6 +1,7 @@
 package main.java.common.file;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -41,8 +42,11 @@ public class LocalFileServer implements FileServer {
     }
 
     @Override
-    public File downloadFile(String name) {
-        return new File(localDirectory + name);
+    public File downloadFile(String name) throws FileNotFoundException {
+        File file = new File(localDirectory + name);
+        if (!file.exists())
+            throw new FileNotFoundException();
+        return file;
     }
 
     @Override
