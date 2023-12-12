@@ -66,7 +66,6 @@ public class ComfyWorkflow {
 		// if those nodes don't exist, then they're ignored.
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			String key = entry.getKey();
-			System.out.println(key);
 
 			String classNameByKey = paramsToNodeClassTypeMap.get(key);
 			String value = entry.getValue();
@@ -75,7 +74,7 @@ public class ComfyWorkflow {
 					.filter(node -> json.getJSONObject(node).has("class_type")
 							&& json.getJSONObject(node).getString("class_type").equals(classNameByKey))
 					.findFirst();
-			System.out.println(classTypeOptional);
+			
 			classTypeOptional.ifPresent(node -> {
 				json.getJSONObject(node).getJSONObject("inputs").put(semanticArgsToFieldsMap.get(key), value);
 			});
