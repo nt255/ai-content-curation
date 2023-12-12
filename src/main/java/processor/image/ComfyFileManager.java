@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,7 @@ public class ComfyFileManager {
                     .filter(file -> !Files.isDirectory(file))
                     .map(Path::getFileName)
                     .map(Path::toString)
+                    .map(s -> outputDirectory + s)
                     .collect(Collectors.toSet());
         } catch (IOException e) {
             LOG.error("comfy output directory not found!");
@@ -60,10 +62,13 @@ public class ComfyFileManager {
     }
 
     public void clearDirectory(String name) {
-        LOG.info("purging output directory");
         File directory = new File(outputDirectory);
-        for (File f: directory.listFiles())
-            f.delete();
+        try {
+            FileUtils.cleanDirectory(directory);
+            LOG.info("purged output directory");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         files = Set.of();
     }
 }

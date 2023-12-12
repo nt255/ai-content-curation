@@ -33,7 +33,7 @@ public class JobDbModel extends BaseDbModel {
     
     // output
     private String outputText;
-    private String outputImagePath;
+    private String outputImageFilename;
     private List<String> errors;
 
 }
