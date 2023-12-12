@@ -62,6 +62,8 @@ public class ProcessorRouter {
                 .prompt(params.get("prompt"))
                 .height(Integer.parseInt(params.get("height")))
                 .width(Integer.parseInt(params.get("width")))
+                .ksteps(Integer.parseInt(params.get("kSteps")))
+                .kcfg(Integer.parseInt(params.get("kCFG")))
                 .checkpoint(params.get("checkpoint"))
                 .workflow(params.get("workflow"))
                 .build();

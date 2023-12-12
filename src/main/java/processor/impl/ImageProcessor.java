@@ -32,7 +32,10 @@ public class ImageProcessor implements Processor {
                     "prompt", request.getPrompt(),
                     "height", request.getHeight().toString(),
                     "width", request.getWidth().toString(),
-                    "checkpoint", request.getCheckpoint());
+                    "checkpoint", request.getCheckpoint(),
+            		"kSteps", request.getKsteps().toString(),
+            		"kCFG", request.getKcfg().toString()
+            		);
             
             comfyClient.loadWorkflow(request.getWorkflow(), params);
             comfyClient.queuePrompt();

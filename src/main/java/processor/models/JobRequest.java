@@ -18,5 +18,6 @@ public class JobRequest {
     private Integer width;
     private String checkpoint;
     private String workflow;
-
+    private Integer ksteps;
+    private Integer kcfg;
 }

@@ -60,10 +60,6 @@ public class ComfyClient {
     // currently simply prints out the error, but should be updated to update
     // relevant JobResponse
     public void queuePrompt() throws IllegalStateException {
-
-        LOG.info("A prompt was queued with no arguments. Proceeding...");
-        LOG.info("Verifying that workflow has been loaded...");
-
         if (workflow != null) {
             LOG.info("Workflow has been verified.");
             LOG.info("Deleting history.");
@@ -111,7 +107,6 @@ public class ComfyClient {
     }
 
     private void clearQueueHistory() {
-        LOG.info("Sent request to clear history.");
         httpClient.post(historyUrl, new JSONObject()
                 .put("clear", true));
     }
