@@ -21,6 +21,8 @@ import main.java.common.db.client.MongoDBClient;
 import main.java.common.db.dao.BaseDao;
 import main.java.common.db.dao.JobDao;
 import main.java.common.db.models.JobDbModel;
+import main.java.common.file.FileServer;
+import main.java.common.file.LocalFileServer;
 
 public class CommonModule extends AbstractModule {
 
@@ -31,6 +33,9 @@ public class CommonModule extends AbstractModule {
 
         // clients
         bind(HttpClient.class).in(Singleton.class);
+
+        // file
+        bind(FileServer.class).to(LocalFileServer.class);
 
         // dao
         bind(MongoDBClient.class).asEagerSingleton();
