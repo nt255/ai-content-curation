@@ -14,13 +14,13 @@ import main.java.common.enums.JobType;
 import main.java.processor.impl.ImageProcessor;
 import main.java.processor.impl.TextProcessor;
 import main.java.processor.models.JobRequest;
-import main.java.processor.models.JobResponse;
+import main.java.processor.models.JobResult;
 
 public class ProcessorRouter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProcessorRouter.class);
 
-    private final Map<JobType, BiFunction<UUID, Map<String, String>, JobResponse>> processorMap;
+    private final Map<JobType, BiFunction<UUID, Map<String, String>, JobResult>> processorMap;
 
     @Inject
     public ProcessorRouter(
@@ -34,10 +34,10 @@ public class ProcessorRouter {
                         getImageJobRequest(id, params)));
     }
 
-    public JobResponse route(JobType type, UUID id, Map<String, String> params) {
+    public JobResult route(JobType type, UUID id, Map<String, String> params) {
 
         String errorMessage = String.format("no matching processor found for JobType: {}", type.name());
-        JobResponse errorResponse = JobResponse.builder()
+        JobResult errorResponse = JobResult.builder()
                 .id(id)
                 .isSuccessful(false)
                 .errors(List.of(errorMessage))

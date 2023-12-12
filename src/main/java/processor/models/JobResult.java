@@ -8,16 +8,15 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class JobResponse {
+public class JobResult {
 
     private UUID id;
     
     private boolean isSuccessful;
     
-    private String textResult;
-    
-    private String imageResultFilePath;
-    
+    // output
+    private String outputText;
+    private String outputImagePath;
     private List<String> errors;
 
 }
