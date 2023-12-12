@@ -18,7 +18,7 @@ public class JobMapper implements Mapper<Job, JobDbModel> {
                 .state(model.getState())
                 .parameters(model.getParameters())
                 .outputText(model.getOutputText())
-                .outputImagePath(model.getOutputImagePath())
+                .outputImageFilename(model.getOutputImageFilename())
                 .errors(model.getErrors())
                 .build();
     }
@@ -33,7 +33,7 @@ public class JobMapper implements Mapper<Job, JobDbModel> {
                 .state(model.getState())
                 .parameters(model.getParameters())
                 .outputText(model.getOutputText())
-                .outputImagePath(model.getOutputImagePath())
+                .outputImageFilename(model.getOutputImageFilename())
                 .errors(model.getErrors())
                 .build();
     }

@@ -29,7 +29,7 @@ public class Job extends BaseModel {
     
     // output
     private String outputText;
-    private String outputImagePath;
+    private String outputImageFilename;
     private List<String> errors;
     
 }

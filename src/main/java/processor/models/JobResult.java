@@ -16,7 +16,7 @@ public class JobResult {
     
     // output
     private String outputText;
-    private String outputImagePath;
+    private String localImagePath;
     private List<String> errors;
 
 }

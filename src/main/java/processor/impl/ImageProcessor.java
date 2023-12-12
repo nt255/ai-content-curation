@@ -41,16 +41,17 @@ public class ImageProcessor implements Processor {
             LOG.error(e.getMessage());
         }
         
-        // TODO: see if there is a better way to get files
         Set<String> generatedFiles = waitForGeneratedFiles();
+        assert(generatedFiles.size() == 1);     // temporary for now
         
-        JobResult jobResponse = JobResult.builder()
+        JobResult jobResult = JobResult.builder()
                 .id(request.getId())
                 .isSuccessful(true)
+                .localImagePath(generatedFiles.iterator().next())
                 .errors(List.of())
                 .build();
 
-        return jobResponse;
+        return jobResult;
     }
     
     

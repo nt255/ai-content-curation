@@ -20,4 +20,5 @@ open module aicontentcuration {
     requires org.jetbrains.annotations;
     requires org.junit.jupiter.api;
     requires gpt4all.java.binding;
+    requires org.apache.commons.io;
 }
