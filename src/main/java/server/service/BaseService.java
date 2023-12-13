@@ -7,14 +7,20 @@ import java.util.UUID;
 import com.google.inject.Inject;
 
 import main.java.common.db.dao.BaseDao;
-import main.java.common.db.models.BaseDbModel;
+import main.java.common.db.models.JobDbModel;
 import main.java.server.mappers.Mapper;
 import main.java.server.models.BaseModel;
 
-public abstract class BaseService<S extends BaseModel, T extends BaseDbModel> {
+public abstract class BaseService<S extends BaseModel, T extends JobDbModel> {
 
-    @Inject private BaseDao<T> dao;
-    @Inject protected Mapper<S, T> mapper;
+    private BaseDao<T> dao;
+    Mapper<S, T> mapper;
+    
+    @Inject
+    public BaseService(BaseDao<T> dao, Mapper<S, T> mapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+    }
 
     public List<S> getCollection() {
         throw new UnsupportedOperationException();
