@@ -2,34 +2,32 @@ package main.java.server.models;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import main.java.common.enums.InputType;
 import main.java.common.enums.JobState;
-import main.java.common.enums.JobType;
-
 
 @Getter
 @Setter
-@Builder
-public class Job extends BaseModel {
+@SuperBuilder
+public abstract class Job extends BaseModel {
     
-    private UUID id;
+    UUID id;
     
-    private Instant createdOn;
-    private Instant lastModifiedOn;
+    Instant createdOn;
+    Instant lastModifiedOn;
     
-    private JobType type;
-    private JobState state;
+    JobState state;
     
-    private Map<String, String> parameters;
+    InputType inputType;
     
-    // output
-    private String outputText;
-    private String outputImageFilename;
-    private List<String> errors;
+    String inputText;
+    String inputFilename;
+    
+    List<String> notes;
+    List<String> errors;
     
 }

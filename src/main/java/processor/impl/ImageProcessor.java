@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -15,8 +16,7 @@ import com.google.inject.Inject;
 import main.java.processor.Processor;
 import main.java.processor.image.ComfyClient;
 import main.java.processor.image.ComfyFileManager;
-import main.java.processor.models.JobRequest;
-import main.java.processor.models.JobResult;
+import main.java.processor.models.ProcessorResponse;
 
 public class ImageProcessor implements Processor {
     
@@ -27,7 +27,7 @@ public class ImageProcessor implements Processor {
     
 
     @Override
-    public JobResult doWork(JobRequest request) {
+    public ProcessorResponse doWork(UUID id, Map<String, String> params) {
         
     	 BigInteger noise = generateNewSeed();
     	
@@ -43,7 +43,7 @@ public class ImageProcessor implements Processor {
             		"kCFG", request.getKcfg().toString()
             		);
             
-            comfyClient.loadWorkflow(request.getWorkflow(), params);
+            comfyClient.loadWorkflow(params.get("workflow"), params);
             comfyClient.queuePrompt();
 
         } catch (IllegalStateException e) {
@@ -82,10 +82,10 @@ public class ImageProcessor implements Processor {
         
         String localUpscaledImagePath = generatedUpscaleFiles.iterator().next();
         
-        JobResult jobResult = JobResult.builder()
-                .id(request.getId())
+        ProcessorResponse jobResult = ProcessorResponse.builder()
+                .id(id)
                 .isSuccessful(true)
-                .localImagePath(localImagePath)
+                .outputString(generatedFiles.iterator().next())
                 .errors(List.of())
                 .build();
 

@@ -1,10 +1,12 @@
 package main.java.processor;
 
-import main.java.processor.models.JobRequest;
-import main.java.processor.models.JobResult;
+import java.util.Map;
+import java.util.UUID;
+
+import main.java.processor.models.ProcessorResponse;
 
 public interface Processor {
 
-    public JobResult doWork(JobRequest request);
+    public ProcessorResponse doWork(UUID id, Map<String, String> params);
 
 }

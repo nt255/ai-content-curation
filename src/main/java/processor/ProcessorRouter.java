@@ -13,14 +13,13 @@ import com.google.inject.Inject;
 import main.java.common.enums.JobType;
 import main.java.processor.impl.ImageProcessor;
 import main.java.processor.impl.TextProcessor;
-import main.java.processor.models.JobRequest;
-import main.java.processor.models.JobResult;
+import main.java.processor.models.ProcessorResponse;
 
 public class ProcessorRouter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProcessorRouter.class);
 
-    private final Map<JobType, BiFunction<UUID, Map<String, String>, JobResult>> processorMap;
+    private final Map<JobType, BiFunction<UUID, Map<String, String>, ProcessorResponse>> processorMap;
 
     @Inject
     public ProcessorRouter(
@@ -28,16 +27,14 @@ public class ProcessorRouter {
             ImageProcessor imageProcessor) {
 
         processorMap = Map.of(
-                JobType.TEXT, (id, params) -> textOnlyProcessor.doWork(
-                        getGenericJobRequest(id, params)),
-                JobType.IMAGE, (id, params) -> imageProcessor.doWork(
-                        getImageJobRequest(id, params)));
+                JobType.TEXT, (id, params) -> textOnlyProcessor.doWork(id, params),
+                JobType.IMAGE, (id, params) -> imageProcessor.doWork(id, params));
     }
 
-    public JobResult route(JobType type, UUID id, Map<String, String> params) {
+    public ProcessorResponse route(JobType type, UUID id, Map<String, String> params) {
 
         String errorMessage = String.format("no matching processor found for JobType: {}", type.name());
-        JobResult errorResponse = JobResult.builder()
+        ProcessorResponse errorResponse = ProcessorResponse.builder()
                 .id(id)
                 .isSuccessful(false)
                 .errors(List.of(errorMessage))
@@ -47,26 +44,6 @@ public class ProcessorRouter {
             LOG.error(errorMessage);
             return errorResponse;
         }).apply(id, params);
-    }
-
-    private JobRequest getGenericJobRequest(UUID id, Map<String, String> params) {
-        return JobRequest.builder()
-                .id(id)
-                .prompt(params.get("prompt"))
-                .build();
-    }
-
-    private JobRequest getImageJobRequest(UUID id, Map<String, String> params) {
-        return JobRequest.builder()
-                .id(id)
-                .prompt(params.get("prompt"))
-                .height(Integer.parseInt(params.get("height")))
-                .width(Integer.parseInt(params.get("width")))
-                .ksteps(Integer.parseInt(params.get("kSteps")))
-                .kcfg(Integer.parseInt(params.get("kCFG")))
-                .checkpoint(params.get("checkpoint"))
-                .workflow(params.get("workflow"))
-                .build();
     }
 
 }
