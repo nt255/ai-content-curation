@@ -3,6 +3,7 @@ package main.java.processor.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -13,8 +14,7 @@ import com.google.inject.Inject;
 import main.java.processor.Processor;
 import main.java.processor.image.ComfyClient;
 import main.java.processor.image.ComfyFileManager;
-import main.java.processor.models.JobRequest;
-import main.java.processor.models.JobResult;
+import main.java.processor.models.ProcessorResponse;
 
 public class ImageProcessor implements Processor {
     
@@ -25,16 +25,10 @@ public class ImageProcessor implements Processor {
     
 
     @Override
-    public JobResult doWork(JobRequest request) {
+    public ProcessorResponse doWork(UUID id, Map<String, String> params) {
         
         try {
-            Map<String, String> params = Map.of(
-                    "prompt", request.getPrompt(),
-                    "height", request.getHeight().toString(),
-                    "width", request.getWidth().toString(),
-                    "checkpoint", request.getCheckpoint());
-            
-            comfyClient.loadWorkflow(request.getWorkflow(), params);
+            comfyClient.loadWorkflow(params.get("workflow"), params);
             comfyClient.queuePrompt();
 
         } catch (IllegalStateException e) {
@@ -44,10 +38,10 @@ public class ImageProcessor implements Processor {
         Set<String> generatedFiles = waitForGeneratedFiles();
         assert(generatedFiles.size() == 1);     // temporary for now
         
-        JobResult jobResult = JobResult.builder()
-                .id(request.getId())
+        ProcessorResponse jobResult = ProcessorResponse.builder()
+                .id(id)
                 .isSuccessful(true)
-                .localImagePath(generatedFiles.iterator().next())
+                .outputString(generatedFiles.iterator().next())
                 .errors(List.of())
                 .build();
 

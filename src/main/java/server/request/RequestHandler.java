@@ -12,9 +12,13 @@ import com.google.inject.Inject;
 
 import io.javalin.Javalin;
 import io.javalin.validation.JavalinValidation;
+
 import main.java.common.enums.JobState;
-import main.java.server.models.Job;
-import main.java.server.service.JobService;
+import main.java.server.models.Image;
+import main.java.server.models.Text;
+import main.java.server.service.ImageService;
+import main.java.server.service.TextService;
+
 
 public class RequestHandler {
 
@@ -24,51 +28,84 @@ public class RequestHandler {
     private final Javalin javalin;
 
     @Inject
-    public RequestHandler(Properties properties, Gson gson, JobService jobService) {
+    public RequestHandler(Properties properties, Gson gson, 
+            TextService textService, ImageService imageService) {
+        
         this.port = Integer.parseInt(properties.getProperty("javalin.port"));
-
-        // todo: move elsewhere
         JavalinValidation.register(UUID.class, s -> UUID.fromString(s));
 
         javalin = Javalin.create()
                 .get("/", ctx -> ctx.result("ai-content-curation"))
-
-                .get("/jobs/{id}", ctx -> {
+                
+                
+                // ----- TEXT -----
+                .get("/texts/{id}", ctx -> {
                     LOG.info("Received GET request to: {}", ctx.fullUrl());
                     UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
-
-                    jobService.get(id).ifPresentOrElse(
+                    textService.get(id).ifPresentOrElse(
                             job -> ctx.json(gson.toJson(job)), 
                             () -> ctx.status(404));
                 })
 
-                .post("/jobs", ctx -> {
+                .post("/texts", ctx -> {
                     String bodyString = ctx.body();
                     LOG.info("Received POST request to: {}, body: {}", ctx.fullUrl(), bodyString);
-                    Job body = gson.fromJson(bodyString, Job.class);
-
+                    Text body = gson.fromJson(bodyString, Text.class);
                     body.setId(UUID.randomUUID());
                     body.setCreatedOn(Instant.now());
                     body.setLastModifiedOn(Instant.now());
                     body.setState(JobState.NEW);
-
-                    jobService.insert(body);
+                    textService.insert(body);
                     ctx.json(gson.toJson(body));
                 })
 
-                .delete("/jobs/{id}", ctx -> {
+                .delete("/texts/{id}", ctx -> {
                     LOG.info("Received DELETE request to: {}", ctx.fullUrl());
                     UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
-
-                    jobService.delete(id);
+                    textService.delete(id);
                     ctx.status(204);
                 })
 
-                .post("/submit/{id}", ctx -> {
+                .post("/submit/texts/{id}", ctx -> {
                     LOG.info("Received POST request to: {}", ctx.fullUrl());
                     UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
+                    textService.submit(id);
+                    ctx.status(202);
+                })
+                
+                
+                // ----- IMAGE -----
+                .get("/images/{id}", ctx -> {
+                    LOG.info("Received GET request to: {}", ctx.fullUrl());
+                    UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
+                    imageService.get(id).ifPresentOrElse(
+                            job -> ctx.json(gson.toJson(job)), 
+                            () -> ctx.status(404));
+                })
 
-                    jobService.submit(id);
+                .post("/images", ctx -> {
+                    String bodyString = ctx.body();
+                    LOG.info("Received POST request to: {}, body: {}", ctx.fullUrl(), bodyString);
+                    Image body = gson.fromJson(bodyString, Image.class);
+                    body.setId(UUID.randomUUID());
+                    body.setCreatedOn(Instant.now());
+                    body.setLastModifiedOn(Instant.now());
+                    body.setState(JobState.NEW);
+                    imageService.insert(body);
+                    ctx.json(gson.toJson(body));
+                })
+
+                .delete("/images/{id}", ctx -> {
+                    LOG.info("Received DELETE request to: {}", ctx.fullUrl());
+                    UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
+                    imageService.delete(id);
+                    ctx.status(204);
+                })
+
+                .post("/submit/images/{id}", ctx -> {
+                    LOG.info("Received POST request to: {}", ctx.fullUrl());
+                    UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
+                    imageService.submit(id);
                     ctx.status(202);
                 });
     }

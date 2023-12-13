@@ -1,59 +1,63 @@
 package main.java.processor;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 
-import main.java.common.db.dao.JobDao;
-import main.java.common.db.models.JobDbModel;
+import main.java.common.db.dao.ImageDao;
+import main.java.common.db.dao.TextDao;
+import main.java.common.db.models.ImageDbModel;
+import main.java.common.db.models.TextDbModel;
 import main.java.common.enums.JobState;
+import main.java.common.enums.JobType;
 import main.java.common.file.FileServer;
 import main.java.common.mq.ZMQModel;
-import main.java.processor.models.JobRequest;
-import main.java.processor.models.JobResult;
+import main.java.processor.models.ProcessorResponse;
 import zmq.util.function.Optional;
 
 public class DbAndFileClient {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DbAndFileClient.class);
-
-    @Inject private JobDao dao;
+    @Inject private TextDao textDao;
+    @Inject private ImageDao imageDao;
     @Inject private FileServer fileServer;
-    @Inject private Gson gson;
 
-    public JobRequest hydrateJobRequest(ZMQModel payload) {
+    public Map<String, String> hydrateJobRequest(ZMQModel payload) {
         throw new UnsupportedOperationException();
     }
 
-    public void persistJobResult(JobResult result) {
+    public void persistJobResult(JobType jobType, ProcessorResponse result) {
 
         UUID id = result.getId();
-
-        JobDbModel existing = dao.get(id).get();
-
-        existing.setLastModifiedOn(Instant.now());
-        existing.setState(JobState.COMPLETED);
-        existing.setOutputText(result.getOutputText());
-
-        Optional.ofNullable(result.getLocalImagePath()).ifPresent(path -> {
-            UUID imageId = UUID.randomUUID();
-            String ext = FilenameUtils.getExtension(path);
-            String newFilename = imageId + "." + ext;
-            fileServer.uploadFile(newFilename, path);
-            existing.setOutputImageFilename(newFilename);
-        });
-
-        // TODO: implement mongodb update
-        dao.delete(id);
-        dao.insert(existing);
-
-        LOG.info("persisted JobResult: {}", gson.toJson(existing));
+        
+        if (JobType.TEXT.equals(jobType)) {
+            TextDbModel existing = textDao.get(id).get();
+            existing.setLastModifiedOn(Instant.now());
+            existing.setState(JobState.COMPLETED);
+            existing.setOutputText(result.getOutputString());
+            
+            textDao.delete(id);
+            textDao.insert(existing);
+        }
+        else if (JobType.IMAGE.equals(jobType)) {
+            ImageDbModel existing = imageDao.get(id).get();
+            existing.setLastModifiedOn(Instant.now());
+            existing.setState(JobState.COMPLETED);
+            
+            Optional.ofNullable(result.getOutputString()).ifPresent(path -> {
+                UUID imageId = UUID.randomUUID();
+                String ext = FilenameUtils.getExtension(path);
+                String newFilename = imageId + "." + ext;
+                fileServer.uploadFile(newFilename, path);
+                existing.setOutputFilename(newFilename);
+            });
+            
+            imageDao.delete(id);
+            imageDao.insert(existing);
+        }
     }
 
 }

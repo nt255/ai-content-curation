@@ -18,7 +18,7 @@ import com.google.inject.Injector;
 import main.java.common.CommonModule;
 import main.java.common.mq.ZMQConsumer;
 import main.java.common.mq.ZMQModel;
-import main.java.processor.models.JobResult;
+import main.java.processor.models.ProcessorResponse;
 
 public class Application {
 
@@ -46,10 +46,10 @@ public class Application {
                 LOG.info("Waiting for payload...");
                 ZMQModel model = consumer.receive();
 
-                JobResult result = router.route(
+                ProcessorResponse result = router.route(
                         model.getJobType(), model.getId(), model.getParameters());
                 
-                dbAndFileClient.persistJobResult(result);
+                dbAndFileClient.persistJobResult(model.getJobType(), result);
                 
                 UUID id = result.getId();
                 if (result.isSuccessful())
