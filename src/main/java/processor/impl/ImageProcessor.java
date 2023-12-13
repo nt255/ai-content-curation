@@ -31,6 +31,7 @@ public class ImageProcessor implements Processor {
         
     	 BigInteger noise = generateNewSeed();
     	
+    	// creates base image
         try {
             Map<String, String> params = Map.of(
             		"kNoise", noise.toString(),
@@ -48,12 +49,18 @@ public class ImageProcessor implements Processor {
         } catch (IllegalStateException e) {
             LOG.error(e.getMessage());
         }
-        
         Set<String> generatedFiles = waitForGeneratedFiles();
         assert(generatedFiles.size() == 1);     // temporary for now
         
         String localImagePath = generatedFiles.iterator().next();
         
+        /*
+         * BETA
+         * This is just to demonstrate and test that the workflow loading for our 
+         * intended basic workflows is operational.
+         */
+        
+        // takes image from previous flow and upscales it 2x
         try {
         	Map<String, String> params = Map.of(
         			"upscaleNoise", noise.toString(),
@@ -70,6 +77,10 @@ public class ImageProcessor implements Processor {
         } catch (IllegalStateException e) {
         	LOG.error(e.getMessage());
         }
+        Set<String> generatedUpscaleFiles = waitForGeneratedFiles();
+        assert(generatedUpscaleFiles.size() == 1);
+        
+        String localUpscaledImagePath = generatedUpscaleFiles.iterator().next();
         
         JobResult jobResult = JobResult.builder()
                 .id(request.getId())
