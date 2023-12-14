@@ -70,6 +70,7 @@ public class ComfyWorkflow {
 	}
 
 	private void applyParams(Map<String, String> params) {
+		LOG.error("test applyParams");
 		// iteratively goes through params and modifies the relevant nodes
 		// if those nodes don't exist, then they're ignored.
 		for (Map.Entry<String, String> entry : params.entrySet()) {

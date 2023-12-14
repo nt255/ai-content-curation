@@ -31,19 +31,20 @@ public class ImageProcessor implements Processor {
         
     	 BigInteger noise = generateNewSeed();
     	
+    	 LOG.error(params.toString());
     	// creates base image
         try {
-            Map<String, String> params = Map.of(
+            Map<String, String> configurationParams = Map.of(
             		"kNoise", noise.toString(),
-                    "prompt", request.getPrompt(),
-                    "height", request.getHeight().toString(),
-                    "width", request.getWidth().toString(),
-                    "checkpoint", request.getCheckpoint(),
-            		"kSteps", request.getKsteps().toString(),
-            		"kCFG", request.getKcfg().toString()
+                    "prompt", params.get("prompt"),
+                    "height", params.get("height"),
+                    "width", params.get("width"),
+                    "checkpoint", params.get("checkpoint"),
+            		"kSteps", "25",
+            		"kCFG", "5"
             		);
             
-            comfyClient.loadWorkflow(params.get("workflow"), params);
+            comfyClient.loadWorkflow(params.get("workflow"), configurationParams);
             comfyClient.queuePrompt();
 
         } catch (IllegalStateException e) {
@@ -61,31 +62,31 @@ public class ImageProcessor implements Processor {
          */
         
         // takes image from previous flow and upscales it 2x
-        try {
-        	Map<String, String> params = Map.of(
-        			"upscaleNoise", noise.toString(),
-        			"prompt", request.getPrompt(),
-        			"height", request.getHeight().toString(),
-        			"width", request.getWidth().toString(),
-        			"checkpoint", request.getCheckpoint(),
-        			"upscaleSteps", "25",
-        			"upscaleCFG", "7",
-        			"imagePath", localImagePath
-        			);
-        	comfyClient.loadWorkflow("upscaler", params);
-        	comfyClient.queuePrompt();
-        } catch (IllegalStateException e) {
-        	LOG.error(e.getMessage());
-        }
-        Set<String> generatedUpscaleFiles = waitForGeneratedFiles();
-        assert(generatedUpscaleFiles.size() == 1);
-        
-        String localUpscaledImagePath = generatedUpscaleFiles.iterator().next();
+//        try {
+//        	Map<String, String> params = Map.of(
+//        			"upscaleNoise", noise.toString(),
+//        			"prompt", request.getPrompt(),
+//        			"height", request.getHeight().toString(),
+//        			"width", request.getWidth().toString(),
+//        			"checkpoint", request.getCheckpoint(),
+//        			"upscaleSteps", "25",
+//        			"upscaleCFG", "7",
+//        			"imagePath", localImagePath
+//        			);
+//        	comfyClient.loadWorkflow("upscaler", params);
+//        	comfyClient.queuePrompt();
+//        } catch (IllegalStateException e) {
+//        	LOG.error(e.getMessage());
+//        }
+//        Set<String> generatedUpscaleFiles = waitForGeneratedFiles();
+//        assert(generatedUpscaleFiles.size() == 1);
+//        
+//        String localUpscaledImagePath = generatedUpscaleFiles.iterator().next();
         
         ProcessorResponse jobResult = ProcessorResponse.builder()
                 .id(id)
                 .isSuccessful(true)
-                .outputString(generatedFiles.iterator().next())
+                .outputString(localImagePath)
                 .errors(List.of())
                 .build();
 
