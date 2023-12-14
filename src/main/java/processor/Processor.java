@@ -1,12 +1,14 @@
 package main.java.processor;
 
-import java.util.Map;
 import java.util.UUID;
 
-import main.java.processor.models.ProcessorResponse;
+import main.java.common.models.BaseParams;
+import main.java.processor.models.ProcessorResult;
 
-public interface Processor {
+public interface Processor<T extends BaseParams> {
 
-    public ProcessorResponse doWork(UUID id, Map<String, String> params);
+    public ProcessorResult process(UUID id, T params);
+    
+    public void save(UUID id, ProcessorResult result);
 
 }

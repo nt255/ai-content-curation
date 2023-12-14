@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.Random;
 
 import org.json.JSONObject;
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import main.java.common.models.ImageParams;
 
 @Getter
 public class ComfyWorkflow {
@@ -35,26 +35,26 @@ public class ComfyWorkflow {
         json = new JSONObject(jsonString);
         generateNewSeed();
         
-        Map<String, String> params = builder.params;
+        ImageParams params = builder.params;
 
-        if (params.containsKey("height")) {
+        if (params.getHeight() != null) {
             json.getJSONObject("6").getJSONObject("inputs")
-            .put("height", params.get("height"));
+            .put("height", params.getHeight());
         }
 
-        if (params.containsKey("width")) {
+        if (params.getWidth() != null) {
             json.getJSONObject("6").getJSONObject("inputs")
-            .put("width", params.get("width"));
+            .put("width", params.getWidth());
         }
 
-        if (params.containsKey("checkpoint")) {
+        if (params.getCheckpoint() != null) {
             json.getJSONObject("1").getJSONObject("inputs")
-            .put("ckpt_name", params.get("checkpoint"));
+            .put("ckpt_name", params.getCheckpoint());
         }
 
-        if (params.containsKey("prompt")) {
+        if (params.getPrompt() != null) {
             json.getJSONObject("9").getJSONObject("inputs")
-            .put("text", params.get("prompt"));
+            .put("text", params.getPrompt());
         }
         
         if (builder.outputDirectory != null) {
@@ -80,7 +80,7 @@ public class ComfyWorkflow {
 
         private String baseWorkflowFile;
 
-        private Map<String, String> params;
+        private ImageParams params;
         
         private String outputDirectory;
 
@@ -89,7 +89,7 @@ public class ComfyWorkflow {
             return this;
         }
 
-        public ComfyWorkflowBuilder setParams(Map<String, String> params) {
+        public ComfyWorkflowBuilder setParams(ImageParams params) {
             this.params = params;
             return this;
         }

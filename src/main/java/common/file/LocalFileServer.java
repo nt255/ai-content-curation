@@ -11,12 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import main.java.processor.DbAndFileClient;
-
-
 public class LocalFileServer implements FileServer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DbAndFileClient.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LocalFileServer.class);
 
     private final String localDirectory;
 

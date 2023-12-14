@@ -1,4 +1,4 @@
-package main.java.common.db.models;
+package main.java.common.models;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public abstract class BaseDbModel {
+public abstract class BaseParams {
 
+    private String prompt;
+    
 }

@@ -1,13 +1,16 @@
 package main.java.server.mappers;
 
-import java.util.Map;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
 
 import main.java.common.db.models.TextDbModel;
-import main.java.common.enums.JobType;
+import main.java.common.models.JobType;
 import main.java.common.mq.ZMQModel;
 import main.java.server.models.Text;
 
 public class TextMapper implements JobMapper<Text, TextDbModel> {
+    
+    @Inject private Gson gson;
 
     @Override
     public TextDbModel mapToDBModel(Text model) {
@@ -16,12 +19,9 @@ public class TextMapper implements JobMapper<Text, TextDbModel> {
                 .createdOn(model.getCreatedOn())
                 .lastModifiedOn(model.getLastModifiedOn())
                 .state(model.getState())
-                .inputType(model.getInputType())
-                .inputText(model.getInputText())
-                .inputFilename(model.getInputFilename())
+                .params(model.getParams())
                 .notes(model.getNotes())
                 .errors(model.getErrors())
-                .type(model.getType())
                 .outputText(model.getOutputText())
                 .build();
     }
@@ -33,23 +33,19 @@ public class TextMapper implements JobMapper<Text, TextDbModel> {
                 .createdOn(model.getCreatedOn())
                 .lastModifiedOn(model.getLastModifiedOn())
                 .state(model.getState())
-                .inputType(model.getInputType())
-                .inputText(model.getInputText())
-                .inputFilename(model.getInputFilename())
+                .params(model.getParams())
                 .notes(model.getNotes())
                 .errors(model.getErrors())
-                .type(model.getType())
                 .outputText(model.getOutputText())
                 .build();
     }
 
     @Override
     public ZMQModel mapToZMQModel(Text model) {
-        Map<String, String> params = Map.of("prompt", model.getInputText());
         return ZMQModel.builder()
                 .id(model.getId())
                 .jobType(JobType.TEXT)
-                .parameters(params)
+                .params(gson.toJson(model.getParams()))
                 .build();
     }
 

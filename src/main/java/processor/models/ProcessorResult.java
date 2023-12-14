@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ProcessorResponse {
+public class ProcessorResult {
 
     private UUID id;
     
