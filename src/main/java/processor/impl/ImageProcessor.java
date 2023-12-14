@@ -1,7 +1,9 @@
 package main.java.processor.impl;
 
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -44,14 +46,15 @@ public class ImageProcessor implements Processor<ImageParams> {
         } catch (IllegalStateException e) {
             LOG.error(e.getMessage());
         }
-
         Set<String> generatedFiles = waitForGeneratedFiles();
-        assert(generatedFiles.size() == 1);
-
+        assert(generatedFiles.size() == 1);     // temporary for now
+        
+        String localImagePath = generatedFiles.iterator().next();
+                
         ProcessorResult result = ProcessorResult.builder()
                 .id(id)
                 .isSuccessful(true)
-                .outputString(generatedFiles.iterator().next())
+                .outputString(localImagePath)
                 .errors(List.of())
                 .build();
 
@@ -74,7 +77,6 @@ public class ImageProcessor implements Processor<ImageParams> {
 
         return generatedFiles;
     }
-
     
     @Override
     public void save(UUID id, ProcessorResult result) {

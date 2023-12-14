@@ -13,6 +13,7 @@ import io.javalin.Javalin;
 import main.java.common.models.JobState;
 import main.java.server.models.Image;
 import main.java.server.service.ImageService;
+import main.java.server.service.JobService;
 
 public class ImageRequestHandler {
 
@@ -50,6 +51,7 @@ public class ImageRequestHandler {
             ctx.json(gson.toJson(body));
         })
         
+        
         .delete("/images/{id}", ctx -> {
             LOG.info("Received DELETE request to: {}", ctx.fullUrl());
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
@@ -62,6 +64,14 @@ public class ImageRequestHandler {
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
             imageService.submit(id);
             ctx.status(202);
+        })
+        
+        .post("submit/upscale/{id}", ctx -> {
+        	LOG.info("Received an UPSCALE request for the image of ID: {}", ctx.pathParam("id"));
+            UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
+            imageService.get(id).ifPresentOrElse(
+            		job -> {},
+            		() -> ctx.status(404));
         });
     }
 

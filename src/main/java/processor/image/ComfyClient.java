@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.Random;
 
 public class ComfyClient {
 
@@ -60,12 +61,7 @@ public class ComfyClient {
     // currently simply prints out the error, but should be updated to update
     // relevant JobResponse
     public void queuePrompt() throws IllegalStateException {
-
-        LOG.info("A prompt was queued with no arguments. Proceeding...");
-        LOG.info("Verifying that workflow has been loaded...");
-
         if (workflow != null) {
-            LOG.info("Workflow has been verified.");
             LOG.info("Deleting history.");
             clearQueueHistory();
             sendTask();
@@ -82,8 +78,6 @@ public class ComfyClient {
 
     private void sendTask() {
         try {
-            workflow.generateNewSeed();
-            
             JSONObject request = new JSONObject()
                     .put("prompt", workflow.getJson());
             
@@ -111,7 +105,6 @@ public class ComfyClient {
     }
 
     private void clearQueueHistory() {
-        LOG.info("Sent request to clear history.");
         httpClient.post(historyUrl, new JSONObject()
                 .put("clear", true));
     }

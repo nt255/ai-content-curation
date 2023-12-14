@@ -11,8 +11,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class ImageParams extends BaseParams {
     
-    private enum ImageType {
-        PLAIN, UPSCALED
+    public enum ImageType {
+        PLAIN, UPSCALED, FACE_DETAILED
     }
 
     private ImageType type;
@@ -21,5 +21,11 @@ public class ImageParams extends BaseParams {
     private Integer width;
     private String checkpoint;
     private String workflow;
-
+    private Integer kSteps;
+    private Integer kCFG;
+    
+    // bad practice?
+    private Integer upscaleSteps;
+    private Integer upscaleCFG;
+    private String imagePath;
 }

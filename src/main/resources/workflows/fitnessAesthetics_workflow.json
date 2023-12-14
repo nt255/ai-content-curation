@@ -76,7 +76,7 @@
   },
   "10": {
     "inputs": {
-      "text": "ugly, eerie, bad proportions, ",
+      "text": "ugly, eerie, bad proportions, nudity",
       "clip": ["8", 1]
     },
     "class_type": "CLIPTextEncode"

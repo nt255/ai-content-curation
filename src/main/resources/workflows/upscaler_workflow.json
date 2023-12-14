@@ -23,7 +23,7 @@
   },
   "5": {
     "inputs": {
-      "text": "",
+      "text": "bad, blurry, ugly",
       "clip": [
         "14",
         1
@@ -33,20 +33,20 @@
   },
   "6": {
     "inputs": {
-      "image": "test_0005.jpg",
+      "image": "",
       "choose file to upload": "image"
     },
     "class_type": "LoadImage"
   },
   "9": {
     "inputs": {
-      "upscale_by": 2,
-      "seed": 810151462306571,
+      "upscale_by": 1.5,
+      "seed": 0,
       "steps": 30,
-      "cfg": 11,
+      "cfg": 10,
       "sampler_name": "dpmpp_sde_gpu",
       "scheduler": "karras",
-      "denoise": 0.3,
+      "denoise": 0.2,
       "mode_type": "Linear",
       "tile_width": 512,
       "tile_height": 512,
