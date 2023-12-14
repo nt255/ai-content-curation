@@ -15,10 +15,10 @@ public abstract class BaseDao<T extends BaseDbModel> {
 
     static final String ID = "_id";
 
-    @Inject MongoDBClient mongoDBClient;
+    private @Inject MongoDBClient mongoDBClient;
 
-    final Class<T> typeParameterClass;
-    final String collectionName;
+    private final Class<T> typeParameterClass;
+    private final String collectionName;
 
     public BaseDao(Class<T> typeParameterClass, String collectionName) {
         this.typeParameterClass = typeParameterClass;
