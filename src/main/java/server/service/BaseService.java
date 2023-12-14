@@ -14,7 +14,7 @@ import main.java.server.models.BaseModel;
 public abstract class BaseService<S extends BaseModel, T extends JobDbModel> {
 
     private BaseDao<T> dao;
-    Mapper<S, T> mapper;
+    private Mapper<S, T> mapper;
     
     @Inject
     public BaseService(BaseDao<T> dao, Mapper<S, T> mapper) {

@@ -7,8 +7,7 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import main.java.common.enums.InputType;
-import main.java.common.enums.JobState;
+import main.java.common.models.JobState;
 
 @Getter
 @Setter
@@ -22,11 +21,11 @@ public abstract class Job extends BaseModel {
     
     JobState state;
     
-    InputType inputType;
-    
-    String inputText;
+    // input
+    String prompt;
     String inputFilename;
     
+    // output
     List<String> notes;
     List<String> errors;
     

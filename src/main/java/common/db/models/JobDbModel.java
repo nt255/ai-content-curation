@@ -8,8 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import main.java.common.enums.InputType;
-import main.java.common.enums.JobState;
+import main.java.common.models.JobState;
 
 @Getter
 @Setter
@@ -23,11 +22,6 @@ public abstract class JobDbModel extends BaseDbModel {
      Instant lastModifiedOn;
      
      JobState state;
-     
-     InputType inputType;
-     
-     String inputText;
-     String inputFilename;
      
      List<String> notes;
      List<String> errors;

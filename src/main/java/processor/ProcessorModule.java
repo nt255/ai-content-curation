@@ -1,6 +1,5 @@
 package main.java.processor;
 
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
@@ -27,6 +26,5 @@ public class ProcessorModule extends AbstractModule {
         // loaders
         bind(GPT4AllLoader.class).in(Singleton.class);
     }
-    
-    
+
 }

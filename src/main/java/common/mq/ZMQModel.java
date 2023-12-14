@@ -1,21 +1,22 @@
 package main.java.common.mq;
 
-import java.util.Map;
 import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
-import main.java.common.enums.JobType;
+import main.java.common.models.JobType;
 
 
-@Builder
 @Getter
+@Builder
 public class ZMQModel {
 
     private UUID id;
 
     private JobType jobType;
 
-    private Map<String, String> parameters;
+    // json string of a BaseParams instance
+    // using BaseParams directly leads to loss of params when converting
+    private String params;
 
 }

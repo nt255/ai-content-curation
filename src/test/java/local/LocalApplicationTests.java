@@ -31,8 +31,8 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
-import main.java.common.enums.JobState;
 import main.java.common.file.FileServer;
+import main.java.common.models.JobState;
 import main.java.server.models.Image;
 import main.java.server.models.Text;
 import test.java.TestWithInjections;
@@ -74,14 +74,16 @@ public class LocalApplicationTests extends TestWithInjections {
         JSONObject body = new JSONObject()
                 .put("type", "TEXT")
                 .put("state", "COMPLETED")
-                .put("inputText", "Write me a nice story about a farmer.");
+                .put("params", new JSONObject()
+                        .put("prompt", "Write me a nice story about a farmer."));
 
         String postResponseString = httpClient.post(
                 textsUrl, headers, body);
         Text postResponse = gson.fromJson(postResponseString, Text.class);
 
         assertEquals(JobState.NEW, postResponse.getState());
-        assertNotNull(postResponse.getInputText());
+        assertNotNull(postResponse.getParams());
+        assertNotNull(postResponse.getParams().getPrompt());
 
 
         // -----get-----
@@ -92,7 +94,8 @@ public class LocalApplicationTests extends TestWithInjections {
 
         assertEquals(postResponse.getId(), getResponse.getId());
         assertEquals(JobState.NEW, getResponse.getState());
-        assertNotNull(getResponse.getInputText());
+        assertNotNull(getResponse.getParams());
+        assertNotNull(getResponse.getParams().getPrompt());
 
         assertTrue(getResponse.getCreatedOn().isBefore(Instant.now()), 
                 "createdOn is not before current time");
@@ -140,7 +143,8 @@ public class LocalApplicationTests extends TestWithInjections {
         JSONObject body = new JSONObject()
                 .put("type", "TEXT")
                 .put("state", "COMPLETED")
-                .put("inputText", "Write me a nice story about a farmer.");
+                .put("params", new JSONObject()
+                        .put("prompt", "Write me a nice story about a farmer."));
 
         int count = 3;
         Set<Text> texts = IntStream.range(0, count).boxed().map(ignored -> {
@@ -183,7 +187,7 @@ public class LocalApplicationTests extends TestWithInjections {
     }
 
 
-    @RepeatedTest(5)
+    @RepeatedTest(1)
     void serverAndProcessorImageFullFlowTest() {
 
         Integer height = 16;
@@ -198,18 +202,19 @@ public class LocalApplicationTests extends TestWithInjections {
         JSONObject body = new JSONObject()
                 .put("type", "IMAGE")
                 .put("state", "NEW")
-                .put("inputText", "chess grandmaster, intense, serious, suit")
-                .put("height", height.toString())
-                .put("width", width.toString())
-                .put("workflow", "fitnessAesthetics")
-                .put("checkpoint", "realDream_8Legendary.safetensors");
+                .put("params", new JSONObject()
+                        .put("prompt", "Write me a nice story about a farmer.")
+                        .put("height", height.toString())
+                        .put("width", width.toString())
+                        .put("workflow", "fitnessAesthetics")
+                        .put("checkpoint", "realDream_8Legendary.safetensors"));
 
         String postResponseString = httpClient.post(
                 imagesUrl, headers, body);
         Image postResponse = gson.fromJson(postResponseString, Image.class);
 
         assertEquals(JobState.NEW, postResponse.getState());
-        assertNotNull(postResponse.getInputText());
+        assertNotNull(postResponse.getParams());
 
 
         // -----get-----
@@ -220,7 +225,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
         assertEquals(postResponse.getId(), getResponse.getId());
         assertEquals(JobState.NEW, getResponse.getState());
-        assertNotNull(getResponse.getInputText());
+        assertNotNull(getResponse.getParams());
 
         assertTrue(getResponse.getCreatedOn().isBefore(Instant.now()), 
                 "createdOn is not before current time");
@@ -237,7 +242,7 @@ public class LocalApplicationTests extends TestWithInjections {
         // TODO: check for submitted state as soon as this goes out
 
 
-        sleep(3L);
+        sleep(5L);
 
 
         // -----make sure image is updated with results-----

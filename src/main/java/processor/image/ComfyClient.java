@@ -3,13 +3,13 @@ package main.java.processor.image;
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
+import main.java.common.models.ImageParams;
 import main.java.processor.image.ComfyWorkflow.ComfyWorkflowBuilder;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
 import java.util.Properties;
 
 public class ComfyClient {
@@ -40,8 +40,8 @@ public class ComfyClient {
         checkConnection();
     }
 
-    public void loadWorkflow(String wfname, Map<String, String> params) {
-        String baseWfFile = String.format(WF_FORMATTED_STRING, wfname);
+    public void loadWorkflow(ImageParams params) {
+        String baseWfFile = String.format(WF_FORMATTED_STRING, params.getWorkflow());
         workflow = new ComfyWorkflowBuilder()
                 .setBaseWorkflowFile(baseWfFile)
                 .setParams(params)

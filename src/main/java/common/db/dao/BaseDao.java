@@ -9,16 +9,16 @@ import com.google.inject.Inject;
 import com.mongodb.client.MongoCollection;
 
 import main.java.common.db.client.MongoDBClient;
-import main.java.common.db.models.JobDbModel;
+import main.java.common.db.models.BaseDbModel;
 
-public abstract class BaseDao<T extends JobDbModel> {
+public abstract class BaseDao<T extends BaseDbModel> {
 
-    private static final String ID = "_id";
+    static final String ID = "_id";
 
-    @Inject private MongoDBClient mongoDBClient;
+    @Inject MongoDBClient mongoDBClient;
 
-    private final Class<T> typeParameterClass;
-    private final String collectionName;
+    final Class<T> typeParameterClass;
+    final String collectionName;
 
     public BaseDao(Class<T> typeParameterClass, String collectionName) {
         this.typeParameterClass = typeParameterClass;

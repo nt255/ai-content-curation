@@ -12,8 +12,7 @@ import com.google.inject.Inject;
 
 import io.javalin.Javalin;
 import io.javalin.validation.JavalinValidation;
-
-import main.java.common.enums.JobState;
+import main.java.common.models.JobState;
 import main.java.server.models.Image;
 import main.java.server.models.Text;
 import main.java.server.service.ImageService;
