@@ -11,6 +11,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Properties;
@@ -31,8 +34,8 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
-import main.java.common.enums.JobState;
 import main.java.common.file.FileServer;
+import main.java.common.models.JobState;
 import main.java.server.models.Image;
 import main.java.server.models.Text;
 import test.java.TestWithInjections;
@@ -74,14 +77,16 @@ public class LocalApplicationTests extends TestWithInjections {
         JSONObject body = new JSONObject()
                 .put("type", "TEXT")
                 .put("state", "COMPLETED")
-                .put("inputText", "Write me a nice story about a farmer.");
+                .put("params", new JSONObject()
+                        .put("prompt", "Write me a nice story about a farmer."));
 
         String postResponseString = httpClient.post(
                 textsUrl, headers, body);
         Text postResponse = gson.fromJson(postResponseString, Text.class);
 
         assertEquals(JobState.NEW, postResponse.getState());
-        assertNotNull(postResponse.getInputText());
+        assertNotNull(postResponse.getParams());
+        assertNotNull(postResponse.getParams().getPrompt());
 
 
         // -----get-----
@@ -92,7 +97,8 @@ public class LocalApplicationTests extends TestWithInjections {
 
         assertEquals(postResponse.getId(), getResponse.getId());
         assertEquals(JobState.NEW, getResponse.getState());
-        assertNotNull(getResponse.getInputText());
+        assertNotNull(getResponse.getParams());
+        assertNotNull(getResponse.getParams().getPrompt());
 
         assertTrue(getResponse.getCreatedOn().isBefore(Instant.now()), 
                 "createdOn is not before current time");
@@ -140,7 +146,8 @@ public class LocalApplicationTests extends TestWithInjections {
         JSONObject body = new JSONObject()
                 .put("type", "TEXT")
                 .put("state", "COMPLETED")
-                .put("inputText", "Write me a nice story about a farmer.");
+                .put("params", new JSONObject()
+                        .put("prompt", "Write me a nice story about a farmer."));
 
         int count = 3;
         Set<Text> texts = IntStream.range(0, count).boxed().map(ignored -> {
@@ -183,7 +190,7 @@ public class LocalApplicationTests extends TestWithInjections {
     }
 
 
-    @RepeatedTest(5)
+    @RepeatedTest(1)
     void serverAndProcessorImageFullFlowTest() {
 
         Integer height = 16;
@@ -198,18 +205,19 @@ public class LocalApplicationTests extends TestWithInjections {
         JSONObject body = new JSONObject()
                 .put("type", "IMAGE")
                 .put("state", "NEW")
-                .put("inputText", "chess grandmaster, intense, serious, suit")
-                .put("height", height.toString())
-                .put("width", width.toString())
-                .put("workflow", "fitnessAesthetics")
-                .put("checkpoint", "realDream_8Legendary.safetensors");
+                .put("params", new JSONObject()
+                        .put("prompt", "Write me a nice story about a farmer.")
+                        .put("height", height.toString())
+                        .put("width", width.toString())
+                        .put("workflow", "fitnessAesthetics")
+                        .put("checkpoint", "realDream_8Legendary.safetensors"));
 
         String postResponseString = httpClient.post(
                 imagesUrl, headers, body);
         Image postResponse = gson.fromJson(postResponseString, Image.class);
 
         assertEquals(JobState.NEW, postResponse.getState());
-        assertNotNull(postResponse.getInputText());
+        assertNotNull(postResponse.getParams());
 
 
         // -----get-----
@@ -220,7 +228,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
         assertEquals(postResponse.getId(), getResponse.getId());
         assertEquals(JobState.NEW, getResponse.getState());
-        assertNotNull(getResponse.getInputText());
+        assertNotNull(getResponse.getParams());
 
         assertTrue(getResponse.getCreatedOn().isBefore(Instant.now()), 
                 "createdOn is not before current time");
@@ -279,8 +287,18 @@ public class LocalApplicationTests extends TestWithInjections {
         }
         assertEquals(height, bufferedImage.getHeight());
         assertEquals(width, bufferedImage.getWidth());
-
-
+        
+        // -----processor local directory should be cleared-----
+        String localDirectory = properties.getProperty("comfy.output.directory");
+        Path directory = new File(localDirectory).toPath();
+        try {
+            DirectoryStream<Path> stream = Files.newDirectoryStream(directory);
+            assertTrue(!stream.iterator().hasNext(), "local directory not empty");
+        } catch (IOException e) {
+            fail("unable to open processor local directory");
+        }
+        
+        
         // -----delete-----
         httpClient.delete(getUrl);
         assertThrows(

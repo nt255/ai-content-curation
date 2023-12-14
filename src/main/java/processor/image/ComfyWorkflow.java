@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import main.java.common.models.ImageParams;
 
 @Getter
 public class ComfyWorkflow {
@@ -60,25 +61,16 @@ public class ComfyWorkflow {
 			LOG.error("error reading workflow file");
 			e.printStackTrace();
 		}
+        json = new JSONObject(jsonString);
+        generateNewSeed();
+        
+        ImageParams params = builder.params;
 
-		json = new JSONObject(jsonString);
-
-		// making a copy so that outputDirectory is also included.
-		Map<String, String> params = new HashMap<>(builder.params);
-		params.put("outputPath", builder.outputDirectory);
-		applyParams(params);
-	}
-
-	private void applyParams(Map<String, String> params) {
-		LOG.error("test applyParams");
-		// iteratively goes through params and modifies the relevant nodes
-		// if those nodes don't exist, then they're ignored.
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			String key = entry.getKey();
 
 			String classNameByKey = paramsToNodeClassTypeMap.get(key);
 			String value = entry.getValue();
-
 			Optional<String> classTypeOptional = json.keySet().stream()
 					.filter(node -> json.getJSONObject(node).has("class_type")
 							&& json.getJSONObject(node).getString("class_type").equals(classNameByKey))
@@ -95,24 +87,24 @@ public class ComfyWorkflow {
 
 		private String baseWorkflowFile;
 
-		private Map<String, String> params;
-
-		private String outputDirectory;
+		private ImageParams params;
+        
+        private String outputDirectory;
 
 		public ComfyWorkflowBuilder setBaseWorkflowFile(String baseWorkflowFile) {
 			this.baseWorkflowFile = baseWorkflowFile;
 			return this;
 		}
 
-		public ComfyWorkflowBuilder setParams(Map<String, String> params) {
-			this.params = params;
-			return this;
-		}
-
-		public ComfyWorkflowBuilder setOutputDirectory(String outputDirectory) {
-			this.outputDirectory = outputDirectory;
-			return this;
-		}
+        public ComfyWorkflowBuilder setParams(ImageParams params) {
+            this.params = params;
+            return this;
+        }
+        
+        public ComfyWorkflowBuilder setOutputDirectory(String outputDirectory) {
+            this.outputDirectory = outputDirectory;
+            return this;
+        }
 
 		public ComfyWorkflow build() {
 			return new ComfyWorkflow(this);

@@ -2,6 +2,8 @@ package main.java.common.mq;
 
 import java.util.Properties;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zeromq.SocketType;
@@ -30,8 +32,19 @@ public class ZMQProducer {
     }
 
     public void send(ZMQModel model) {
+        verifyJson(model.getParams());
+        
         String s = gson.toJson(model);
         LOG.info("Sending message: {}", s);
         producer.send(s);
+    }
+    
+    // move to some util class in common?
+    private void verifyJson(String json) {
+        try {
+            new JSONObject(json);
+        } catch (JSONException e) {
+            throw new IllegalStateException("found invalid json");
+        }
     }
 }

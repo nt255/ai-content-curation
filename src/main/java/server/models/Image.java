@@ -2,19 +2,16 @@ package main.java.server.models;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import main.java.common.enums.ImageType;
+import main.java.common.models.ImageParams;
 
 @Getter
 @SuperBuilder
 public class Image extends Job {
     
-    private ImageType type;
+    // input
+    private ImageParams params;
     
-    private Integer height;
-    private Integer width;
-    private String checkpoint;
-    private String workflow;
-    
+    // output
     private String outputFilename;
 
 }

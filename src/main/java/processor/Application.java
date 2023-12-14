@@ -18,14 +18,13 @@ import com.google.inject.Injector;
 import main.java.common.CommonModule;
 import main.java.common.mq.ZMQConsumer;
 import main.java.common.mq.ZMQModel;
-import main.java.processor.models.ProcessorResponse;
+import main.java.processor.models.ProcessorResult;
 
 public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     @Inject private ZMQConsumer consumer;
-    @Inject private DbAndFileClient dbAndFileClient;
     @Inject private ProcessorRouter router;
 
     public static void main(String[] args) {
@@ -46,11 +45,9 @@ public class Application {
                 LOG.info("Waiting for payload...");
                 ZMQModel model = consumer.receive();
 
-                ProcessorResponse result = router.route(
-                        model.getJobType(), model.getId(), model.getParameters());
-                
-                dbAndFileClient.persistJobResult(model.getJobType(), result);
-                
+                ProcessorResult result = router.processAndSave(
+                        model.getJobType(), model.getId(), model.getParams());
+                                
                 UUID id = result.getId();
                 if (result.isSuccessful())
                     LOG.info("Succesfully processed job with id: {}.", id);

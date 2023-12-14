@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import main.java.common.enums.ImageType;
+import main.java.common.models.ImageParams;
 
 @Getter
 @Setter
@@ -12,13 +12,10 @@ import main.java.common.enums.ImageType;
 @SuperBuilder
 public class ImageDbModel extends JobDbModel {
 
-    private ImageType type;
+    // input
+    private ImageParams params;
     
-    private Integer height;
-    private Integer width;
-    private String checkpoint;
-    private String workflow;
-    
+    // output
     private String outputFilename;
     
 }

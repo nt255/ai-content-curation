@@ -1,13 +1,17 @@
 package main.java.server.mappers;
 
-import java.util.Map;
-
 import main.java.common.db.models.ImageDbModel;
-import main.java.common.enums.JobType;
+
+import com.google.gson.Gson;
+import com.google.inject.Inject;
+
+import main.java.common.models.JobType;
 import main.java.common.mq.ZMQModel;
 import main.java.server.models.Image;
 
 public class ImageMapper implements JobMapper<Image, ImageDbModel> {
+    
+    @Inject private Gson gson;
 
     @Override
     public ImageDbModel mapToDBModel(Image model) {
@@ -16,16 +20,9 @@ public class ImageMapper implements JobMapper<Image, ImageDbModel> {
                 .createdOn(model.getCreatedOn())
                 .lastModifiedOn(model.getLastModifiedOn())
                 .state(model.getState())
-                .inputType(model.getInputType())
-                .inputText(model.getInputText())
-                .inputFilename(model.getInputFilename())
                 .notes(model.getNotes())
                 .errors(model.getErrors())
-                .type(model.getType())
-                .height(model.getHeight())
-                .width(model.getWidth())
-                .checkpoint(model.getCheckpoint())
-                .workflow(model.getWorkflow())
+                .params(model.getParams())
                 .outputFilename(model.getOutputFilename())
                 .build();
     }
@@ -37,32 +34,19 @@ public class ImageMapper implements JobMapper<Image, ImageDbModel> {
                 .createdOn(model.getCreatedOn())
                 .lastModifiedOn(model.getLastModifiedOn())
                 .state(model.getState())
-                .inputType(model.getInputType())
-                .inputText(model.getInputText())
-                .inputFilename(model.getInputFilename())
                 .notes(model.getNotes())
                 .errors(model.getErrors())
-                .type(model.getType())
-                .height(model.getHeight())
-                .width(model.getWidth())
-                .checkpoint(model.getCheckpoint())
-                .workflow(model.getWorkflow())
+                .params(model.getParams())
                 .outputFilename(model.getOutputFilename())
                 .build();
     }
 
     @Override
     public ZMQModel mapToZMQModel(Image model) {
-        Map<String, String> params = Map.of(
-                "prompt", model.getInputText(),
-                "height", model.getHeight().toString(),
-                "width", model.getWidth().toString(),
-                "checkpoint", model.getCheckpoint(),
-                "workflow", model.getWorkflow());
         return ZMQModel.builder()
                 .id(model.getId())
                 .jobType(JobType.IMAGE)
-                .parameters(params)
+                .params(gson.toJson(model.getParams()))
                 .build();
     }
 
