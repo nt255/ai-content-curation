@@ -13,9 +13,9 @@ import main.java.common.db.models.BaseDbModel;
 
 public abstract class BaseDao<T extends BaseDbModel> {
 
-    static final String ID = "_id";
+    private static final String ID = "_id";
 
-    private @Inject MongoDBClient mongoDBClient;
+    @Inject private  MongoDBClient mongoDBClient;
 
     private final Class<T> typeParameterClass;
     private final String collectionName;
