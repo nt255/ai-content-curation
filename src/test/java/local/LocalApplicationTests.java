@@ -11,6 +11,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Properties;
@@ -284,8 +287,18 @@ public class LocalApplicationTests extends TestWithInjections {
         }
         assertEquals(height, bufferedImage.getHeight());
         assertEquals(width, bufferedImage.getWidth());
-
-
+        
+        // -----processor local directory should be cleared-----
+        String localDirectory = properties.getProperty("comfy.output.directory");
+        Path directory = new File(localDirectory).toPath();
+        try {
+            DirectoryStream<Path> stream = Files.newDirectoryStream(directory);
+            assertTrue(!stream.iterator().hasNext(), "local directory not empty");
+        } catch (IOException e) {
+            fail("unable to open processor local directory");
+        }
+        
+        
         // -----delete-----
         httpClient.delete(getUrl);
         assertThrows(

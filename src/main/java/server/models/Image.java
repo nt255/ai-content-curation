@@ -8,6 +8,7 @@ import main.java.common.models.ImageParams;
 @SuperBuilder
 public class Image extends Job {
     
+    // input
     private ImageParams params;
     
     // output

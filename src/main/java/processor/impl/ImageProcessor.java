@@ -29,7 +29,7 @@ public class ImageProcessor implements Processor<ImageParams> {
 
     @Inject private ImageDao imageDao;
     @Inject private FileServer fileServer;
-    
+
     @Inject private ComfyClient comfyClient;
     @Inject private ComfyFileManager comfyFileManager;
 
@@ -46,7 +46,7 @@ public class ImageProcessor implements Processor<ImageParams> {
         }
 
         Set<String> generatedFiles = waitForGeneratedFiles();
-        assert(generatedFiles.size() == 1);     // temporary for now
+        assert(generatedFiles.size() == 1);
 
         ProcessorResult result = ProcessorResult.builder()
                 .id(id)
@@ -75,8 +75,10 @@ public class ImageProcessor implements Processor<ImageParams> {
         return generatedFiles;
     }
 
-
+    
+    @Override
     public void save(UUID id, ProcessorResult result) {
+        
         ImageDbModel existing = imageDao.get(id).get();
         existing.setLastModifiedOn(Instant.now());
         existing.setState(JobState.COMPLETED);
@@ -85,8 +87,11 @@ public class ImageProcessor implements Processor<ImageParams> {
             UUID imageId = UUID.randomUUID();
             String ext = FilenameUtils.getExtension(path);
             String newFilename = imageId + "." + ext;
+            
             fileServer.uploadFile(newFilename, path);
             existing.setOutputFilename(newFilename);
+
+            comfyFileManager.clearDirectory();
         });
 
         imageDao.delete(id);

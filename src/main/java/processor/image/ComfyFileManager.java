@@ -61,11 +61,11 @@ public class ComfyFileManager {
         return currentFiles;
     }
 
-    public void clearDirectory(String name) {
+    public void clearDirectory() {
         File directory = new File(outputDirectory);
         try {
             FileUtils.cleanDirectory(directory);
-            LOG.info("purged output directory");
+            LOG.info("cleared output directory");
         } catch (IOException e) {
             e.printStackTrace();
         }
