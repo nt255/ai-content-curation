@@ -115,7 +115,7 @@ public class LocalApplicationTests extends TestWithInjections {
         // TODO: check for submitted state as soon as this goes out
 
         
-        sleep(15L);
+        sleep(20L);
 
 
         // -----make sure text is updated with results-----

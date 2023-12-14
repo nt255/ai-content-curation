@@ -62,7 +62,6 @@ public class ComfyClient {
     // relevant JobResponse
     public void queuePrompt() throws IllegalStateException {
         if (workflow != null) {
-            LOG.info("Workflow has been verified.");
             LOG.info("Deleting history.");
             clearQueueHistory();
             sendTask();

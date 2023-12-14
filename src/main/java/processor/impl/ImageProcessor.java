@@ -1,7 +1,9 @@
 package main.java.processor.impl;
 
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -48,7 +50,7 @@ public class ImageProcessor implements Processor<ImageParams> {
         assert(generatedFiles.size() == 1);     // temporary for now
         
         String localImagePath = generatedFiles.iterator().next();
-        
+                
         ProcessorResult result = ProcessorResult.builder()
                 .id(id)
                 .isSuccessful(true)
@@ -75,16 +77,6 @@ public class ImageProcessor implements Processor<ImageParams> {
 
         return generatedFiles;
     }
-    
-	public BigInteger generateNewSeed() {
-		Random random = new Random();
-		BigInteger maxSeed = new BigInteger("18446744073709551614");
-		BigInteger seed = new BigInteger(maxSeed.bitLength(), random);
-		while (seed.compareTo(maxSeed) >= 0)
-			seed = new BigInteger(maxSeed.bitLength(), random);
-		return seed;
-	}
-
     
     @Override
     public void save(UUID id, ProcessorResult result) {
