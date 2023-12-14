@@ -7,11 +7,11 @@ import java.util.UUID;
 import com.google.inject.Inject;
 
 import main.java.common.db.dao.BaseDao;
-import main.java.common.db.models.JobDbModel;
+import main.java.common.db.models.BaseDbModel;
 import main.java.server.mappers.Mapper;
 import main.java.server.models.BaseModel;
 
-public abstract class BaseService<S extends BaseModel, T extends JobDbModel> {
+public abstract class BaseService<S extends BaseModel, T extends BaseDbModel> {
 
     private BaseDao<T> dao;
     private Mapper<S, T> mapper;

@@ -10,6 +10,7 @@ import main.java.common.models.TextParams;
 @SuperBuilder
 public class Text extends Job {
 
+    // input
     private TextParams params;
     
     // output

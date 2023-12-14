@@ -20,12 +20,7 @@ public abstract class Job extends BaseModel {
     Instant lastModifiedOn;
     
     JobState state;
-    
-    // input
-    String prompt;
-    String inputFilename;
-    
-    // output
+
     List<String> notes;
     List<String> errors;
     

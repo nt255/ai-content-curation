@@ -44,6 +44,7 @@ public class TextProcessor implements Processor<TextParams> {
         return result;
     }
 
+    @Override
     public void save(UUID id, ProcessorResult result) {
         TextDbModel existing = textDao.get(id).get();
         existing.setLastModifiedOn(Instant.now());
