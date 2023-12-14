@@ -15,7 +15,7 @@ public abstract class BaseDao<T extends BaseDbModel> {
 
     private static final String ID = "_id";
 
-    @Inject private  MongoDBClient mongoDBClient;
+    @Inject private MongoDBClient mongoDBClient;
 
     private final Class<T> typeParameterClass;
     private final String collectionName;
