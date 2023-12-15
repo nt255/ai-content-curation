@@ -11,10 +11,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class TextParams extends BaseParams {
     
-    private enum TextType {
+    public enum TextType {
         PLAIN, HASHTAGS
     }
     
     private TextType type;
+    
+    private String audience;
+    
+    private Integer numTokens;
 
 }

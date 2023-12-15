@@ -18,7 +18,7 @@ public class ChatGPTClient {
     @Inject private Properties properties;
     @Inject private HttpClient httpClient;
 
-    public String makeRequest(String prompt) {
+    public String generate(String prompt) {
         String url = properties.getProperty("openai.url");
         String secretkey = properties.getProperty("openai.secretkey");
         String model = properties.getProperty("openai.model");

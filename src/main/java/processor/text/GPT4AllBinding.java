@@ -20,6 +20,7 @@ public class GPT4AllBinding {
         
         int numTokens = maxTokens.orElseGet(() -> DEFAULT_MAX_TOKENS);
         LOG.info("generating up to {} tokens..", numTokens);
+        LOG.info("received the following prompt: {}", prompt);
         
         LLModel.GenerationConfig config = LLModel.config()
                 .withNPredict(numTokens).build();
