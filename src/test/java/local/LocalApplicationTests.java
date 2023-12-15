@@ -36,6 +36,7 @@ import com.google.inject.Inject;
 import main.java.common.clients.HttpClient;
 import main.java.common.file.FileServer;
 import main.java.common.models.JobState;
+import main.java.common.models.TextParams;
 import main.java.server.models.Image;
 import main.java.server.models.Text;
 import test.java.TestWithInjections;
@@ -66,7 +67,7 @@ public class LocalApplicationTests extends TestWithInjections {
     }
 
     @Test
-    void serverAndProcessorTextFullFlowTest() {
+    void serverAndProcessorTextFullFlow() {
 
         // -----create-----
         String port = properties.getProperty("javalin.port");
@@ -78,7 +79,8 @@ public class LocalApplicationTests extends TestWithInjections {
                 .put("type", "TEXT")
                 .put("state", "COMPLETED")
                 .put("params", new JSONObject()
-                        .put("prompt", "Write me a nice story about a farmer."));
+                        .put("prompt", "Write me a nice story about a farmer.")
+                        .put("numTokens", 2));
 
         String postResponseString = httpClient.post(
                 textsUrl, headers, body);
@@ -86,7 +88,10 @@ public class LocalApplicationTests extends TestWithInjections {
 
         assertEquals(JobState.NEW, postResponse.getState());
         assertNotNull(postResponse.getParams());
-        assertNotNull(postResponse.getParams().getPrompt());
+        
+        TextParams params = postResponse.getParams();
+        assertEquals("Write me a nice story about a farmer.", params.getPrompt());
+        assertEquals(2, params.getNumTokens());
 
 
         // -----get-----
@@ -135,7 +140,7 @@ public class LocalApplicationTests extends TestWithInjections {
     }
 
     @Test
-    void pullingEveryMessagePushedTest() {
+    void pullingEveryMessagePushed() {
 
         // -----create-----
         String port = properties.getProperty("javalin.port");
@@ -147,7 +152,8 @@ public class LocalApplicationTests extends TestWithInjections {
                 .put("type", "TEXT")
                 .put("state", "COMPLETED")
                 .put("params", new JSONObject()
-                        .put("prompt", "Write me a nice story about a farmer."));
+                        .put("prompt", "Write me a nice story about a farmer.")
+                        .put("numTokens", 2));
 
         int count = 3;
         Set<Text> texts = IntStream.range(0, count).boxed().map(ignored -> {
@@ -191,7 +197,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
     @RepeatedTest(1)
-    void serverAndProcessorImageFullFlowTest() {
+    void serverAndProcessorImageFullFlow() {
 
         Integer height = 16;
         Integer width = 16;
