@@ -9,15 +9,16 @@ import com.google.inject.Inject;
 import main.java.common.db.dao.BaseDao;
 import main.java.common.db.models.BaseDbModel;
 import main.java.server.mappers.Mapper;
-import main.java.server.models.BaseModel;
+import main.java.server.models.BaseGetResponse;
+import main.java.server.models.BasePostRequest;
 
-public abstract class BaseService<S extends BaseModel, T extends BaseDbModel> {
+public abstract class BaseService<S extends BaseGetResponse, T extends BasePostRequest, U extends BaseDbModel> {
 
-    private BaseDao<T> dao;
-    private Mapper<S, T> mapper;
+    private BaseDao<U> dao;
+    private Mapper<S, T, U> mapper;
     
     @Inject
-    public BaseService(BaseDao<T> dao, Mapper<S, T> mapper) {
+    public BaseService(BaseDao<U> dao, Mapper<S, T, U> mapper) {
         this.dao = dao;
         this.mapper = mapper;
     }
@@ -30,7 +31,7 @@ public abstract class BaseService<S extends BaseModel, T extends BaseDbModel> {
         return dao.get(id).map(model -> mapper.mapFromDBModel(model));
     }
 
-    public void create(S model) {
+    public void create(T model) {
         dao.insert(mapper.mapToDBModel(model));
     }
 

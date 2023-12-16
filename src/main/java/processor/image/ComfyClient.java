@@ -3,7 +3,7 @@ package main.java.processor.image;
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
-import main.java.common.models.ImageParams;
+import main.java.common.models.image.ImageParams;
 import main.java.processor.image.ComfyWorkflow.ComfyWorkflowBuilder;
 
 import org.json.JSONObject;

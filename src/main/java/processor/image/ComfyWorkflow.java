@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import main.java.common.models.BaseParams;
-import main.java.common.models.ImageParams;
+import main.java.common.models.image.ImageParams;
 
 @Getter
 public class ComfyWorkflow {

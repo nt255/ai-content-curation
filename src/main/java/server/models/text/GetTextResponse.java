@@ -1,19 +1,16 @@
-package main.java.common.db.models;
+package main.java.server.models.text;
 
 import java.util.List;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import main.java.common.models.text.TextParams;
 import main.java.common.models.text.TextParamsType;
+import main.java.server.models.GetJobResponse;
 
 @Getter
-@Setter
-@NoArgsConstructor
 @SuperBuilder
-public class TextDbModel extends JobDbModel {
+public class GetTextResponse extends GetJobResponse {
 
     // input
     private List<TextParamsType> steps;

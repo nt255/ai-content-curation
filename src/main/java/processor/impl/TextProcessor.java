@@ -13,8 +13,8 @@ import com.google.inject.Inject;
 import main.java.common.db.dao.TextDao;
 import main.java.common.db.models.TextDbModel;
 import main.java.common.models.JobState;
-import main.java.common.models.TextParams;
-import main.java.common.models.TextParams.TextType;
+import main.java.common.models.text.TextParams;
+import main.java.common.models.text.TextParamsType;
 import main.java.processor.Processor;
 import main.java.processor.models.ProcessorResult;
 // import main.java.processor.text.ChatGPTClient;
@@ -35,15 +35,17 @@ public class TextProcessor implements Processor<TextParams> {
 
 
     @Override
-    public ProcessorResult process(UUID id, TextParams params) {
+    public ProcessorResult process(UUID id, List<TextParams> steps) {
+        
+        TextParams params = steps.get(0); // 
 
-        TextType type = params.getType();
+        TextParamsType type = params.getType();
         String prompt = params.getPrompt();
         Integer numTokens = params.getNumTokens();
 
-        if (TextType.HASHTAGS.equals(type)) {
+        if (TextParamsType.CREATE_HASHTAGS.equals(type)) {
             prompt = PromptBuilder.builder()
-                    .textType(TextType.HASHTAGS)
+                    .type(TextParamsType.CREATE_HASHTAGS)
                     .prompt(prompt)
                     .audience(params.getAudience())
                     .build()
@@ -56,7 +58,7 @@ public class TextProcessor implements Processor<TextParams> {
 //        String outputText = chatGPTClient.generate(prompt);
         LOG.info("produced result: {}", outputText);
 
-        if (TextType.HASHTAGS.equals(type))
+        if (TextParamsType.CREATE_HASHTAGS.equals(type))
             outputText = hashtagCleaner.clean(outputText);
 
         ProcessorResult result = ProcessorResult.builder()

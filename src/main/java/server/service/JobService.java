@@ -9,28 +9,29 @@ import main.java.common.db.dao.BaseDao;
 import main.java.common.db.models.JobDbModel;
 import main.java.common.mq.ZMQProducer;
 import main.java.server.mappers.JobMapper;
-import main.java.server.models.Job;
+import main.java.server.models.BasePostRequest;
+import main.java.server.models.GetJobResponse;
 
-public abstract class JobService<S extends Job, T extends JobDbModel> 
-extends BaseService<S, T> {
+public abstract class JobService<S extends GetJobResponse, T extends BasePostRequest, U extends JobDbModel> 
+extends BaseService<S, T, U> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobService.class);
     
-    private JobMapper<S, T> mapper;
+    private JobMapper<S, T, U> mapper;
     private ZMQProducer producer;
     
     @Inject
-    public JobService(BaseDao<T> dao, JobMapper<S, T> mapper, 
+    public JobService(BaseDao<U> dao, JobMapper<S, T, U> mapper, 
             ZMQProducer producer) {
         super(dao, mapper);
         this.mapper = mapper;
         this.producer = producer;
     }
     
-    public void create(S model) {
+    public void create(T model) {
         super.create(model);
         
-        LOG.info("submitting job with id: {} to queue", model.getId());
+        LOG.info("submitting job with id: {} to queue", model.getGeneratedId());
         producer.send(mapper.mapToZMQModel(model));
     }
 

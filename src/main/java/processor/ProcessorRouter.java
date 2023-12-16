@@ -9,11 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 
 import main.java.common.models.JobType;
-import main.java.common.models.ImageParams;
-import main.java.common.models.TextParams;
+import main.java.common.models.image.ImageParams;
+import main.java.common.models.text.TextParams;
 import main.java.processor.impl.ImageProcessor;
 import main.java.processor.impl.TextProcessor;
 import main.java.processor.models.ProcessorResult;
@@ -50,15 +51,17 @@ public class ProcessorRouter {
     }
 
     private ProcessorResult processAndSaveText(UUID id, String params) {
-        TextParams textParams = gson.fromJson(params, TextParams.class);
-        ProcessorResult result = textProcessor.process(id, textParams);
+        List<TextParams> steps = gson.fromJson(
+                params, new TypeToken<List<TextParams>>(){}.getType());
+        ProcessorResult result = textProcessor.process(id, steps);
         textProcessor.save(id, result);
         return result;
     }
     
     private ProcessorResult processAndSaveImage(UUID id, String params) {
-        ImageParams imageParams = gson.fromJson(params, ImageParams.class);
-        ProcessorResult result = imageProcessor.process(id, imageParams);
+        List<ImageParams> steps = gson.fromJson(
+                params, new TypeToken<List<ImageParams>>(){}.getType());
+        ProcessorResult result = imageProcessor.process(id, steps);
         imageProcessor.save(id, result);
         return result;
     }

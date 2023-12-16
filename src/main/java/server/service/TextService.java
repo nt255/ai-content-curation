@@ -6,13 +6,17 @@ import main.java.common.db.dao.BaseDao;
 import main.java.common.db.models.TextDbModel;
 import main.java.common.mq.ZMQProducer;
 import main.java.server.mappers.JobMapper;
-import main.java.server.models.Text;
+import main.java.server.models.text.GetTextResponse;
+import main.java.server.models.text.PostTextRequest;
 
-public class TextService extends JobService<Text, TextDbModel> {
+public class TextService extends JobService<GetTextResponse, PostTextRequest, TextDbModel> {
 
     @Inject
-    public TextService(BaseDao<TextDbModel> dao, JobMapper<Text, TextDbModel> mapper, 
+    public TextService(
+            BaseDao<TextDbModel> dao, 
+            JobMapper<GetTextResponse, PostTextRequest, TextDbModel> mapper, 
             ZMQProducer producer) {
+        
         super(dao, mapper, producer);
     }
 

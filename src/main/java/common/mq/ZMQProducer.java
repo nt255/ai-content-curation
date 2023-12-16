@@ -2,6 +2,7 @@ package main.java.common.mq;
 
 import java.util.Properties;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class ZMQProducer {
     }
 
     public void send(ZMQModel model) {
+        // verifyJson(model.getSteps());
         verifyJson(model.getParams());
         
         String s = gson.toJson(model);
@@ -42,7 +44,7 @@ public class ZMQProducer {
     // move to some util class in common?
     private void verifyJson(String json) {
         try {
-            new JSONObject(json);
+            new JSONArray(json);
         } catch (JSONException e) {
             throw new IllegalStateException("found invalid json");
         }

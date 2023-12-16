@@ -12,11 +12,11 @@ import main.java.common.models.JobType;
 public class ZMQModel {
 
     private UUID id;
+    private UUID baseJobId;
 
     private JobType jobType;
-
-    // json string of a BaseParams instance
-    // using BaseParams directly leads to loss of params when converting
-    private String params;
+    
+    // private String steps;   // json string of param types
+    private String params;  // json string of params
 
 }

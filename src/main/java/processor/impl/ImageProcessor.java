@@ -1,9 +1,7 @@
 package main.java.processor.impl;
 
-import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +15,9 @@ import com.google.inject.Inject;
 import main.java.common.db.dao.ImageDao;
 import main.java.common.db.models.ImageDbModel;
 import main.java.common.file.FileServer;
-import main.java.common.models.ImageParams;
 import main.java.common.models.JobState;
+import main.java.common.models.image.ImageParams;
+import main.java.common.models.image.ImageParamsType;
 import main.java.processor.Processor;
 import main.java.processor.image.ComfyClient;
 import main.java.processor.image.ComfyFileManager;
@@ -37,20 +36,14 @@ public class ImageProcessor implements Processor<ImageParams> {
 
 
     @Override
-    public ProcessorResult process(UUID id, ImageParams params) {
+    public ProcessorResult process(UUID id, List<ImageParams> steps) {
 
-        try {
-            comfyClient.loadWorkflow(params);
-            comfyClient.queuePrompt();
-
-        } catch (IllegalStateException e) {
-            LOG.error(e.getMessage());
+        String localImagePath = "";
+        for (ImageParams step : steps) {
+            if (ImageParamsType.CREATE.equals(step.getType()))
+                localImagePath = create(id, step);
         }
-        Set<String> generatedFiles = waitForGeneratedFiles();
-        assert(generatedFiles.size() == 1);     // temporary for now
-        
-        String localImagePath = generatedFiles.iterator().next();
-                
+
         ProcessorResult result = ProcessorResult.builder()
                 .id(id)
                 .isSuccessful(true)
@@ -59,6 +52,23 @@ public class ImageProcessor implements Processor<ImageParams> {
                 .build();
 
         return result;
+    }
+
+    private String create(UUID id, ImageParams params) {
+        try {
+            comfyClient.loadWorkflow(params);
+            comfyClient.queuePrompt();
+
+        } catch (IllegalStateException e) {
+            LOG.error(e.getMessage());
+        }
+
+        Set<String> generatedFiles = waitForGeneratedFiles();
+        if (generatedFiles.size() > 1)
+            throw new IllegalStateException(
+                    "should not have generated more than one file");
+
+        return generatedFiles.iterator().next();
     }
 
 
@@ -77,10 +87,10 @@ public class ImageProcessor implements Processor<ImageParams> {
 
         return generatedFiles;
     }
-    
+
     @Override
     public void save(UUID id, ProcessorResult result) {
-        
+
         ImageDbModel existing = imageDao.get(id).get();
         existing.setLastModifiedOn(Instant.now());
         existing.setState(JobState.COMPLETED);
@@ -89,7 +99,7 @@ public class ImageProcessor implements Processor<ImageParams> {
             UUID imageId = UUID.randomUUID();
             String ext = FilenameUtils.getExtension(path);
             String newFilename = imageId + "." + ext;
-            
+
             fileServer.uploadFile(newFilename, path);
             existing.setOutputFilename(newFilename);
 
