@@ -114,11 +114,6 @@ public class LocalApplicationTests extends TestWithInjections {
         assertNull(getResponse.getErrors());
 
 
-        // -----submit-----
-        String submitUrl = url + "/submit/texts/" + getResponse.getId();
-        httpClient.post(submitUrl);
-        // TODO: check for submitted state as soon as this goes out
-
         
         sleep(20L);
 
@@ -169,12 +164,6 @@ public class LocalApplicationTests extends TestWithInjections {
 
         assertEquals(count, texts.size());
 
-
-        // -----submit-----
-        texts.stream().forEach(text -> {
-            String submitUrl = url + "/submit/texts/" + text.getId();
-            httpClient.post(submitUrl);
-        });
 
 
         sleep(20L);
@@ -244,11 +233,6 @@ public class LocalApplicationTests extends TestWithInjections {
         assertNull(getResponse.getOutputFilename());
         assertNull(getResponse.getErrors());
 
-
-        // -----submit-----
-        String submitUrl = url + "/submit/images/" + getResponse.getId();
-        httpClient.post(submitUrl);
-        // TODO: check for submitted state as soon as this goes out
 
 
         sleep(20L);

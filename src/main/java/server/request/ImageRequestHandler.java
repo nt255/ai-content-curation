@@ -13,7 +13,7 @@ import io.javalin.Javalin;
 import main.java.common.models.JobState;
 import main.java.server.models.Image;
 import main.java.server.service.ImageService;
-import main.java.server.service.JobService;
+
 
 public class ImageRequestHandler {
 
@@ -47,10 +47,9 @@ public class ImageRequestHandler {
             body.setCreatedOn(Instant.now());
             body.setLastModifiedOn(Instant.now());
             body.setState(JobState.NEW);
-            imageService.insert(body);
-            ctx.json(gson.toJson(body));
+            imageService.create(body);
+            ctx.json(gson.toJson(body)).status(202);
         })
-        
         
         .delete("/images/{id}", ctx -> {
             LOG.info("Received DELETE request to: {}", ctx.fullUrl());
@@ -59,14 +58,7 @@ public class ImageRequestHandler {
             ctx.status(204);
         })
         
-        .post("/submit/images/{id}", ctx -> {
-            LOG.info("Received POST request to: {}", ctx.fullUrl());
-            UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
-            imageService.submit(id);
-            ctx.status(202);
-        })
-        
-        .post("submit/upscale/{id}", ctx -> {
+        .post("/upscale/{id}", ctx -> {
         	LOG.info("Received an UPSCALE request for the image of ID: {}", ctx.pathParam("id"));
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
             imageService.get(id).ifPresentOrElse(

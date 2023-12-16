@@ -30,7 +30,7 @@ public abstract class BaseService<S extends BaseModel, T extends BaseDbModel> {
         return dao.get(id).map(model -> mapper.mapFromDBModel(model));
     }
 
-    public void insert(S model) {
+    public void create(S model) {
         dao.insert(mapper.mapToDBModel(model));
     }
 
