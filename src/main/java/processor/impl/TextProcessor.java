@@ -17,7 +17,7 @@ import main.java.common.models.TextParams;
 import main.java.common.models.TextParams.TextType;
 import main.java.processor.Processor;
 import main.java.processor.models.ProcessorResult;
-import main.java.processor.text.ChatGPTClient;
+// import main.java.processor.text.ChatGPTClient;
 import main.java.processor.text.GPT4AllBinding;
 import main.java.processor.text.util.HashtagCleaner;
 import main.java.processor.text.util.PromptBuilder;
@@ -31,7 +31,7 @@ public class TextProcessor implements Processor<TextParams> {
     @Inject private HashtagCleaner hashtagCleaner;
 
     @Inject private GPT4AllBinding gpt4AllBinding;
-    @Inject private ChatGPTClient chatGPTClient;
+    // @Inject private ChatGPTClient chatGPTClient;
 
 
     @Override

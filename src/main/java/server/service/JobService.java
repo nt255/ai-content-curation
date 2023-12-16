@@ -1,7 +1,5 @@
 package main.java.server.service;
 
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,14 +26,12 @@ extends BaseService<S, T> {
         this.mapper = mapper;
         this.producer = producer;
     }
-
-    public void submit(UUID id) {        
-        get(id).ifPresentOrElse(
-                job -> {
-                    LOG.info("submitting job with id: {} to queue", id);
-                    producer.send(mapper.mapToZMQModel(job));
-                }, 
-                () -> LOG.warn("unable to find job with id: {}", id));
+    
+    public void create(S model) {
+        super.create(model);
+        
+        LOG.info("submitting job with id: {} to queue", model.getId());
+        producer.send(mapper.mapToZMQModel(model));
     }
 
 }

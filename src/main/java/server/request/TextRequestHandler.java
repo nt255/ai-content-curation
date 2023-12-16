@@ -46,8 +46,8 @@ public class TextRequestHandler {
             body.setCreatedOn(Instant.now());
             body.setLastModifiedOn(Instant.now());
             body.setState(JobState.NEW);
-            textService.insert(body);
-            ctx.json(gson.toJson(body));
+            textService.create(body);
+            ctx.json(gson.toJson(body)).status(202);
         })
 
         .delete("/texts/{id}", ctx -> {
@@ -55,14 +55,8 @@ public class TextRequestHandler {
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
             textService.delete(id);
             ctx.status(204);
-        })
-
-        .post("/submit/texts/{id}", ctx -> {
-            LOG.info("Received POST request to: {}", ctx.fullUrl());
-            UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
-            textService.submit(id);
-            ctx.status(202);
         });
+
     }
 
 }
