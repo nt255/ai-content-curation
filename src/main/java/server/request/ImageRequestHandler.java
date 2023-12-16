@@ -66,7 +66,7 @@ public class ImageRequestHandler {
             ctx.status(202);
         })
         
-        .post("submit/upscale/{id}", ctx -> {
+        .post("/submit/upscale/{id}", ctx -> {
         	LOG.info("Received an UPSCALE request for the image of ID: {}", ctx.pathParam("id"));
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
             imageService.get(id).ifPresentOrElse(
