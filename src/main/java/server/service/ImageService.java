@@ -12,18 +12,22 @@ import main.java.common.db.models.ImageDbModel;
 import main.java.common.file.FileServer;
 import main.java.common.mq.ZMQProducer;
 import main.java.server.mappers.JobMapper;
-import main.java.server.models.Image;
+import main.java.server.models.image.GetImageResponse;
+import main.java.server.models.image.PostImageRequest;
 import zmq.util.function.Optional;
 
-public class ImageService extends JobService<Image, ImageDbModel> {
+public class ImageService extends JobService<GetImageResponse, PostImageRequest, ImageDbModel> {
     
     private static final Logger LOG = LoggerFactory.getLogger(ImageService.class);
     
     private FileServer fileServer;
 
     @Inject
-    public ImageService(BaseDao<ImageDbModel> dao, JobMapper<Image, ImageDbModel> mapper, 
+    public ImageService(
+            BaseDao<ImageDbModel> dao, 
+            JobMapper<GetImageResponse, PostImageRequest, ImageDbModel> mapper, 
             ZMQProducer producer, FileServer fileServer) {
+        
         super(dao, mapper, producer);
         this.fileServer = fileServer;
     }

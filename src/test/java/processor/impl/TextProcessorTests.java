@@ -2,6 +2,7 @@ package test.java.processor.impl;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -9,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import com.google.inject.Inject;
 
-import main.java.common.models.TextParams;
-import main.java.common.models.TextParams.TextType;
+import main.java.common.models.text.TextParams;
+import main.java.common.models.text.TextParamsType;
 import main.java.processor.impl.TextProcessor;
 import main.java.processor.models.ProcessorResult;
 import test.java.TestWithInjections;
@@ -27,12 +28,12 @@ public class TextProcessorTests extends TestWithInjections {
 
         UUID id = UUID.randomUUID();
         TextParams params = TextParams.builder()
-                .type(TextType.PLAIN)
+                .type(TextParamsType.CREATE)
                 .prompt("few short sentences")
                 .numTokens(numTokens)
                 .build();
 
-        ProcessorResult result = textProcessor.process(id, params);
+        ProcessorResult result = textProcessor.process(id, List.of(params));
 
         StringTokenizer tokenizer = 
                 new StringTokenizer(result.getOutputString(), " ");

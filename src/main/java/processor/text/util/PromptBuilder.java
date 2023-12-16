@@ -1,21 +1,21 @@
 package main.java.processor.text.util;
 
 import lombok.Builder;
-import main.java.common.models.TextParams.TextType;
+import main.java.common.models.text.TextParamsType;
 
 @Builder
 public class PromptBuilder {   // experimental
 
     private StringBuilder sb;
     
-    private TextType textType;
+    private TextParamsType type;
     private String prompt;
     private String audience;
 
     public String getFinalPrompt() {
         sb = new StringBuilder();
         
-        if (TextType.HASHTAGS.equals(textType))
+        if (TextParamsType.CREATE_HASHTAGS.equals(type))
             sb.append("Generate several hashtags about the following: ");
         sb.append(prompt);
         sb.append(".");

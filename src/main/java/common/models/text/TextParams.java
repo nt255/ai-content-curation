@@ -1,9 +1,10 @@
-package main.java.common.models;
+package main.java.common.models.text;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import main.java.common.models.BaseParams;
 
 @Getter
 @Setter
@@ -11,14 +12,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class TextParams extends BaseParams {
     
-    public enum TextType {
-        PLAIN, HASHTAGS
-    }
+    private TextParamsType type;
     
-    private TextType type;
-    
+    private String prompt;
     private String audience;
-    
     private Integer numTokens;
 
 }

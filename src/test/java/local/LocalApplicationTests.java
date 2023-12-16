@@ -25,6 +25,7 @@ import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
@@ -36,9 +37,11 @@ import com.google.inject.Inject;
 import main.java.common.clients.HttpClient;
 import main.java.common.file.FileServer;
 import main.java.common.models.JobState;
-import main.java.common.models.TextParams;
-import main.java.server.models.Image;
-import main.java.server.models.Text;
+import main.java.common.models.text.TextParams;
+import main.java.server.models.image.GetImageResponse;
+import main.java.server.models.image.PostImageRequest;
+import main.java.server.models.text.GetTextResponse;
+import main.java.server.models.text.PostTextRequest;
 import test.java.TestWithInjections;
 
 
@@ -78,32 +81,36 @@ public class LocalApplicationTests extends TestWithInjections {
         JSONObject body = new JSONObject()
                 .put("type", "TEXT")
                 .put("state", "COMPLETED")
-                .put("params", new JSONObject()
-                        .put("prompt", "Write me a nice story about a farmer.")
-                        .put("numTokens", 2));
+                .put("params", new JSONArray()
+                        .put(new JSONObject()
+                                .put("type", "CREATE")
+                                .put("prompt", "Write me a nice story about a farmer.")
+                                .put("numTokens", 2)));
+
 
         String postResponseString = httpClient.post(
                 textsUrl, headers, body);
-        Text postResponse = gson.fromJson(postResponseString, Text.class);
+        PostTextRequest postResponse = gson.fromJson(
+                postResponseString, PostTextRequest.class);
 
-        assertEquals(JobState.NEW, postResponse.getState());
         assertNotNull(postResponse.getParams());
-        
-        TextParams params = postResponse.getParams();
+
+        TextParams params = postResponse.getParams().get(0);
         assertEquals("Write me a nice story about a farmer.", params.getPrompt());
         assertEquals(2, params.getNumTokens());
 
 
         // -----get-----
-        String getUrl = textsUrl + "/" + postResponse.getId();
+        String getUrl = textsUrl + "/" + postResponse.getGeneratedId();
 
         String getResponseString = httpClient.get(getUrl);
-        Text getResponse = gson.fromJson(getResponseString, Text.class);
+        GetTextResponse getResponse = gson.fromJson(
+                getResponseString, GetTextResponse.class);
 
-        assertEquals(postResponse.getId(), getResponse.getId());
-        assertEquals(JobState.NEW, getResponse.getState());
+        assertEquals(postResponse.getGeneratedId(), getResponse.getId());
+        assertEquals(JobState.SUBMITTED, getResponse.getState());
         assertNotNull(getResponse.getParams());
-        assertNotNull(getResponse.getParams().getPrompt());
+        assertNotNull(getResponse.getParams().get(0).getPrompt());
 
         assertTrue(getResponse.getCreatedOn().isBefore(Instant.now()), 
                 "createdOn is not before current time");
@@ -114,13 +121,14 @@ public class LocalApplicationTests extends TestWithInjections {
         assertNull(getResponse.getErrors());
 
 
-        
-        sleep(20L);
+
+        sleep(10L);
 
 
         // -----make sure text is updated with results-----
         String getResponseStringTwo = httpClient.get(getUrl);
-        Text getResponseTwo = gson.fromJson(getResponseStringTwo, Text.class);
+        GetTextResponse getResponseTwo = gson.fromJson(
+                getResponseStringTwo, GetTextResponse.class);
 
         assertEquals(getResponse.getId(), getResponseTwo.getId());
         assertEquals(JobState.COMPLETED, getResponseTwo.getState());
@@ -146,18 +154,18 @@ public class LocalApplicationTests extends TestWithInjections {
         JSONObject body = new JSONObject()
                 .put("type", "TEXT")
                 .put("state", "COMPLETED")
-                .put("params", new JSONObject()
-                        .put("prompt", "Write me a nice story about a farmer.")
-                        .put("numTokens", 2));
+                .put("params", new JSONArray()
+                        .put(new JSONObject()
+                                .put("type", "CREATE")
+                                .put("prompt", "Write me a nice story about a farmer.")
+                                .put("numTokens", 2)));
 
         int count = 3;
-        Set<Text> texts = IntStream.range(0, count).boxed().map(ignored -> {
+        Set<PostTextRequest> texts = IntStream.range(0, count).boxed().map(ignored -> {
             String postResponseString = httpClient.post(
                     textsUrl, headers, body);
-            Text postResponse = gson.fromJson(postResponseString, Text.class);
-
-            assertEquals(postResponse.getCreatedOn(), 
-                    postResponse.getLastModifiedOn());
+            PostTextRequest postResponse = gson.fromJson(
+                    postResponseString, PostTextRequest.class);
 
             return postResponse;
         }).collect(Collectors.toSet());
@@ -166,15 +174,16 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
 
-        sleep(20L);
+        sleep(10L);
 
 
         // -----get-----
         texts.stream().forEach(text -> {
-            String getUrl = textsUrl + "/" + text.getId();
+            String getUrl = textsUrl + "/" + text.getGeneratedId();
 
             String getResponseString = httpClient.get(getUrl);
-            Text getResponse = gson.fromJson(getResponseString, Text.class);
+            GetTextResponse getResponse = gson.fromJson(
+                    getResponseString, GetTextResponse.class);
 
             Instant lastModifiedOn = getResponse.getLastModifiedOn();
             Instant createdOn = getResponse.getCreatedOn();
@@ -197,32 +206,36 @@ public class LocalApplicationTests extends TestWithInjections {
         String imagesUrl = url + "/images";
         Map<String, String> headers = Map.of();
 
+
         JSONObject body = new JSONObject()
                 .put("type", "IMAGE")
                 .put("state", "NEW")
-                .put("params", new JSONObject()
-                        .put("prompt", "Write me a nice story about a farmer.")
-                        .put("height", height.toString())
-                        .put("width", width.toString())
-                        .put("workflow", "fitnessAesthetics")
-                        .put("checkpoint", "realDream_8Legendary.safetensors"));
+                .put("params", new JSONArray()
+                        .put(new JSONObject()
+                                .put("type", "CREATE")
+                                .put("prompt", "Write me a nice story about a farmer.")
+                                .put("height", height.toString())
+                                .put("width", width.toString())
+                                .put("workflow", "fitnessAesthetics")
+                                .put("checkpoint", "realDream_8Legendary.safetensors")));
 
         String postResponseString = httpClient.post(
                 imagesUrl, headers, body);
-        Image postResponse = gson.fromJson(postResponseString, Image.class);
+        PostImageRequest postResponse = gson.fromJson(
+                postResponseString, PostImageRequest.class);
 
-        assertEquals(JobState.NEW, postResponse.getState());
         assertNotNull(postResponse.getParams());
 
 
         // -----get-----
-        String getUrl = imagesUrl + "/" + postResponse.getId();
+        String getUrl = imagesUrl + "/" + postResponse.getGeneratedId();
 
         String getResponseString = httpClient.get(getUrl);
-        Image getResponse = gson.fromJson(getResponseString, Image.class);
+        GetImageResponse getResponse = gson.fromJson(
+                getResponseString, GetImageResponse.class);
 
-        assertEquals(postResponse.getId(), getResponse.getId());
-        assertEquals(JobState.NEW, getResponse.getState());
+        assertEquals(postResponse.getGeneratedId(), getResponse.getId());
+        assertEquals(JobState.SUBMITTED, getResponse.getState());
         assertNotNull(getResponse.getParams());
 
         assertTrue(getResponse.getCreatedOn().isBefore(Instant.now()), 
@@ -235,12 +248,13 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
 
-        sleep(20L);
+        sleep(10L);
 
 
         // -----make sure image is updated with results-----
         String getResponseStringTwo = httpClient.get(getUrl);
-        Image getResponseTwo = gson.fromJson(getResponseStringTwo, Image.class);
+        GetImageResponse getResponseTwo = gson.fromJson(
+                getResponseStringTwo, GetImageResponse.class);
 
         assertEquals(getResponse.getId(), getResponseTwo.getId());
         assertEquals(JobState.COMPLETED, getResponseTwo.getState());
@@ -277,7 +291,7 @@ public class LocalApplicationTests extends TestWithInjections {
         }
         assertEquals(height, bufferedImage.getHeight());
         assertEquals(width, bufferedImage.getWidth());
-        
+
         // -----processor local directory should be cleared-----
         String localDirectory = properties.getProperty("comfy.output.directory");
         Path directory = new File(localDirectory).toPath();
@@ -287,8 +301,8 @@ public class LocalApplicationTests extends TestWithInjections {
         } catch (IOException e) {
             fail("unable to open processor local directory");
         }
-        
-        
+
+
         // -----delete-----
         httpClient.delete(getUrl);
         assertThrows(

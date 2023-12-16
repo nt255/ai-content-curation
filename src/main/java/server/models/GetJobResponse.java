@@ -12,7 +12,7 @@ import main.java.common.models.JobState;
 @Getter
 @Setter
 @SuperBuilder
-public abstract class Job extends BaseModel {
+public abstract class GetJobResponse extends BaseGetResponse {
     
     UUID id;
     
@@ -20,8 +20,8 @@ public abstract class Job extends BaseModel {
     Instant lastModifiedOn;
     
     JobState state;
-
+    
     List<String> notes;
     List<String> errors;
-    
+
 }

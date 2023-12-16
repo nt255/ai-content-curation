@@ -10,8 +10,10 @@ import main.java.common.mq.ZMQProducer;
 import main.java.server.mappers.ImageMapper;
 import main.java.server.mappers.JobMapper;
 import main.java.server.mappers.TextMapper;
-import main.java.server.models.Image;
-import main.java.server.models.Text;
+import main.java.server.models.image.GetImageResponse;
+import main.java.server.models.image.PostImageRequest;
+import main.java.server.models.text.GetTextResponse;
+import main.java.server.models.text.PostTextRequest;
 import main.java.server.request.RequestHandler;
 
 public class ServerModule extends AbstractModule {
@@ -25,8 +27,11 @@ public class ServerModule extends AbstractModule {
         bind(RequestHandler.class).in(Singleton.class);
         
         // mappers
-        bind(new TypeLiteral<JobMapper<Text, TextDbModel>>(){}).to(TextMapper.class);
-        bind(new TypeLiteral<JobMapper<Image, ImageDbModel>>(){}).to(ImageMapper.class);
+        bind(new TypeLiteral<JobMapper<GetTextResponse, PostTextRequest, TextDbModel>>(){})
+        .to(TextMapper.class);
+        
+        bind(new TypeLiteral<JobMapper<GetImageResponse, PostImageRequest, ImageDbModel>>(){})
+        .to(ImageMapper.class);
         
     }
 

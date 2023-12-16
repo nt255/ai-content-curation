@@ -1,6 +1,5 @@
 package main.java.server.request;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -10,8 +9,7 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import io.javalin.Javalin;
-import main.java.common.models.JobState;
-import main.java.server.models.Text;
+import main.java.server.models.text.PostTextRequest;
 import main.java.server.service.TextService;
 
 public class TextRequestHandler {
@@ -41,11 +39,8 @@ public class TextRequestHandler {
         .post("/texts", ctx -> {
             String bodyString = ctx.body();
             LOG.info("Received POST request to: {}, body: {}", ctx.fullUrl(), bodyString);
-            Text body = gson.fromJson(bodyString, Text.class);
-            body.setId(UUID.randomUUID());
-            body.setCreatedOn(Instant.now());
-            body.setLastModifiedOn(Instant.now());
-            body.setState(JobState.NEW);
+            PostTextRequest body = gson.fromJson(bodyString, PostTextRequest.class);
+            body.setGeneratedId(UUID.randomUUID());
             textService.create(body);
             ctx.json(gson.toJson(body)).status(202);
         })

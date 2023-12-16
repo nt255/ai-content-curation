@@ -1,6 +1,5 @@
 package main.java.server.request;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -10,8 +9,7 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import io.javalin.Javalin;
-import main.java.common.models.JobState;
-import main.java.server.models.Image;
+import main.java.server.models.image.PostImageRequest;
 import main.java.server.service.ImageService;
 
 
@@ -42,11 +40,8 @@ public class ImageRequestHandler {
         .post("/images", ctx -> {
             String bodyString = ctx.body();
             LOG.info("Received POST request to: {}, body: {}", ctx.fullUrl(), bodyString);
-            Image body = gson.fromJson(bodyString, Image.class);
-            body.setId(UUID.randomUUID());
-            body.setCreatedOn(Instant.now());
-            body.setLastModifiedOn(Instant.now());
-            body.setState(JobState.NEW);
+            PostImageRequest body = gson.fromJson(bodyString, PostImageRequest.class);
+            body.setGeneratedId(UUID.randomUUID());
             imageService.create(body);
             ctx.json(gson.toJson(body)).status(202);
         })
