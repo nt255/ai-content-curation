@@ -1,6 +1,5 @@
 package main.java.processor.models;
 
-import java.util.List;
 import java.util.UUID;
 
 import lombok.Builder;
@@ -13,10 +12,6 @@ public class ProcessorResult {
     private UUID id;
     
     private boolean isSuccessful;
-
     private String outputString;
-    
-    private List<String> notes;
-    private List<String> errors;
 
 }

@@ -1,5 +1,7 @@
 package main.java.server.service;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +14,11 @@ import main.java.server.mappers.JobMapper;
 import main.java.server.models.BasePostRequest;
 import main.java.server.models.GetJobResponse;
 
-public abstract class JobService<S extends GetJobResponse, T extends BasePostRequest, U extends JobDbModel> 
-extends BaseService<S, T, U> {
+
+public abstract class JobService<
+S extends GetJobResponse, 
+T extends BasePostRequest, 
+U extends JobDbModel> extends BaseService<S, T, U> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobService.class);
     
@@ -28,11 +33,13 @@ extends BaseService<S, T, U> {
         this.producer = producer;
     }
     
-    public void create(T model) {
-        super.create(model);
+    public UUID create(T model) {
+        UUID generatedId = super.create(model);
         
-        LOG.info("submitting job with id: {} to queue", model.getGeneratedId());
-        producer.send(mapper.mapToZMQModel(model));
+        LOG.info("submitting job with id: {} to queue", generatedId);
+        producer.send(mapper.mapToZMQModel(generatedId, model));
+        
+        return generatedId;
     }
 
 }

@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zeromq.SocketType;
@@ -17,10 +16,10 @@ import com.google.inject.Inject;
 public class ZMQProducer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZMQProducer.class);
-    
+
     private Gson gson;
     private ZMQ.Socket producer;
-    
+
     @Inject
     public ZMQProducer(Gson gson, Properties properties, ZContext context) {
         this.gson = gson;
@@ -33,20 +32,19 @@ public class ZMQProducer {
     }
 
     public void send(ZMQModel model) {
-        // verifyJson(model.getSteps());
-        verifyJson(model.getParams());
-        
+        verifyJsonArray(model.getParams());
+
         String s = gson.toJson(model);
         LOG.info("Sending message: {}", s);
         producer.send(s);
     }
-    
+
     // move to some util class in common?
-    private void verifyJson(String json) {
+    private void verifyJsonArray(String json) {
         try {
             new JSONArray(json);
         } catch (JSONException e) {
-            throw new IllegalStateException("found invalid json");
+            throw new IllegalStateException("found invalid json array");
         }
     }
 }

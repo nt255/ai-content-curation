@@ -1,6 +1,7 @@
 package main.java.server.mappers;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
@@ -8,6 +9,7 @@ import com.google.inject.Inject;
 import main.java.common.db.models.TextDbModel;
 import main.java.common.models.JobState;
 import main.java.common.models.JobType;
+import main.java.common.models.text.TextParams;
 import main.java.common.mq.ZMQModel;
 import main.java.server.models.text.GetTextResponse;
 import main.java.server.models.text.PostTextRequest;
@@ -23,8 +25,6 @@ public class TextMapper implements JobMapper<GetTextResponse, PostTextRequest, T
                 .createdOn(model.getCreatedOn())
                 .lastModifiedOn(model.getLastModifiedOn())
                 .state(model.getState())
-                .notes(model.getNotes())
-                .errors(model.getErrors())
                 .steps(model.getSteps())
                 .params(model.getParams())
                 .outputText(model.getOutputText())
@@ -32,23 +32,24 @@ public class TextMapper implements JobMapper<GetTextResponse, PostTextRequest, T
     }
 
     @Override
-    public TextDbModel mapToDBModel(PostTextRequest model) {
+    public TextDbModel mapToDBModel(UUID generatedId, PostTextRequest model) {
         return TextDbModel.builder()
-                .id(model.getGeneratedId())
+                .id(generatedId)
                 .createdOn(Instant.now())
                 .lastModifiedOn(Instant.now())
                 .state(JobState.SUBMITTED)
-                .steps(model.getSteps())
+                .steps(model.getParams().stream()
+                        .map(TextParams::getType)
+                        .toList())
                 .params(model.getParams())
                 .build();
     }
 
     @Override
-    public ZMQModel mapToZMQModel(PostTextRequest model) {
+    public ZMQModel mapToZMQModel(UUID generatedId, PostTextRequest model) {
         return ZMQModel.builder()
-                .id(model.getGeneratedId())
+                .id(generatedId)
                 .jobType(JobType.TEXT)
-                //.steps(gson.toJson(model.getSteps()))
                 .params(gson.toJson(model.getParams()))
                 .build();
     }

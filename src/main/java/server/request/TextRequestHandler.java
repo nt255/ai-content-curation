@@ -40,9 +40,8 @@ public class TextRequestHandler {
             String bodyString = ctx.body();
             LOG.info("Received POST request to: {}, body: {}", ctx.fullUrl(), bodyString);
             PostTextRequest body = gson.fromJson(bodyString, PostTextRequest.class);
-            body.setGeneratedId(UUID.randomUUID());
-            textService.create(body);
-            ctx.json(gson.toJson(body)).status(202);
+            UUID generatedId = textService.create(body);
+            ctx.result(generatedId.toString()).status(202);
         })
 
         .delete("/texts/{id}", ctx -> {

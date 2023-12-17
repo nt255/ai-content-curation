@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
-import java.util.Random;
 
 public class ComfyClient {
 
@@ -33,11 +32,11 @@ public class ComfyClient {
     public ComfyClient(Properties properties, HttpClient httpClient) {
         this.httpClient = httpClient;
         this.outputDirectory = properties.getProperty("comfy.output.directory");
-        
+
         String baseUrl = properties.getProperty("comfy.server.address");
         this.promptUrl = baseUrl + "/prompt";
         this.historyUrl = baseUrl + "/history";
-        
+
         checkConnection();
     }
 
@@ -80,19 +79,19 @@ public class ComfyClient {
         try {
             JSONObject request = new JSONObject()
                     .put("prompt", workflow.getJson());
-            
+
             LOG.info("sending prompt: {}", request);
-            
+
             JSONObject response = new JSONObject(
                     httpClient.post(promptUrl, request));
-            
+
             LOG.info("received back: {}", response);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private void checkConnection() {
         LOG.info("Checking connection to Comfy.");
         try {
