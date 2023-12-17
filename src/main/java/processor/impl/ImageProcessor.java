@@ -48,7 +48,6 @@ public class ImageProcessor implements Processor<ImageParams> {
                 .id(id)
                 .isSuccessful(true)
                 .outputString(localImagePath)
-                .errors(List.of())
                 .build();
 
         return result;

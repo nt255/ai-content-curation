@@ -5,9 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
@@ -20,8 +17,6 @@ import main.java.processor.impl.TextProcessor;
 import main.java.processor.models.ProcessorResult;
 
 public class ProcessorRouter {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ProcessorRouter.class);
 
     private final Map<JobType, BiFunction<UUID, String, ProcessorResult>> processorMap;
 
@@ -36,17 +31,10 @@ public class ProcessorRouter {
     }
 
     public ProcessorResult processAndSave(JobType type, UUID id, String params) {
-
-        String errorMessage = String.format("no matching processor found for JobType: {}", type.name());
-        ProcessorResult errorResponse = ProcessorResult.builder()
-                .id(id)
-                .isSuccessful(false)
-                .errors(List.of(errorMessage))
-                .build();
-
         return processorMap.getOrDefault(type, (ignoredOne, ignoredTwo) -> {
-            LOG.error(errorMessage);
-            return errorResponse;
+            String errorMessage = String.format(
+                    "no processor found for JobType: {}", type.name());
+            throw new IllegalStateException(errorMessage);
         }).apply(id, params);
     }
 

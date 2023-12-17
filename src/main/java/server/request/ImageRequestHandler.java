@@ -41,9 +41,8 @@ public class ImageRequestHandler {
             String bodyString = ctx.body();
             LOG.info("Received POST request to: {}, body: {}", ctx.fullUrl(), bodyString);
             PostImageRequest body = gson.fromJson(bodyString, PostImageRequest.class);
-            body.setGeneratedId(UUID.randomUUID());
-            imageService.create(body);
-            ctx.json(gson.toJson(body)).status(202);
+            UUID generatedId = imageService.create(body);
+            ctx.result(generatedId.toString()).status(202);
         })
         
         .delete("/images/{id}", ctx -> {
@@ -51,14 +50,6 @@ public class ImageRequestHandler {
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
             imageService.delete(id);
             ctx.status(204);
-        })
-        
-        .post("/upscale/{id}", ctx -> {
-        	LOG.info("Received an UPSCALE request for the image of ID: {}", ctx.pathParam("id"));
-            UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
-            imageService.get(id).ifPresentOrElse(
-            		job -> {},
-            		() -> ctx.status(404));
         });
     }
 

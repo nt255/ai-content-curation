@@ -1,7 +1,6 @@
 package main.java.server.models;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -20,8 +19,5 @@ public abstract class GetJobResponse extends BaseGetResponse {
     Instant lastModifiedOn;
     
     JobState state;
-    
-    List<String> notes;
-    List<String> errors;
 
 }

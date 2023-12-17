@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import main.java.common.models.image.ImageParams;
-import main.java.common.models.image.ImageParamsType;
 import main.java.server.models.BasePostRequest;
 
 @Getter
@@ -17,7 +16,6 @@ public class PostImageRequest extends BasePostRequest {
         
     // input
     private UUID baseImageId;
-    private List<ImageParamsType> steps;
     private List<ImageParams> params;
     
     private boolean overwrite;

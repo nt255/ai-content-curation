@@ -65,7 +65,6 @@ public class TextProcessor implements Processor<TextParams> {
                 .id(id)
                 .isSuccessful(true)
                 .outputString(outputText)
-                .errors(List.of())
                 .build();
 
         return result;

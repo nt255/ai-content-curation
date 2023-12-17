@@ -15,7 +15,6 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
@@ -37,11 +36,8 @@ import com.google.inject.Inject;
 import main.java.common.clients.HttpClient;
 import main.java.common.file.FileServer;
 import main.java.common.models.JobState;
-import main.java.common.models.text.TextParams;
 import main.java.server.models.image.GetImageResponse;
-import main.java.server.models.image.PostImageRequest;
 import main.java.server.models.text.GetTextResponse;
-import main.java.server.models.text.PostTextRequest;
 import test.java.TestWithInjections;
 
 
@@ -76,7 +72,6 @@ public class LocalApplicationTests extends TestWithInjections {
         String port = properties.getProperty("javalin.port");
         String url = "http://localhost:" + port;
         String textsUrl = url + "/texts";
-        Map<String, String> headers = Map.of();
 
         JSONObject body = new JSONObject()
                 .put("type", "TEXT")
@@ -87,27 +82,17 @@ public class LocalApplicationTests extends TestWithInjections {
                                 .put("prompt", "Write me a nice story about a farmer.")
                                 .put("numTokens", 2)));
 
-
-        String postResponseString = httpClient.post(
-                textsUrl, headers, body);
-        PostTextRequest postResponse = gson.fromJson(
-                postResponseString, PostTextRequest.class);
-
-        assertNotNull(postResponse.getParams());
-
-        TextParams params = postResponse.getParams().get(0);
-        assertEquals("Write me a nice story about a farmer.", params.getPrompt());
-        assertEquals(2, params.getNumTokens());
+        String generatedId = httpClient.post(textsUrl, body);
 
 
         // -----get-----
-        String getUrl = textsUrl + "/" + postResponse.getGeneratedId();
+        String getUrl = textsUrl + "/" + generatedId;
 
         String getResponseString = httpClient.get(getUrl);
         GetTextResponse getResponse = gson.fromJson(
                 getResponseString, GetTextResponse.class);
 
-        assertEquals(postResponse.getGeneratedId(), getResponse.getId());
+        assertEquals(generatedId, getResponse.getId().toString());
         assertEquals(JobState.SUBMITTED, getResponse.getState());
         assertNotNull(getResponse.getParams());
         assertNotNull(getResponse.getParams().get(0).getPrompt());
@@ -116,9 +101,7 @@ public class LocalApplicationTests extends TestWithInjections {
                 "createdOn is not before current time");
         assertTrue(getResponse.getLastModifiedOn().isBefore(Instant.now()), 
                 "lastModified is not before current time");
-
         assertNull(getResponse.getOutputText());
-        assertNull(getResponse.getErrors());
 
 
 
@@ -149,7 +132,6 @@ public class LocalApplicationTests extends TestWithInjections {
         String port = properties.getProperty("javalin.port");
         String url = "http://localhost:" + port;
         String textsUrl = url + "/texts";
-        Map<String, String> headers = Map.of();
 
         JSONObject body = new JSONObject()
                 .put("type", "TEXT")
@@ -161,16 +143,11 @@ public class LocalApplicationTests extends TestWithInjections {
                                 .put("numTokens", 2)));
 
         int count = 3;
-        Set<PostTextRequest> texts = IntStream.range(0, count).boxed().map(ignored -> {
-            String postResponseString = httpClient.post(
-                    textsUrl, headers, body);
-            PostTextRequest postResponse = gson.fromJson(
-                    postResponseString, PostTextRequest.class);
-
-            return postResponse;
+        Set<String> generatedIds = IntStream.range(0, count).boxed().map(ignored -> {
+            return httpClient.post(textsUrl, body);
         }).collect(Collectors.toSet());
 
-        assertEquals(count, texts.size());
+        assertEquals(count, generatedIds.size());
 
 
 
@@ -178,8 +155,8 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         // -----get-----
-        texts.stream().forEach(text -> {
-            String getUrl = textsUrl + "/" + text.getGeneratedId();
+        generatedIds.stream().forEach(generatedId -> {
+            String getUrl = textsUrl + "/" + generatedId;
 
             String getResponseString = httpClient.get(getUrl);
             GetTextResponse getResponse = gson.fromJson(
@@ -204,8 +181,6 @@ public class LocalApplicationTests extends TestWithInjections {
         String port = properties.getProperty("javalin.port");
         String url = "http://localhost:" + port;
         String imagesUrl = url + "/images";
-        Map<String, String> headers = Map.of();
-
 
         JSONObject body = new JSONObject()
                 .put("type", "IMAGE")
@@ -219,22 +194,17 @@ public class LocalApplicationTests extends TestWithInjections {
                                 .put("workflow", "fitnessAesthetics")
                                 .put("checkpoint", "realDream_8Legendary.safetensors")));
 
-        String postResponseString = httpClient.post(
-                imagesUrl, headers, body);
-        PostImageRequest postResponse = gson.fromJson(
-                postResponseString, PostImageRequest.class);
-
-        assertNotNull(postResponse.getParams());
+        String generatedId = httpClient.post(imagesUrl, body);
 
 
         // -----get-----
-        String getUrl = imagesUrl + "/" + postResponse.getGeneratedId();
+        String getUrl = imagesUrl + "/" + generatedId;
 
         String getResponseString = httpClient.get(getUrl);
         GetImageResponse getResponse = gson.fromJson(
                 getResponseString, GetImageResponse.class);
 
-        assertEquals(postResponse.getGeneratedId(), getResponse.getId());
+        assertEquals(generatedId, getResponse.getId().toString());
         assertEquals(JobState.SUBMITTED, getResponse.getState());
         assertNotNull(getResponse.getParams());
 
@@ -244,7 +214,6 @@ public class LocalApplicationTests extends TestWithInjections {
                 "lastModified is not before current time");
 
         assertNull(getResponse.getOutputFilename());
-        assertNull(getResponse.getErrors());
 
 
 

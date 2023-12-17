@@ -8,7 +8,7 @@ import main.java.processor.models.ProcessorResult;
 
 public interface Processor<T extends BaseParams> {
 
-    public ProcessorResult process(UUID id, List<T> params);
+    public ProcessorResult process(UUID id, List<T> steps);
     
     public void save(UUID id, ProcessorResult result);
 

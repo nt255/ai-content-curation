@@ -1,7 +1,6 @@
 package main.java.common.db.models;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -22,8 +21,5 @@ public abstract class JobDbModel extends BaseDbModel {
      Instant lastModifiedOn;
      
      JobState state;
-     
-     List<String> notes;
-     List<String> errors;
      
 }

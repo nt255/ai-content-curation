@@ -16,7 +16,6 @@ public class ZMQModel {
 
     private JobType jobType;
     
-    // private String steps;   // json string of param types
-    private String params;  // json string of params
+    private String params;  // json array of params
 
 }

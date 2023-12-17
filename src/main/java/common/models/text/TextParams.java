@@ -14,7 +14,6 @@ public class TextParams extends BaseParams {
     
     private TextParamsType type;
     
-    private String prompt;
     private String audience;
     private Integer numTokens;
 

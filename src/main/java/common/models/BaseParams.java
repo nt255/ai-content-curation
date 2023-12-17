@@ -11,4 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract class BaseParams {
 
+    private String prompt;
+    
 }

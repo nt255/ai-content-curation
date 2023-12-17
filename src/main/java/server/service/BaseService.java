@@ -12,7 +12,10 @@ import main.java.server.mappers.Mapper;
 import main.java.server.models.BaseGetResponse;
 import main.java.server.models.BasePostRequest;
 
-public abstract class BaseService<S extends BaseGetResponse, T extends BasePostRequest, U extends BaseDbModel> {
+public abstract class BaseService<
+S extends BaseGetResponse, 
+T extends BasePostRequest, 
+U extends BaseDbModel> {
 
     private BaseDao<U> dao;
     private Mapper<S, T, U> mapper;
@@ -31,8 +34,10 @@ public abstract class BaseService<S extends BaseGetResponse, T extends BasePostR
         return dao.get(id).map(model -> mapper.mapFromDBModel(model));
     }
 
-    public void create(T model) {
-        dao.insert(mapper.mapToDBModel(model));
+    public UUID create(T model) {
+        UUID generatedId = UUID.randomUUID();
+        dao.insert(mapper.mapToDBModel(generatedId, model));
+        return generatedId;
     }
 
     public void delete(UUID id) {
