@@ -1,5 +1,7 @@
 package main.java.common.models.image;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +21,10 @@ public class ImageParams extends BaseParams {
     private String checkpoint;
     private String workflow;
     
+    private Double denoise;
     private Integer kSteps;
     private Integer kCFG;
+    
+    private List<LoraSettings> loraSettings;
     
 }

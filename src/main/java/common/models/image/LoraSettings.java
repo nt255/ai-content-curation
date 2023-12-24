@@ -1,4 +1,4 @@
-package main.java.common.models;
+package main.java.common.models.image;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +9,10 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public abstract class BaseParams {
-
-    private String prompt;
-    private String negativePrompt;
+public class LoraSettings {
     
+    private String name;
+    private Double modelStrength;
+    private Double clipStrength;
+
 }

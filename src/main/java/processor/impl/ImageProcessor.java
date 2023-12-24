@@ -42,6 +42,10 @@ public class ImageProcessor implements Processor<ImageParams> {
         for (ImageParams step : steps) {
             if (ImageParamsType.CREATE.equals(step.getType()))
                 localImagePath = create(id, step);
+            else if (ImageParamsType.UPSCALE.equals(step.getType()))
+                localImagePath = upscale(id, step);
+            else
+                throw new UnsupportedOperationException();
         }
 
         ProcessorResult result = ProcessorResult.builder()
@@ -68,6 +72,11 @@ public class ImageProcessor implements Processor<ImageParams> {
                     "should not have generated more than one file");
 
         return generatedFiles.iterator().next();
+    }
+    
+    private String upscale(UUID id, ImageParams params) {
+        // TODO: implement upscale logic
+        return "upscaledImage";
     }
 
 
