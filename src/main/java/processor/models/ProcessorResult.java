@@ -9,9 +9,9 @@ import lombok.Getter;
 @Getter
 public class ProcessorResult {
 
-    private UUID id;
+    private final UUID id;
     
-    private boolean isSuccessful;
-    private String outputString;
+    private final boolean isSuccessful;
+    private final String outputString;
 
 }

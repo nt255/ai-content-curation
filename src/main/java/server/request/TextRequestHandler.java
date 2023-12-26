@@ -12,7 +12,7 @@ import io.javalin.Javalin;
 import main.java.server.models.text.PostTextRequest;
 import main.java.server.service.TextService;
 
-public class TextRequestHandler {
+class TextRequestHandler {
     
     private static final Logger LOG = 
             LoggerFactory.getLogger(TextRequestHandler.class);
@@ -26,7 +26,7 @@ public class TextRequestHandler {
         this.gson = gson;
     }
     
-    public void addRoutes(Javalin server) {
+    void addRoutes(Javalin server) {
         server
         .get("/texts/{id}", ctx -> {
             LOG.info("Received GET request to: {}", ctx.fullUrl());

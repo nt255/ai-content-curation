@@ -12,13 +12,13 @@ import main.java.server.mappers.Mapper;
 import main.java.server.models.BaseGetResponse;
 import main.java.server.models.BasePostRequest;
 
-public abstract class BaseService<
+abstract class BaseService<
 S extends BaseGetResponse, 
 T extends BasePostRequest, 
 U extends BaseDbModel> {
 
-    private BaseDao<U> dao;
-    private Mapper<S, T, U> mapper;
+    private final BaseDao<U> dao;
+    private final Mapper<S, T, U> mapper;
     
     @Inject
     public BaseService(BaseDao<U> dao, Mapper<S, T, U> mapper) {
@@ -30,7 +30,7 @@ U extends BaseDbModel> {
         throw new UnsupportedOperationException();
     }
 
-    public Optional<S> get(UUID id) {
+    public final Optional<S> get(UUID id) {
         return dao.get(id).map(model -> mapper.mapFromDBModel(model));
     }
 

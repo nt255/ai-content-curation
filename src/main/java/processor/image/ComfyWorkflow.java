@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -23,12 +22,12 @@ import main.java.common.models.BaseParams;
 import main.java.common.models.image.ImageParams;
 
 @Getter
-public class ComfyWorkflow {
+class ComfyWorkflow {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ComfyWorkflow.class);
 
-	private JSONObject json;
-	private Map<String, String> paramsToNodeClassTypeMap = Map.ofEntries(
+	private final JSONObject json;
+	private final Map<String, String> paramsToNodeClassTypeMap = Map.ofEntries(
 			Map.entry("width", "EmptyLatentImage"), 
 			Map.entry("height", "EmptyLatentImage"),
 			Map.entry("checkpoint", "CheckpointLoaderSimple"), 
@@ -42,7 +41,7 @@ public class ComfyWorkflow {
 			Map.entry("upscaleCFG", "UltimateSDUpscale"),
 			Map.entry("imagePath", "LoadImage")
 			);
-	private Map<String, String> semanticArgsToFieldsMap = Map.ofEntries(
+	private final Map<String, String> semanticArgsToFieldsMap = Map.ofEntries(
 			Map.entry("width", "width"),
 			Map.entry("height", "height"),
 			Map.entry("prompt", "text"),
@@ -57,7 +56,7 @@ public class ComfyWorkflow {
 			Map.entry("imagePath", "image")
 			);
 
-	public ComfyWorkflow(ComfyWorkflowBuilder builder) {
+	private ComfyWorkflow(ComfyWorkflowBuilder builder) {
 
 		String jsonString = "";
 		try {
@@ -119,7 +118,7 @@ public class ComfyWorkflow {
 	}
 
 	@NoArgsConstructor
-	public static class ComfyWorkflowBuilder {
+	static class ComfyWorkflowBuilder {
 
 		private String baseWorkflowFile;
 
@@ -127,22 +126,22 @@ public class ComfyWorkflow {
         
         private String outputDirectory;
 
-		public ComfyWorkflowBuilder setBaseWorkflowFile(String baseWorkflowFile) {
+		ComfyWorkflowBuilder setBaseWorkflowFile(String baseWorkflowFile) {
 			this.baseWorkflowFile = baseWorkflowFile;
 			return this;
 		}
 
-        public ComfyWorkflowBuilder setParams(ImageParams params) {
+        ComfyWorkflowBuilder setParams(ImageParams params) {
             this.params = params;
             return this;
         }
         
-        public ComfyWorkflowBuilder setOutputDirectory(String outputDirectory) {
+        ComfyWorkflowBuilder setOutputDirectory(String outputDirectory) {
             this.outputDirectory = outputDirectory;
             return this;
         }
 
-		public ComfyWorkflow build() {
+		ComfyWorkflow build() {
 			return new ComfyWorkflow(this);
 		}
 	}

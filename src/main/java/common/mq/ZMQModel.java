@@ -11,11 +11,11 @@ import main.java.common.models.JobType;
 @Builder
 public class ZMQModel {
 
-    private UUID id;
-    private UUID baseJobId;
+    private final UUID id;
+    private final UUID baseJobId;
 
-    private JobType jobType;
+    private final JobType jobType;
     
-    private String params;  // json array of params
+    private final String params;  // json array of params
 
 }

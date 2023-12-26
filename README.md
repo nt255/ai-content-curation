@@ -5,10 +5,13 @@ Automated AI Content Curation Pipeline
 # Setup
 
 1. Install Eclipse (or IntelliJ)
-2. Install Lombok: Help menu > Install new software > Add https://projectlombok.org/p2 > Install the Lombok plugin and restart Eclipse
-3. Do the same thing for other dependencies. Whenever adding a new dependency into pom.xml, `open pom.xml > Run > Run As > Maven Build > put "package" into goals and Run`. You'll see the jar for the dependency under Maven Dependencies in the project structure.
-4. If indexes are out of sync (names are not found when it's clearly there), `Project > Clean`.
-5. Run `Local Application`. Server and Processor can be run separately too.
+2. Run the following. `open pom.xml > Run > Run As > Maven Build > put "package" into goals and Run`. You'll see the jar for the dependency under Maven Dependencies in the project structure. Do this each time a new dependency is added to pom.xml.
+3. If indexes are out of sync (names are not found when it's clearly there), `Project > Clean`. `mvn clean` should also work.
+4. Start up comfy server.
+5. Run `LocalApplicationTests` to make sure everything is working. Add the following VM arguments to the run configuration:
+	* --add-exports=org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
+	* --add-exports=org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+6. Run `LocalApplication`. Server and Processor can be run separately. No VM arguments needed.
 
 # Eclipse Common Mistakes
 

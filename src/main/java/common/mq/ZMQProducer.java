@@ -17,8 +17,8 @@ public class ZMQProducer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZMQProducer.class);
 
-    private Gson gson;
-    private ZMQ.Socket producer;
+    private final Gson gson;
+    private final ZMQ.Socket producer;
 
     @Inject
     public ZMQProducer(Gson gson, Properties properties, ZContext context) {
@@ -44,6 +44,7 @@ public class ZMQProducer {
         try {
             new JSONArray(json);
         } catch (JSONException e) {
+            e.printStackTrace();
             throw new IllegalStateException("found invalid json array");
         }
     }

@@ -41,9 +41,7 @@ public class ImageProcessor implements Processor<ImageParams> {
         String localImagePath = "";
         for (ImageParams step : steps) {
             if (ImageParamsType.CREATE.equals(step.getType()))
-                localImagePath = create(id, step);
-            else if (ImageParamsType.UPSCALE.equals(step.getType()))
-                localImagePath = upscale(id, step);
+                localImagePath = create(step);
             else
                 throw new UnsupportedOperationException();
         }
@@ -57,7 +55,7 @@ public class ImageProcessor implements Processor<ImageParams> {
         return result;
     }
 
-    private String create(UUID id, ImageParams params) {
+    private String create(ImageParams params) {
         try {
             comfyClient.loadWorkflow(params);
             comfyClient.queuePrompt();
@@ -72,11 +70,6 @@ public class ImageProcessor implements Processor<ImageParams> {
                     "should not have generated more than one file");
 
         return generatedFiles.iterator().next();
-    }
-    
-    private String upscale(UUID id, ImageParams params) {
-        // TODO: implement upscale logic
-        return "upscaledImage";
     }
 
 

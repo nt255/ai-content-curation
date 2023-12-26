@@ -36,10 +36,6 @@ public class HttpClient {
         return post(url, NO_HEADERS, body);
     }
     
-    public String post(String url) {
-        return post(url, NO_BODY);
-    }
-    
     public String delete(String url) {
         return makeRequest(DELETE, url, NO_HEADERS, NO_BODY);
     }

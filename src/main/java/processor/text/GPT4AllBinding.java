@@ -30,9 +30,5 @@ public class GPT4AllBinding {
         System.out.println("\n");
         return fullGeneration;
     }
-    
-    public String generate(String prompt) {
-        return generate(prompt, Optional.empty());
-    }
 
 }

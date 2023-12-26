@@ -20,7 +20,7 @@ public class ComfyFileManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(ComfyFileManager.class);
 
-    private String outputDirectory;
+    private final String outputDirectory;
     private Set<String> files;
 
     @Inject

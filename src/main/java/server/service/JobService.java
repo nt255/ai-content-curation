@@ -15,15 +15,15 @@ import main.java.server.models.BasePostRequest;
 import main.java.server.models.GetJobResponse;
 
 
-public abstract class JobService<
+abstract class JobService<
 S extends GetJobResponse, 
 T extends BasePostRequest, 
 U extends JobDbModel> extends BaseService<S, T, U> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobService.class);
     
-    private JobMapper<S, T, U> mapper;
-    private ZMQProducer producer;
+    private final JobMapper<S, T, U> mapper;
+    private final ZMQProducer producer;
     
     @Inject
     public JobService(BaseDao<U> dao, JobMapper<S, T, U> mapper, 

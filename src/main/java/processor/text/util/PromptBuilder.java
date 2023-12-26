@@ -8,9 +8,9 @@ public class PromptBuilder {   // experimental
 
     private StringBuilder sb;
     
-    private TextParamsType type;
-    private String prompt;
-    private String audience;
+    private final TextParamsType type;
+    private final String prompt;
+    private final String audience;
 
     public String getFinalPrompt() {
         sb = new StringBuilder();
