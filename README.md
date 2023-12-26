@@ -13,6 +13,13 @@ Automated AI Content Curation Pipeline
 	* --add-exports=org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
 6. Run `LocalApplication`. Server and Processor can be run separately. No VM arguments needed.
 
+# General Conventions
+
+- Use `final` whenever possible.
+- Restrict visibility as much as possible.
+- Use Lombok and Guice injections.
+- Append abstract classes with "Base".
+
 # Eclipse Common Mistakes
 
 - "The declared package does not match the expected package." highlighting in red.

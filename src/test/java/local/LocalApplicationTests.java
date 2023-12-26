@@ -121,7 +121,7 @@ public class LocalApplicationTests extends TestWithInjections {
         // -----delete-----
         httpClient.delete(getUrl);
         assertThrows(
-                RuntimeException.class, // TODO: handle 404s in httpClient
+                RuntimeException.class,
                 () -> httpClient.get(getUrl));
     }
 
@@ -275,7 +275,7 @@ public class LocalApplicationTests extends TestWithInjections {
         // -----delete-----
         httpClient.delete(getUrl);
         assertThrows(
-                RuntimeException.class, // TODO: handle 404s in httpClient
+                RuntimeException.class,
                 () -> httpClient.get(getUrl));        
         assertTrue(!outputFile.exists(), "file is not yet deleted");
         assertThrows(

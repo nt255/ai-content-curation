@@ -33,6 +33,7 @@ public class MongoDBClient {
                 .applyConnectionString(new ConnectionString(uri))
                 .uuidRepresentation(UuidRepresentation.STANDARD)
                 .build();
+        
         MongoClient client = MongoClients.create(settings);
 
         // check connection

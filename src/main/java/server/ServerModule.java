@@ -16,7 +16,7 @@ import main.java.server.models.text.GetTextResponse;
 import main.java.server.models.text.PostTextRequest;
 import main.java.server.request.RequestHandler;
 
-public class ServerModule extends AbstractModule {
+class ServerModule extends AbstractModule {
 
     @Override
     protected void configure() {

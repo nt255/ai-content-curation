@@ -9,7 +9,7 @@ import io.javalin.Javalin;
 import io.javalin.validation.JavalinValidation;
 import main.java.server.request.RequestHandler;
 
-public class JavalinServer {
+class JavalinServer {
     
     private final Javalin javalin;
     private final int port;

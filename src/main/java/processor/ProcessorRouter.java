@@ -12,9 +12,9 @@ import com.google.inject.Inject;
 import main.java.common.models.JobType;
 import main.java.common.models.image.ImageParams;
 import main.java.common.models.text.TextParams;
-import main.java.processor.impl.ImageProcessor;
-import main.java.processor.impl.TextProcessor;
+import main.java.processor.image.ImageProcessor;
 import main.java.processor.models.ProcessorResult;
+import main.java.processor.text.TextProcessor;
 
 class ProcessorRouter {
 

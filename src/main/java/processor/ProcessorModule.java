@@ -4,12 +4,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
 import main.java.common.mq.ZMQConsumer;
-import main.java.processor.impl.ImageProcessor;
-import main.java.processor.impl.TextProcessor;
-import main.java.processor.text.GPT4AllLoader;
+import main.java.processor.gpt.GPT4AllLoader;
+import main.java.processor.image.ImageProcessor;
+import main.java.processor.text.TextProcessor;
 
-
-public class ProcessorModule extends AbstractModule {
+class ProcessorModule extends AbstractModule {
 
     @Override
     protected void configure() {
