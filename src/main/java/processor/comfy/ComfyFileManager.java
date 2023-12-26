@@ -1,4 +1,4 @@
-package main.java.processor.image;
+package main.java.processor.comfy;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,7 +52,7 @@ public class ComfyFileManager {
      * 
      * @return new files
      */
-    public Set<String> getNewFiles() {
+    private Set<String> getNewFiles() {
         Set<String> currentFiles = getCurrentFiles();
         Set<String> copy = Set.copyOf(currentFiles);
         currentFiles.removeAll(files);
@@ -59,6 +60,22 @@ public class ComfyFileManager {
 
         LOG.info("found the following new files {}", currentFiles);
         return currentFiles;
+    }
+    
+    public Set<String> waitForGeneratedFiles() {
+        LOG.info("waiting for new files(s) to be generated..");
+        LOG.info("polling every second");
+        Set<String> generatedFiles;
+        do {
+            try {
+                TimeUnit.SECONDS.sleep(1l);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            generatedFiles = getNewFiles();
+        } while (generatedFiles.isEmpty());
+
+        return generatedFiles;
     }
 
     public void clearDirectory() {

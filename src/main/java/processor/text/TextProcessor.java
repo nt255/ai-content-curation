@@ -1,4 +1,4 @@
-package main.java.processor.impl;
+package main.java.processor.text;
 
 import java.time.Instant;
 import java.util.List;
@@ -15,14 +15,14 @@ import main.java.common.db.models.TextDbModel;
 import main.java.common.models.JobState;
 import main.java.common.models.text.TextParams;
 import main.java.common.models.text.TextParamsType;
-import main.java.processor.Processor;
+import main.java.processor.MultistepProcessor;
+import main.java.processor.gpt.GPT4AllBinding;
 import main.java.processor.models.ProcessorResult;
-import main.java.processor.text.GPT4AllBinding;
 import main.java.processor.text.util.HashtagCleaner;
 import main.java.processor.text.util.PromptBuilder;
 
 
-public class TextProcessor implements Processor<TextParams> {
+public class TextProcessor implements MultistepProcessor<TextParams> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TextProcessor.class);
 

@@ -12,8 +12,8 @@ import com.google.inject.Inject;
 
 import main.java.common.models.text.TextParams;
 import main.java.common.models.text.TextParamsType;
-import main.java.processor.impl.TextProcessor;
 import main.java.processor.models.ProcessorResult;
+import main.java.processor.text.TextProcessor;
 import test.java.TestWithInjections;
 
 public class TextProcessorTests extends TestWithInjections {

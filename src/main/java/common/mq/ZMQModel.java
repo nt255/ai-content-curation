@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import main.java.common.models.JobType;
 
-
 @Getter
 @Builder
 public class ZMQModel {

@@ -1,4 +1,4 @@
-package main.java.processor.text;
+package main.java.processor.gpt;
 
 import java.nio.file.Path;
 import java.util.Properties;

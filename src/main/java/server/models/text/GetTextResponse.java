@@ -13,10 +13,10 @@ import main.java.server.models.GetJobResponse;
 public class GetTextResponse extends GetJobResponse {
 
     // input
-    private List<TextParamsType> steps;
-    private List<TextParams> params;
+    private final List<TextParamsType> steps;
+    private final List<TextParams> params;
 
     // output
-    private String outputText;
+    private final String outputText;
 
 }

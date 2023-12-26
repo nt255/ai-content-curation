@@ -33,6 +33,7 @@ U extends JobDbModel> extends BaseService<S, T, U> {
         this.producer = producer;
     }
     
+    @Override
     public UUID create(T model) {
         UUID generatedId = super.create(model);
         

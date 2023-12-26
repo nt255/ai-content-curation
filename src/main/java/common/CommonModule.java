@@ -50,7 +50,10 @@ public class CommonModule extends AbstractModule {
     public Properties provideProperties() {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("src/config.properties"));
+            FileInputStream fileInputStream = 
+                    new FileInputStream("src/config.properties");
+            properties.load(fileInputStream);
+            fileInputStream.close();
         } catch (IOException e) {
             LOG.error("failed to open properties file");
             e.printStackTrace();

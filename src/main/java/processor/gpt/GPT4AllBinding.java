@@ -1,5 +1,4 @@
-package main.java.processor.text;
-
+package main.java.processor.gpt;
 
 import java.util.Optional;
 

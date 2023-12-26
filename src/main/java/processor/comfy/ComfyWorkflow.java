@@ -1,4 +1,4 @@
-package main.java.processor.image;
+package main.java.processor.comfy;
 
 import java.util.Optional;
 import java.io.IOException;
