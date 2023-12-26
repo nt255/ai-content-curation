@@ -18,7 +18,7 @@ Automated AI Content Curation Pipeline
 - Use `final` whenever possible.
 - Restrict visibility as much as possible.
 - Use Lombok and Guice injections.
-- Append abstract classes with "Base".
+- Prefix abstract class names with "Base".
 
 # Eclipse Common Mistakes
 
