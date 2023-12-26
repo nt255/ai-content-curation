@@ -3,7 +3,6 @@ package main.java.local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class LocalApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(LocalApplication.class);

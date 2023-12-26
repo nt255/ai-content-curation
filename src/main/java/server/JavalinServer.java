@@ -24,7 +24,7 @@ public class JavalinServer {
         requestHandler.addRoutes(javalin);
     }
     
-    public void start() {
+    void start() {
         javalin.start(port);
     }
 

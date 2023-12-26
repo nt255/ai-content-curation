@@ -15,9 +15,9 @@ import main.java.server.models.BasePostRequest;
 public class PostImageRequest extends BasePostRequest {
         
     // input
-    private UUID baseImageId;
-    private List<ImageParams> params;
+    private final UUID baseImageId;
+    private final List<ImageParams> params;
     
-    private boolean overwrite;
+    private final boolean overwrite;
 
 }

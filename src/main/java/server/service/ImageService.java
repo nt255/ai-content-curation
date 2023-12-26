@@ -20,7 +20,7 @@ public class ImageService extends JobService<GetImageResponse, PostImageRequest,
     
     private static final Logger LOG = LoggerFactory.getLogger(ImageService.class);
     
-    private FileServer fileServer;
+    private final FileServer fileServer;
 
     @Inject
     public ImageService(

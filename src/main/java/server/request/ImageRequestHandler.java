@@ -13,7 +13,7 @@ import main.java.server.models.image.PostImageRequest;
 import main.java.server.service.ImageService;
 
 
-public class ImageRequestHandler {
+class ImageRequestHandler {
 
     private static final Logger LOG = 
             LoggerFactory.getLogger(ImageRequestHandler.class);
@@ -27,7 +27,7 @@ public class ImageRequestHandler {
         this.gson = gson;
     }
 
-    public void addRoutes(Javalin server) {
+    void addRoutes(Javalin server) {
         server
         .get("/images/{id}", ctx -> {
             LOG.info("Received GET request to: {}", ctx.fullUrl());

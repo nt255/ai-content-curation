@@ -15,10 +15,10 @@ public class Application {
                 new CommonModule(),
                 new ServerModule());
         Application application = injector.getInstance(Application.class);
-        application.start(args);
+        application.start();
     }
 
-    private void start(String[] args) {
+    private void start() {
         javalinServer.start();
     }
 

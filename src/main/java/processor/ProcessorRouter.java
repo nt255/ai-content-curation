@@ -16,7 +16,7 @@ import main.java.processor.impl.ImageProcessor;
 import main.java.processor.impl.TextProcessor;
 import main.java.processor.models.ProcessorResult;
 
-public class ProcessorRouter {
+class ProcessorRouter {
 
     private final Map<JobType, BiFunction<UUID, String, ProcessorResult>> processorMap;
 
@@ -30,7 +30,7 @@ public class ProcessorRouter {
                 JobType.IMAGE, (id, params) -> processAndSaveImage(id, params));
     }
 
-    public ProcessorResult processAndSave(JobType type, UUID id, String params) {
+    ProcessorResult processAndSave(JobType type, UUID id, String params) {
         return processorMap.getOrDefault(type, (ignoredOne, ignoredTwo) -> {
             String errorMessage = String.format(
                     "no processor found for JobType: {}", type.name());

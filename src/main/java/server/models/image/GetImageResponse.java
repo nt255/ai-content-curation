@@ -14,11 +14,11 @@ import main.java.server.models.GetJobResponse;
 public class GetImageResponse extends GetJobResponse {
 
     // input
-    private UUID baseImageId;
-    private List<ImageParamsType> steps;
-    private List<ImageParams> params;
+    private final UUID baseImageId;
+    private final List<ImageParamsType> steps;
+    private final List<ImageParams> params;
 
     // output
-    private String outputFilename;
+    private final String outputFilename;
 
 }

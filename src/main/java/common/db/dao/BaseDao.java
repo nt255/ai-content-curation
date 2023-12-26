@@ -20,32 +20,27 @@ public abstract class BaseDao<T extends BaseDbModel> {
     private final Class<T> typeParameterClass;
     private final String collectionName;
 
-    public BaseDao(Class<T> typeParameterClass, String collectionName) {
+    BaseDao(Class<T> typeParameterClass, String collectionName) {
         this.typeParameterClass = typeParameterClass;
         this.collectionName = collectionName;
     }
 
-    public MongoCollection<T> getCollection() {
+    private MongoCollection<T> getCollection() {
         return mongoDBClient.getDatabase()
                 .getCollection(collectionName, typeParameterClass);
     }
 
-    public Optional<T> get(UUID id) {
-        return Optional.ofNullable(mongoDBClient.getDatabase()
-                .getCollection(collectionName, typeParameterClass)
-                .find(eq(ID, id)).first());
+    public final Optional<T> get(UUID id) {
+        return Optional.ofNullable(getCollection().find(eq(ID, id))
+                .first());
     }
 
-    public void insert(T document) {
-        mongoDBClient.getDatabase()
-        .getCollection(collectionName, typeParameterClass)
-        .insertOne(document);
+    public final void insert(T document) {
+        getCollection().insertOne(document);
     }
 
-    public void delete(UUID id) {
-        mongoDBClient.getDatabase()
-        .getCollection(collectionName, typeParameterClass)
-        .deleteOne(eq(ID, id));
+    public final void delete(UUID id) {
+        getCollection().deleteOne(eq(ID, id));
     }
 
 }

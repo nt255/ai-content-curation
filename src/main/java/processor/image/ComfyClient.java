@@ -19,11 +19,11 @@ public class ComfyClient {
     private static final String WF_FORMATTED_STRING = 
             "src/main/resources/workflows/%s_workflow.json";
 
-    private HttpClient httpClient;
+    private final HttpClient httpClient;
 
-    private String outputDirectory;
-    private String promptUrl;
-    private String historyUrl;
+    private final String outputDirectory;
+    private final String promptUrl;
+    private final String historyUrl;
 
     private ComfyWorkflow workflow;
 
@@ -69,10 +69,6 @@ public class ComfyClient {
                     "Workflow has not been loaded correctly (it is null)! "
                             + "Check to see that workflow names are properly spelled.");
         }
-    }
-
-    public void upscaleImages(String[] imageIds) {
-        throw new UnsupportedOperationException();
     }
 
     private void sendTask() {

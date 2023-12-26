@@ -22,16 +22,17 @@ public class HashtagCleaner {
     private static final Integer LIMIT_MIN = 3;
     private static final Integer LIMIT_MAX = 10;
     
+    private final Random random;
     private final Pattern pattern;
     
     public HashtagCleaner() {
+        this.random = new Random();
         this.pattern = Pattern.compile(HASHTAG_REGEX);
     }
     
     
     public String clean(String hashtags) {
-        Random r = new Random();
-        int limit = r.nextInt(LIMIT_MAX - LIMIT_MIN) + LIMIT_MIN;
+        int limit = random.nextInt(LIMIT_MAX - LIMIT_MIN) + LIMIT_MIN;
         return clean(hashtags, limit, true);
     }
 

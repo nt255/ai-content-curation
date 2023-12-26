@@ -14,6 +14,6 @@ import main.java.server.models.BasePostRequest;
 public class PostTextRequest extends BasePostRequest {
     
     // input
-    private List<TextParams> params;
+    private final List<TextParams> params;
 
 }

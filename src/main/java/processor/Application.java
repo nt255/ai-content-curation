@@ -64,7 +64,7 @@ public class Application {
                 future.get();
             }
         } catch (TimeoutException e) {
-            LOG.info("timeout has been reached");
+            LOG.info(e.getMessage());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
