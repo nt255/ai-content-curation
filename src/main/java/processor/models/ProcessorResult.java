@@ -10,8 +10,6 @@ import lombok.Getter;
 public class ProcessorResult {
 
     private final UUID id;
-    
-    private final boolean isSuccessful;
     private final String outputString;
 
 }

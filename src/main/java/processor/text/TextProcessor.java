@@ -21,21 +21,29 @@ import main.java.processor.models.ProcessorResult;
 import main.java.processor.text.util.HashtagCleaner;
 import main.java.processor.text.util.PromptBuilder;
 
-
 public class TextProcessor implements MultistepProcessor<TextParams> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TextProcessor.class);
 
-    @Inject private TextDao textDao;
-    @Inject private HashtagCleaner hashtagCleaner;
-
-    @Inject private GPT4AllBinding gpt4AllBinding;
-
+    private final GPT4AllBinding gpt4AllBinding;
+    private final HashtagCleaner hashtagCleaner;
+    private final TextDao textDao;
+    
+    @Inject
+    private TextProcessor(GPT4AllBinding gpt4AllBinding, 
+            HashtagCleaner hashtagCleaner, TextDao textDao) {
+        
+        this.gpt4AllBinding = gpt4AllBinding;
+        this.hashtagCleaner = hashtagCleaner;
+        this.textDao = textDao;
+    }
 
     @Override
     public ProcessorResult process(UUID id, List<TextParams> steps) {
+        if (steps.size() != 1)
+            throw new UnsupportedOperationException();
         
-        TextParams params = steps.get(0); // 
+        TextParams params = steps.get(0);
 
         TextParamsType type = params.getType();
         String prompt = params.getPrompt();
@@ -60,7 +68,6 @@ public class TextProcessor implements MultistepProcessor<TextParams> {
 
         ProcessorResult result = ProcessorResult.builder()
                 .id(id)
-                .isSuccessful(true)
                 .outputString(outputText)
                 .build();
 

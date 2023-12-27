@@ -2,20 +2,21 @@
 
 Automated AI Content Curation Pipeline
 
-# Setup
+# Setup (for Eclipse)
 
-1. Install Eclipse (or IntelliJ)
-2. Run the following. `open pom.xml > Run > Run As > Maven Build > put "package" into goals and Run`. You'll see the jar for the dependency under Maven Dependencies in the project structure. Do this each time a new dependency is added to pom.xml.
-3. If indexes are out of sync (names are not found when it's clearly there), `Project > Clean`. `mvn clean` should also work.
-4. Start up comfy server.
-5. Run `LocalApplicationTests` to make sure everything is working. Add the following VM arguments to the run configuration:
+1. Install Eclipse
+2. Install Lombok: Help menu > Install new software > Add https://projectlombok.org/p2 > Install the Lombok plugin and restart Eclipse
+3. Run the following. `open pom.xml > Run > Run As > Maven Build > put "package" into goals and Run`. You'll see the jar for the dependency under Maven Dependencies in the project structure. Do this each time a new dependency is added to pom.xml.
+4. If indexes are out of sync (names are not found when it's clearly there), `Project > Clean`. `mvn clean` should also work.
+5. Start up comfy server.
+6. Run `LocalApplicationTests` to make sure everything is working. Add the following VM arguments to the run configuration:
 	* --add-exports=org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
 	* --add-exports=org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
-6. Run `LocalApplication`. Server and Processor can be run separately. No VM arguments needed.
+7. Run `LocalApplication`. Server and Processor can be run separately. No VM arguments needed.
 
 # General Conventions
 
-- Use `final` whenever possible.
+- Use `final`, or make names effectively final whenever possible.
 - Restrict visibility as much as possible.
 - Use Lombok and Guice injections.
 - Prefix abstract class names with "Base".
@@ -24,6 +25,9 @@ Automated AI Content Curation Pipeline
 
 - "The declared package does not match the expected package." highlighting in red.
   - close and reopen the window
+- Lots of names and fields are not found, particularly in classes with Lombok.
+  - make sure Lombok is installed. restart if needed
+  - `right click project directory > Run As > Maven clean`
 
 # Setting up ComfyUI to Work with Project
 

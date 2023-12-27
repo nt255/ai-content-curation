@@ -16,16 +16,13 @@ import org.slf4j.LoggerFactory;
 public class HttpClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
-    
-    private static final Map<String, String> NO_HEADERS = Map.of();
-    private static final JSONObject NO_BODY = new JSONObject();
 
     enum RequestMethod {
-        GET, POST, PATCH, DELETE
+        GET, POST, DELETE
     }
     
     public String get(String url) {
-        return makeRequest(GET, url, NO_HEADERS, NO_BODY);
+        return makeRequest(GET, url, Map.of(), null);
     }
     
     public String post(String url, Map<String, String> headers, JSONObject body) {
@@ -33,28 +30,29 @@ public class HttpClient {
     }
     
     public String post(String url, JSONObject body) {
-        return post(url, NO_HEADERS, body);
+        return makeRequest(POST, url, Map.of(), body);
     }
     
     public String delete(String url) {
-        return makeRequest(DELETE, url, NO_HEADERS, NO_BODY);
+        return makeRequest(DELETE, url, Map.of(), null);
     }
 
-    private String makeRequest(RequestMethod requestMethod, String url, 
+    private String makeRequest(RequestMethod method, String url, 
             Map<String, String> headers, JSONObject body) {
+        
         try {
             LOG.info("Calling URL: {}", url);
+            LOG.info("Request Method: {}", method.name());
 
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-            connection.setRequestMethod(requestMethod.name());
+            connection.setRequestMethod(method.name());
 
             headers.entrySet().stream().forEach(
                     e -> connection.setRequestProperty(e.getKey(), e.getValue()));
 
             // request body
-            if (RequestMethod.POST.equals(requestMethod) || 
-                    RequestMethod.PATCH.equals(requestMethod)) {
+            if (RequestMethod.POST.equals(method)) {
                 connection.setDoOutput(true);
                 OutputStreamWriter writer = 
                         new OutputStreamWriter(connection.getOutputStream());

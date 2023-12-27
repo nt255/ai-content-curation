@@ -59,7 +59,6 @@ public class ImageProcessor implements MultistepProcessor<ImageParams> {
 
         ProcessorResult result = ProcessorResult.builder()
                 .id(id)
-                .isSuccessful(true)
                 .outputString(localImagePath)
                 .build();
         
