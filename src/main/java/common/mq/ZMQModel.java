@@ -15,6 +15,6 @@ public class ZMQModel {
 
     private final JobType jobType;
     
-    private final String params;  // json array of params
+    private final String params;  // json array of BaseParams instances
 
 }

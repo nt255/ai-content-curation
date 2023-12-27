@@ -1,6 +1,5 @@
 package main.java.processor;
 
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +17,6 @@ import com.google.inject.Injector;
 import main.java.common.CommonModule;
 import main.java.common.mq.ZMQConsumer;
 import main.java.common.mq.ZMQModel;
-import main.java.processor.models.ProcessorResult;
 
 public class Application {
 
@@ -45,14 +43,8 @@ public class Application {
                 LOG.info("Waiting for payload...");
                 ZMQModel model = consumer.receive();
 
-                ProcessorResult result = router.processAndSave(
+                router.processAndSave(
                         model.getJobType(), model.getId(), model.getParams());
-                                
-                UUID id = result.getId();
-                if (result.isSuccessful())
-                    LOG.info("Succesfully processed job with id: {}.", id);
-                else
-                    LOG.warn("Unable to process job with id: {}.", id);
             }
         });
 

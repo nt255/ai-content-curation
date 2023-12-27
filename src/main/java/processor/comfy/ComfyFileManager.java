@@ -61,10 +61,11 @@ public class ComfyFileManager {
         LOG.info("found the following new files {}", currentFiles);
         return currentFiles;
     }
-    
-    public Set<String> waitForGeneratedFiles() {
+
+    public String waitForGeneratedFile() {
         LOG.info("waiting for new files(s) to be generated..");
         LOG.info("polling every second");
+
         Set<String> generatedFiles;
         do {
             try {
@@ -74,8 +75,12 @@ public class ComfyFileManager {
             }
             generatedFiles = getNewFiles();
         } while (generatedFiles.isEmpty());
+        
+        if (generatedFiles.size() > 1)
+            throw new IllegalStateException(
+                    "should not have generated more than one file");
 
-        return generatedFiles;
+        return generatedFiles.iterator().next();
     }
 
     public void clearDirectory() {

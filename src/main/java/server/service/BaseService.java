@@ -1,6 +1,5 @@
 package main.java.server.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,10 +23,6 @@ U extends BaseDbModel> {
     public BaseService(BaseDao<U> dao, Mapper<S, T, U> mapper) {
         this.dao = dao;
         this.mapper = mapper;
-    }
-
-    public List<S> getCollection() {
-        throw new UnsupportedOperationException();
     }
 
     public final Optional<S> get(UUID id) {

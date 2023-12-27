@@ -18,6 +18,8 @@ public class ComfyClient {
 
     private static final String WF_FORMATTED_STRING = 
             "src/main/resources/workflows/%s_workflow.json";
+    
+    private static final String UPSCALER_WF_PREFIX = "upscaler";
 
     private final HttpClient httpClient;
 
@@ -39,14 +41,22 @@ public class ComfyClient {
 
         checkConnection();
     }
-
-    public void loadWorkflow(ImageParams params) {
-        String baseWfFile = String.format(WF_FORMATTED_STRING, params.getWorkflow());
+    
+    private void loadWorkflow(ImageParams params, String workflowPrefix) {
+        String baseWfFile = String.format(WF_FORMATTED_STRING, workflowPrefix);
         workflow = new ComfyWorkflowBuilder()
                 .setBaseWorkflowFile(baseWfFile)
                 .setParams(params)
                 .setOutputDirectory(outputDirectory) // must always be set
                 .build();
+    }
+
+    public void loadWorkflow(ImageParams params) {
+        loadWorkflow(params, params.getWorkflow());
+    }
+    
+    public void loadUpscalerWorkflow(ImageParams params) {
+        loadWorkflow(params, UPSCALER_WF_PREFIX);
     }
 
     /**
@@ -55,20 +65,15 @@ public class ComfyClient {
      * saved to a directory, which by default is [comfyUi's
      * drive]://comfyclient_output/
      **/
-
-    // will load in default options when queued without arguments
-    // currently simply prints out the error, but should be updated to update
-    // relevant JobResponse
-    public void queuePrompt() throws IllegalStateException {
-        if (workflow != null) {
-            LOG.info("Deleting history.");
-            clearQueueHistory();
-            sendTask();
-        } else {
+    public void queuePrompt() {
+        if (workflow == null)
             throw new IllegalStateException(
                     "Workflow has not been loaded correctly (it is null)! "
                             + "Check to see that workflow names are properly spelled.");
-        }
+        
+        LOG.info("Deleting history.");
+        clearQueueHistory();
+        sendTask();
     }
 
     private void sendTask() {
