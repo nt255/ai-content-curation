@@ -41,8 +41,7 @@ public class HttpClient {
             Map<String, String> headers, JSONObject body) {
         
         try {
-            LOG.info("Calling URL: {}", url);
-            LOG.info("Request Method: {}", method.name());
+            LOG.info("Calling {} {}", method.name(), url);
 
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
@@ -53,6 +52,8 @@ public class HttpClient {
 
             // request body
             if (RequestMethod.POST.equals(method)) {
+                LOG.info("with body {}", body.toString());
+                
                 connection.setDoOutput(true);
                 OutputStreamWriter writer = 
                         new OutputStreamWriter(connection.getOutputStream());

@@ -21,33 +21,33 @@ public class ComfyFileManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(ComfyFileManager.class);
 
-    private final String outputDirectory;
+    private final String workingDirectory;
     private Set<String> files;
 
     @Inject
     public ComfyFileManager(Properties properties) {
-        this.outputDirectory = properties.getProperty("comfy.output.directory");
+        this.workingDirectory = properties.getProperty("comfy.working.directory");
         this.files = getCurrentFiles();
     }
 
     private Set<String> getCurrentFiles() {
-        try (Stream<Path> stream = Files.list(Paths.get(outputDirectory))) {
+        try (Stream<Path> stream = Files.list(Paths.get(workingDirectory))) {
             return stream
                     .filter(file -> !Files.isDirectory(file))
                     .map(Path::getFileName)
                     .map(Path::toString)
-                    .map(s -> outputDirectory + s)
+                    .map(s -> workingDirectory + s)
                     .collect(Collectors.toSet());
         } catch (IOException e) {
-            LOG.error("comfy output directory not found!");
+            LOG.error("comfy working directory not found!");
             e.printStackTrace();
         }
         return Set.of();
     }
 
     /**
-     * Returns new files added since last checking output directory.
-     * Output directory is checked, i.e. existing files kept track of
+     * Returns new files added since last checking working directory.
+     * Working directory is checked, i.e. existing files kept track of
      * when constructing and when calling this method.
      * 
      * @return new files
@@ -84,10 +84,10 @@ public class ComfyFileManager {
     }
 
     public void clearDirectory() {
-        File directory = new File(outputDirectory);
+        File directory = new File(workingDirectory);
         try {
             FileUtils.cleanDirectory(directory);
-            LOG.info("cleared output directory");
+            LOG.info("cleared working directory");
         } catch (IOException e) {
             e.printStackTrace();
         }

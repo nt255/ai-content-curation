@@ -21,9 +21,13 @@ public class ImageParams extends BaseParams {
     private String checkpoint;
     private String workflow;
     
-    private Double denoise;
     private Integer kSteps;
     private Integer kCFG;
+    private Double kNoise;
+    
+    private Integer upscaleSteps;
+    private Integer upscaleCFG;
+    private Double upscaleNoise;
     
     private List<LoraSettings> loraSettings;
     

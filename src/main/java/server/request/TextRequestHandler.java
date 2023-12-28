@@ -5,25 +5,27 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import io.javalin.Javalin;
 import main.java.server.models.text.PostTextRequest;
 import main.java.server.service.TextService;
+import main.java.server.validator.TextValidator;
 
 class TextRequestHandler {
     
     private static final Logger LOG = 
             LoggerFactory.getLogger(TextRequestHandler.class);
     
+    private final TextValidator textValidator;
     private final TextService textService;
-    private final Gson gson;
     
     @Inject
-    public TextRequestHandler(TextService textService, Gson gson) {
+    public TextRequestHandler(TextValidator textValidator, 
+            TextService textService) {
+        
+        this.textValidator = textValidator;
         this.textService = textService;
-        this.gson = gson;
     }
     
     void addRoutes(Javalin server) {
@@ -32,14 +34,13 @@ class TextRequestHandler {
             LOG.info("Received GET request to: {}", ctx.fullUrl());
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
             textService.get(id).ifPresentOrElse(
-                    job -> ctx.json(gson.toJson(job)), 
+                    job -> ctx.json(job), 
                     () -> ctx.status(404));
         })
 
         .post("/texts", ctx -> {
-            String bodyString = ctx.body();
-            LOG.info("Received POST request to: {}, body: {}", ctx.fullUrl(), bodyString);
-            PostTextRequest body = gson.fromJson(bodyString, PostTextRequest.class);
+            LOG.info("Received POST request to: {}", ctx.fullUrl());
+            PostTextRequest body = textValidator.validate(ctx).get();
             UUID generatedId = textService.create(body);
             ctx.result(generatedId.toString()).status(202);
         })
@@ -50,7 +51,6 @@ class TextRequestHandler {
             textService.delete(id);
             ctx.status(204);
         });
-
     }
 
 }

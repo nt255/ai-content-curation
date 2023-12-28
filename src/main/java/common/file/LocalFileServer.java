@@ -32,7 +32,7 @@ public class LocalFileServer implements FileServer {
         File newFile = new File(destination);
         try {
             FileUtils.copyFile(toCopy, newFile);
-            LOG.info("succesfully copied file: {}", destination);
+            LOG.info("succesfully copied file to {}", destination);
         } catch (IOException e) {
             e.printStackTrace();
         }

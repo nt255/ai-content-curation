@@ -15,6 +15,8 @@ import main.java.server.models.image.PostImageRequest;
 import main.java.server.models.text.GetTextResponse;
 import main.java.server.models.text.PostTextRequest;
 import main.java.server.request.RequestHandler;
+import main.java.server.validator.ImageValidator;
+import main.java.server.validator.TextValidator;
 
 class ServerModule extends AbstractModule {
 
@@ -26,11 +28,18 @@ class ServerModule extends AbstractModule {
         // request
         bind(RequestHandler.class).in(Singleton.class);
         
+        // validators
+        bind(TextValidator.class).in(Singleton.class);
+        bind(ImageValidator.class).in(Singleton.class);
+        
+        
         // mappers
-        bind(new TypeLiteral<JobMapper<GetTextResponse, PostTextRequest, TextDbModel>>(){})
+        bind(new TypeLiteral<
+                JobMapper<GetTextResponse, PostTextRequest, TextDbModel>>(){})
         .to(TextMapper.class);
         
-        bind(new TypeLiteral<JobMapper<GetImageResponse, PostImageRequest, ImageDbModel>>(){})
+        bind(new TypeLiteral<
+                JobMapper<GetImageResponse, PostImageRequest, ImageDbModel>>(){})
         .to(ImageMapper.class);
         
     }

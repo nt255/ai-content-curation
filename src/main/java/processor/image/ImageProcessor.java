@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -22,9 +24,11 @@ import main.java.processor.models.ProcessorResult;
 import zmq.util.function.Optional;
 
 public class ImageProcessor implements MultistepProcessor<ImageParams> {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(ImageProcessor.class);
 
-    private final Map<ImageParamsType, 
-    BiFunction<String, ImageParams, String>> singleStepMap;
+    private final 
+    Map<ImageParamsType, BiFunction<String, ImageParams, String>> singleStepMap;
 
     private final ImageDao imageDao;
     private final FileServer fileServer;
@@ -33,13 +37,16 @@ public class ImageProcessor implements MultistepProcessor<ImageParams> {
 
     @Inject
     public ImageProcessor(ImageDao imageDao, FileServer fileServer, 
-            ComfyFileManager comfyFileManager, CreateStep createStep) {
+            ComfyFileManager comfyFileManager, 
+            CreateStep createStep, UpscaleStep upscaleStep) {
 
         this.imageDao = imageDao;
         this.fileServer = fileServer;
         this.comfyFileManager = comfyFileManager;
 
-        singleStepMap = Map.of(ImageParamsType.CREATE, createStep::execute);
+        singleStepMap = Map.of(
+                ImageParamsType.CREATE, createStep::execute,
+                ImageParamsType.UPSCALE, upscaleStep::execute);
     }
 
 
@@ -85,6 +92,8 @@ public class ImageProcessor implements MultistepProcessor<ImageParams> {
 
         imageDao.delete(id);
         imageDao.insert(existing);
+        
+        LOG.info("Save successful.");
     }
 
 }
