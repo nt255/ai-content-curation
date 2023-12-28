@@ -26,6 +26,7 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,11 @@ public class LocalApplicationTests extends TestWithInjections {
         main.java.processor.Application.main(new String[]{"500"});
         main.java.server.Application.main(new String[0]);
     }
-
+    
+    @AfterAll
+    void closeApplication() {
+        main.java.server.Application.getApplication().close();
+    }
 
     private void sleep(long seconds) {
         try {
@@ -262,7 +267,7 @@ public class LocalApplicationTests extends TestWithInjections {
         assertEquals(width, bufferedImage.getWidth());
 
         // -----processor local directory should be cleared-----
-        String localDirectory = properties.getProperty("comfy.output.directory");
+        String localDirectory = properties.getProperty("comfy.working.directory");
         Path directory = new File(localDirectory).toPath();
         try {
             DirectoryStream<Path> stream = Files.newDirectoryStream(directory);

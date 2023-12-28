@@ -38,6 +38,10 @@ public class ZMQProducer {
         LOG.info("Sending message: {}", s);
         producer.send(s);
     }
+    
+    public void close() {
+        producer.close();
+    }
 
     // move to some util class in common?
     private void verifyJsonArray(String json) {

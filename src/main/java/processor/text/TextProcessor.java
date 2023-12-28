@@ -22,7 +22,7 @@ import main.java.processor.text.util.HashtagCleaner;
 import main.java.processor.text.util.PromptBuilder;
 
 public class TextProcessor implements MultistepProcessor<TextParams> {
-
+    
     private static final Logger LOG = LoggerFactory.getLogger(TextProcessor.class);
 
     private final GPT4AllBinding gpt4AllBinding;
@@ -61,7 +61,6 @@ public class TextProcessor implements MultistepProcessor<TextParams> {
 
         String outputText = gpt4AllBinding.generate(
                 prompt, Optional.ofNullable(numTokens));
-        LOG.info("produced result: {}", outputText);
 
         if (TextParamsType.CREATE_HASHTAGS.equals(type))
             outputText = hashtagCleaner.clean(outputText);
@@ -83,6 +82,8 @@ public class TextProcessor implements MultistepProcessor<TextParams> {
 
         textDao.delete(id);
         textDao.insert(existing);
+        
+        LOG.info("Save successful.");
     }
 
 }

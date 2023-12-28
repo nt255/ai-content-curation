@@ -1,4 +1,4 @@
-package test.java.processor.impl;
+package test.java.processor.text;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

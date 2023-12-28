@@ -22,6 +22,7 @@ public class ImageDbModel extends JobDbModel {
     private List<ImageParams> params;
     
     // output
+    private boolean isUpscaled;
     private String outputFilename;
     
 }

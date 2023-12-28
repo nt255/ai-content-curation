@@ -12,7 +12,9 @@ Automated AI Content Curation Pipeline
 6. Run `LocalApplicationTests` to make sure everything is working. Add the following VM arguments to the run configuration:
 	* --add-exports=org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
 	* --add-exports=org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
-7. Run `LocalApplication`. Server and Processor can be run separately. No VM arguments needed.
+	* --add-opens=io.javalin/io.javalin.validation=com.google.gson
+7. Run `LocalApplication`. Server and Processor can be run separately. VM arguments:
+	* --add-opens=io.javalin/io.javalin.validation=com.google.gson
 
 # General Conventions
 
@@ -21,13 +23,15 @@ Automated AI Content Curation Pipeline
 - Use Lombok and Guice injections.
 - Prefix abstract class names with "Base".
 
-# Eclipse Common Mistakes
+# Eclipse Common Issues
 
 - "The declared package does not match the expected package." highlighting in red.
   - close and reopen the window
 - Lots of names and fields are not found, particularly in classes with Lombok.
   - make sure Lombok is installed. restart if needed
-  - `right click project directory > Run As > Maven clean`
+  - right click project directory, `Run As > Maven clean`
+- Log messages are not being filtered properly.
+  - clean should also fix this, `Project > Clean...`
 
 # Setting up ComfyUI to Work with Project
 

@@ -4,22 +4,27 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import lombok.Getter;
 import main.java.common.CommonModule;
+import main.java.common.mq.ZMQProducer;
 
 public class Application {
+    
+    @Getter private static Application application;
 
-    @Inject private JavalinServer javalinServer;
-
+    @Inject private JavalinServer server;
+    @Inject private ZMQProducer producer;
+    
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
                 new CommonModule(),
                 new ServerModule());
-        Application application = injector.getInstance(Application.class);
-        application.start();
+        application = injector.getInstance(Application.class);
     }
-
-    private void start() {
-        javalinServer.start();
+    
+    public void close() {
+        server.close();
+        producer.close();
     }
 
 }

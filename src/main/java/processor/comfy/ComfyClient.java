@@ -23,7 +23,7 @@ public class ComfyClient {
 
     private final HttpClient httpClient;
 
-    private final String outputDirectory;
+    private final String workingDirectory;
     private final String promptUrl;
     private final String historyUrl;
 
@@ -33,7 +33,7 @@ public class ComfyClient {
     @Inject
     public ComfyClient(Properties properties, HttpClient httpClient) {
         this.httpClient = httpClient;
-        this.outputDirectory = properties.getProperty("comfy.output.directory");
+        this.workingDirectory = properties.getProperty("comfy.working.directory");
 
         String baseUrl = properties.getProperty("comfy.server.address");
         this.promptUrl = baseUrl + "/prompt";
@@ -47,7 +47,7 @@ public class ComfyClient {
         workflow = new ComfyWorkflowBuilder()
                 .setBaseWorkflowFile(baseWfFile)
                 .setParams(params)
-                .setOutputDirectory(outputDirectory) // must always be set
+                .setOutputDirectory(workingDirectory) // must always be set
                 .build();
     }
 

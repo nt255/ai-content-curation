@@ -15,11 +15,11 @@ public class ZMQConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZMQConsumer.class);
 
-    private Gson gson;
-    private ZMQ.Socket consumer;
+    private final Gson gson;
+    private final ZMQ.Socket consumer;
     
     @Inject
-    public void connectSocket(Gson gson, Properties properties, ZContext context) {
+    public ZMQConsumer(Gson gson, Properties properties, ZContext context) {
         this.gson = gson;
 
         String address = properties.getProperty("zmq.socket.address");
