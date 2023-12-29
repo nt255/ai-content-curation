@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 
 import io.javalin.Javalin;
@@ -11,6 +14,9 @@ import io.javalin.validation.ValidationError;
 import io.javalin.validation.ValidationException;
 
 public class RequestHandler {
+    
+    private static final Logger LOG = 
+            LoggerFactory.getLogger(RequestHandler.class);
 
     private final TextRequestHandler textRequestHandler;
     private final ImageRequestHandler imageRequestHandler;
@@ -46,6 +52,8 @@ public class RequestHandler {
             Map<String, Object> errorResponse = Map.of(
                     "errors", codes,
                     "postRequest", postRequest);
+            
+            LOG.info("found validation errors");
             ctx.json(errorResponse).status(400);
         });
     }
