@@ -1,14 +1,18 @@
 package main.java.server.validator;
 
-import io.javalin.http.Context;
-import io.javalin.validation.BodyValidator;
+import java.util.List;
+
 import main.java.server.models.text.PostTextRequest;
 
 public class TextValidator extends BaseValidator<PostTextRequest> {
+    
+    public TextValidator() {
+        super(PostTextRequest.class);
+    }
 
     @Override
-    public BodyValidator<PostTextRequest> validate(Context ctx) {
-        return ctx.bodyValidator(PostTextRequest.class);
+    List<ErrorCode> validate(PostTextRequest body) {
+        return List.of();
     }
 
 }
