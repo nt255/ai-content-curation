@@ -41,6 +41,7 @@ public class ZMQProducer {
     
     public void close() {
         producer.close();
+        LOG.info("closed producer");
     }
 
     // move to some util class in common?

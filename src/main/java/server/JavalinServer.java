@@ -26,7 +26,9 @@ class JavalinServer {
 
         this.javalin = Javalin.create(
                 config -> config.jsonMapper(getGsonMapper(gson)));
+        
         requestHandler.addRoutes(javalin);
+        requestHandler.addExceptionHandler(javalin);
         
         int port = Integer.parseInt(
                 properties.getProperty("javalin.port"));
