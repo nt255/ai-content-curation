@@ -32,7 +32,7 @@ public class ImageValidator extends BaseValidator<PostImageRequest> {
             
             else if (ImageParamsType.CREATE.equals(type)) {
                 if (i > 0)
-                    errorCodes.add(ErrorCode.CREATE_NOT_FIRST);
+                    errorCodes.add(ErrorCode.CREATE_IS_NOT_FIRST);
             }
         }
         return errorCodes;
