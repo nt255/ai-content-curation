@@ -1,5 +1,7 @@
 package main.java.server.request;
 
+import static java.net.HttpURLConnection.*;
+
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -34,22 +36,22 @@ class ImageRequestHandler {
             LOG.info("Received GET request to: {}", ctx.fullUrl());
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
             imageService.get(id).ifPresentOrElse(
-                    job -> ctx.json(job), 
-                    () -> ctx.status(404));
+                    job -> ctx.json(job).status(HTTP_OK), 
+                    () -> ctx.status(HTTP_NOT_FOUND));
         })
         
         .post("/images", ctx -> {
             LOG.info("Received POST request to: {}", ctx.fullUrl());
             PostImageRequest body = imageValidator.validate(ctx).get();
             UUID generatedId = imageService.create(body);
-            ctx.result(generatedId.toString()).status(202);
+            ctx.result(generatedId.toString()).status(HTTP_ACCEPTED);
         })
         
         .delete("/images/{id}", ctx -> {
             LOG.info("Received DELETE request to: {}", ctx.fullUrl());
             UUID id = ctx.pathParamAsClass("{id}", UUID.class).get();
             imageService.delete(id);
-            ctx.status(204);
+            ctx.status(HTTP_NO_CONTENT);
         });
     }
 

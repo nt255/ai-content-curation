@@ -1,5 +1,7 @@
 package main.java.server.request;
 
+import static java.net.HttpURLConnection.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,7 +56,7 @@ public class RequestHandler {
                     "postRequest", postRequest);
             
             LOG.info("found validation errors");
-            ctx.json(errorResponse).status(400);
+            ctx.json(errorResponse).status(HTTP_BAD_REQUEST);
         });
     }
 
