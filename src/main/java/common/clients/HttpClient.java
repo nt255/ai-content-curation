@@ -1,9 +1,11 @@
 package main.java.common.clients;
 
+import static java.net.HttpURLConnection.*;
 import static main.java.common.clients.HttpClient.RequestMethod.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -13,70 +15,110 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lombok.Builder;
+import lombok.Getter;
+
 public class HttpClient {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
+    private static final Logger LOG = 
+            LoggerFactory.getLogger(HttpClient.class);
+
+    @Builder
+    @Getter
+    public static class Response {
+        private final int code;
+        private final String body;
+    }
 
     enum RequestMethod {
         GET, POST, DELETE
     }
-    
-    public String get(String url) {
+
+
+    public Response get(String url) {
         return makeRequest(GET, url, Map.of(), null);
     }
-    
-    public String post(String url, Map<String, String> headers, JSONObject body) {
+
+    public Response post(String url, 
+            Map<String, String> headers, JSONObject body) {
         return makeRequest(POST, url, headers, body);
     }
-    
-    public String post(String url, JSONObject body) {
+
+    public Response post(String url, JSONObject body) {
         return makeRequest(POST, url, Map.of(), body);
     }
-    
-    public String delete(String url) {
+
+    public Response delete(String url) {
         return makeRequest(DELETE, url, Map.of(), null);
     }
 
-    private String makeRequest(RequestMethod method, String url, 
+
+    private Response makeRequest(RequestMethod method, String url, 
             Map<String, String> headers, JSONObject body) {
-        
+
         try {
             LOG.info("Calling {} {}", method.name(), url);
 
             URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-            connection.setRequestMethod(method.name());
+
+            HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
+            conn.setRequestMethod(method.name());
 
             headers.entrySet().stream().forEach(
-                    e -> connection.setRequestProperty(e.getKey(), e.getValue()));
+                    e -> conn.setRequestProperty(e.getKey(), e.getValue()));
 
-            // request body
+            // ------ request body
             if (RequestMethod.POST.equals(method)) {
                 LOG.info("with body {}", body.toString());
-                
-                connection.setDoOutput(true);
+
+                conn.setDoOutput(true);
                 OutputStreamWriter writer = 
-                        new OutputStreamWriter(connection.getOutputStream());
+                        new OutputStreamWriter(conn.getOutputStream());
                 writer.write(body.toString());
                 writer.flush();
                 writer.close();
             }
 
-            // response
+            // ------ response
+            InputStream inputStream;
+            int code = conn.getResponseCode();
+            if (code == HTTP_BAD_REQUEST || code == HTTP_NOT_FOUND)
+                inputStream = conn.getErrorStream();
+            else
+                inputStream = conn.getInputStream();
+            
+            if (inputStream == null)
+                return getResponse(code, "");
+            
             BufferedReader br = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-            
-            StringBuffer response = new StringBuffer();
-            
+                    new InputStreamReader(inputStream));
+
+            StringBuffer sb = new StringBuffer();
             String line;
             while ((line = br.readLine()) != null)
-                response.append(line);
+                sb.append(line);
             br.close();
 
-            return response.toString();
+            return getResponse(code, sb.toString());
 
-        } catch (IOException e) {
+        } catch (NullPointerException | IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    private Response getResponse(int code, String body) {
+        Response response = Response.builder()
+                .code(code)
+                .body(body)
+                .build();
+
+        LOG.info("Received code: {}", response.getCode());
+        if (body.isEmpty()) 
+            LOG.info("empty body");
+        else
+            LOG.info("Received body: {}", body);
+
+        return response;
     }
 }

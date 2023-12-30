@@ -35,7 +35,7 @@ public class ChatGPTClient {
                         .put("content", prompt))));
 
         return extractMessageFromJSONResponse(
-                httpClient.post(url, headers, body));
+                httpClient.post(url, headers, body).getBody());
     }
 
     private String extractMessageFromJSONResponse(String response) {

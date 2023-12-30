@@ -1,5 +1,7 @@
 package test.java.local;
 
+import static java.net.HttpURLConnection.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -35,6 +37,7 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
+import main.java.common.clients.HttpClient.Response;
 import main.java.common.file.FileServer;
 import main.java.common.models.JobState;
 import main.java.server.models.image.GetImageResponse;
@@ -87,13 +90,19 @@ public class LocalApplicationTests extends TestWithInjections {
                                 .put("prompt", "Write me a nice story about a farmer.")
                                 .put("numTokens", 2)));
 
-        String generatedId = httpClient.post(textsUrl, body);
+        Response response = httpClient.post(textsUrl, body);
+        assertEquals(HTTP_ACCEPTED, response.getCode());
+        
+        String generatedId = response.getBody();
 
 
         // -----get-----
         String getUrl = textsUrl + "/" + generatedId;
 
-        String getResponseString = httpClient.get(getUrl);
+        response =  httpClient.get(getUrl);
+        assertEquals(HTTP_OK, response.getCode());
+        
+        String getResponseString = response.getBody();
         GetTextResponse getResponse = gson.fromJson(
                 getResponseString, GetTextResponse.class);
 
@@ -114,7 +123,10 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         // -----make sure text is updated with results-----
-        String getResponseStringTwo = httpClient.get(getUrl);
+        response =  httpClient.get(getUrl);
+        assertEquals(HTTP_OK, response.getCode());
+        
+        String getResponseStringTwo = response.getBody();
         GetTextResponse getResponseTwo = gson.fromJson(
                 getResponseStringTwo, GetTextResponse.class);
 
@@ -124,10 +136,13 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         // -----delete-----
-        httpClient.delete(getUrl);
-        assertThrows(
-                RuntimeException.class,
-                () -> httpClient.get(getUrl));
+        response = httpClient.delete(getUrl);
+        assertEquals(HTTP_NO_CONTENT, response.getCode());
+        assertTrue(response.getBody().isEmpty(), "body not empty");
+        
+        response = httpClient.get(getUrl);
+        assertEquals(HTTP_NOT_FOUND, response.getCode());
+        assertTrue(response.getBody().isEmpty(), "body not empty");
     }
 
     @Test
@@ -149,7 +164,10 @@ public class LocalApplicationTests extends TestWithInjections {
 
         int count = 3;
         Set<String> generatedIds = IntStream.range(0, count).boxed().map(ignored -> {
-            return httpClient.post(textsUrl, body);
+            Response response = httpClient.post(textsUrl, body);
+            assertEquals(HTTP_ACCEPTED, response.getCode());
+            
+            return response.getBody();
         }).collect(Collectors.toSet());
 
         assertEquals(count, generatedIds.size());
@@ -163,7 +181,10 @@ public class LocalApplicationTests extends TestWithInjections {
         generatedIds.stream().forEach(generatedId -> {
             String getUrl = textsUrl + "/" + generatedId;
 
-            String getResponseString = httpClient.get(getUrl);
+            Response response = httpClient.get(getUrl);
+            assertEquals(HTTP_OK, response.getCode());
+            
+            String getResponseString = response.getBody();
             GetTextResponse getResponse = gson.fromJson(
                     getResponseString, GetTextResponse.class);
 
@@ -199,13 +220,19 @@ public class LocalApplicationTests extends TestWithInjections {
                                 .put("workflow", "fitnessAesthetics")
                                 .put("checkpoint", "realDream_8Legendary.safetensors")));
 
-        String generatedId = httpClient.post(imagesUrl, body);
+        Response response = httpClient.post(imagesUrl, body);
+        assertEquals(HTTP_ACCEPTED, response.getCode());
+        
+        String generatedId = response.getBody();
 
 
         // -----get-----
         String getUrl = imagesUrl + "/" + generatedId;
 
-        String getResponseString = httpClient.get(getUrl);
+        response = httpClient.get(getUrl);
+        assertEquals(HTTP_OK, response.getCode());
+        
+        String getResponseString = response.getBody();
         GetImageResponse getResponse = gson.fromJson(
                 getResponseString, GetImageResponse.class);
 
@@ -226,7 +253,10 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         // -----make sure image is updated with results-----
-        String getResponseStringTwo = httpClient.get(getUrl);
+        response = httpClient.get(getUrl);
+        assertEquals(HTTP_OK, response.getCode());
+        
+        String getResponseStringTwo = response.getBody();
         GetImageResponse getResponseTwo = gson.fromJson(
                 getResponseStringTwo, GetImageResponse.class);
 
@@ -278,10 +308,14 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
         // -----delete-----
-        httpClient.delete(getUrl);
-        assertThrows(
-                RuntimeException.class,
-                () -> httpClient.get(getUrl));        
+        response = httpClient.delete(getUrl);
+        assertEquals(HTTP_NO_CONTENT, response.getCode());
+        assertTrue(response.getBody().isEmpty(), "body not empty");
+        
+        response = httpClient.get(getUrl);
+        assertEquals(HTTP_NOT_FOUND, response.getCode());
+        assertTrue(response.getBody().isEmpty(), "body not empty");
+          
         assertTrue(!outputFile.exists(), "file is not yet deleted");
         assertThrows(
                 FileNotFoundException.class,
