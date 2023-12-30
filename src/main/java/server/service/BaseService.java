@@ -11,7 +11,7 @@ import main.java.server.mappers.Mapper;
 import main.java.server.models.BaseGetResponse;
 import main.java.server.models.BasePostRequest;
 
-abstract class BaseService<
+public abstract class BaseService<
 S extends BaseGetResponse, 
 T extends BasePostRequest, 
 U extends BaseDbModel> {

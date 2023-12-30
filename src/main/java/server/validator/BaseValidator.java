@@ -8,7 +8,7 @@ import io.javalin.validation.BodyValidator;
 import io.javalin.validation.ValidationError;
 import main.java.server.models.BasePostRequest;
 
-abstract class BaseValidator<T extends BasePostRequest> {
+public abstract class BaseValidator<T extends BasePostRequest> {
     
     private final Class<T> typeParameterClass;
     

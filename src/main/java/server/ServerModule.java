@@ -14,7 +14,7 @@ import main.java.server.models.image.GetImageResponse;
 import main.java.server.models.image.PostImageRequest;
 import main.java.server.models.text.GetTextResponse;
 import main.java.server.models.text.PostTextRequest;
-import main.java.server.request.RequestHandler;
+import main.java.server.request.CombinedRequestHandler;
 import main.java.server.validator.ImageValidator;
 import main.java.server.validator.TextValidator;
 
@@ -26,7 +26,7 @@ class ServerModule extends AbstractModule {
         bind(ZMQProducer.class).asEagerSingleton();
         
         // request
-        bind(RequestHandler.class).in(Singleton.class);
+        bind(CombinedRequestHandler.class).in(Singleton.class);
         
         // validators
         bind(TextValidator.class).in(Singleton.class);
