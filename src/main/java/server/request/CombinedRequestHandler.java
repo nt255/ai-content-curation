@@ -15,16 +15,22 @@ import io.javalin.Javalin;
 import io.javalin.validation.ValidationError;
 import io.javalin.validation.ValidationException;
 
-public class RequestHandler {
+/**
+ *  CombinedRequestHandler will register routes for all type specific request
+ *  handlers and also contains the ValidationException handler. JavalinServer
+ *  only has to call the methods in this class and not be concerned with the
+ *  individual types of request handlers or the exception handling logic.
+ */
+public class CombinedRequestHandler {
     
     private static final Logger LOG = 
-            LoggerFactory.getLogger(RequestHandler.class);
+            LoggerFactory.getLogger(CombinedRequestHandler.class);
 
     private final TextRequestHandler textRequestHandler;
     private final ImageRequestHandler imageRequestHandler;
 
     @Inject
-    public RequestHandler(
+    public CombinedRequestHandler(
             TextRequestHandler textRequestHandler, 
             ImageRequestHandler imageRequestHandler) {
 

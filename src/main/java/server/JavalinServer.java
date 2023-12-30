@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 import io.javalin.Javalin;
 import io.javalin.json.JsonMapper;
 import io.javalin.validation.JavalinValidation;
-import main.java.server.request.RequestHandler;
+import main.java.server.request.CombinedRequestHandler;
 
 class JavalinServer {
 
@@ -20,15 +20,15 @@ class JavalinServer {
 
     @Inject
     public JavalinServer(Gson gson, Properties properties,
-            RequestHandler requestHandler) {
+            CombinedRequestHandler combinedRequestHandler) {
         
         JavalinValidation.register(UUID.class, s -> UUID.fromString(s));
 
         this.javalin = Javalin.create(
                 config -> config.jsonMapper(getGsonMapper(gson)));
         
-        requestHandler.addRoutes(javalin);
-        requestHandler.addExceptionHandler(javalin);
+        combinedRequestHandler.addRoutes(javalin);
+        combinedRequestHandler.addExceptionHandler(javalin);
         
         int port = Integer.parseInt(
                 properties.getProperty("javalin.port"));
