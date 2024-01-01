@@ -6,7 +6,6 @@
 	<artifactId>aicontentcuration</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
-		<aws.sdk.version>1.12.629</aws.sdk.version>
 		<logback.version>1.4.14</logback.version>
 		<lombok.version>1.18.30</lombok.version>
 		<mongo.version>4.11.1</mongo.version>
