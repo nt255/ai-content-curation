@@ -6,8 +6,9 @@
 	<artifactId>aicontentcuration</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
-		<lombok.version>1.18.30</lombok.version>
+		<aws.sdk.version>1.12.629</aws.sdk.version>
 		<logback.version>1.4.14</logback.version>
+		<lombok.version>1.18.30</lombok.version>
 		<mongo.version>4.11.1</mongo.version>
 	</properties>
 	<build>
@@ -37,7 +38,42 @@
 			</plugin>
 		</plugins>
 	</build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>2.22.9</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>auth</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>aws-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>identity-spi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>sdk-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>utils</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

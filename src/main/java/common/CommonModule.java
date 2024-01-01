@@ -24,7 +24,7 @@ import main.java.common.db.dao.TextDao;
 import main.java.common.db.models.ImageDbModel;
 import main.java.common.db.models.TextDbModel;
 import main.java.common.file.FileServer;
-import main.java.common.file.LocalFileServer;
+import main.java.common.file.S3FileServer;
 
 public class CommonModule extends AbstractModule {
 
@@ -37,7 +37,7 @@ public class CommonModule extends AbstractModule {
         bind(HttpClient.class).in(Singleton.class);
 
         // file
-        bind(FileServer.class).to(LocalFileServer.class);
+        bind(FileServer.class).to(S3FileServer.class);
 
         // db
         bind(MongoDBClient.class).asEagerSingleton();

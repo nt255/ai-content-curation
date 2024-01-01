@@ -5,21 +5,28 @@
  * 
  */
 open module aicontentcuration {
-    requires lombok;
-    requires org.json;
-    requires com.google.guice;
-    requires jeromq;
-    requires com.google.gson;
-    requires org.slf4j;
-    requires org.mongodb.driver.sync.client;
-    requires org.mongodb.driver.core;
-    requires org.mongodb.bson;
-    requires io.javalin;
     requires ch.qos.logback.classic;
     requires ch.qos.logback.core;
-    requires org.jetbrains.annotations;
-    requires org.junit.jupiter.api;
+    requires com.google.gson;
+    requires com.google.guice;
     requires gpt4all.java.binding;
-    requires org.apache.commons.io;
+    requires io.javalin;
     requires java.desktop;
+    requires jeromq;
+    requires lombok;
+    requires org.apache.commons.io;
+    requires org.jetbrains.annotations;
+    requires org.json;
+    requires org.junit.jupiter.api;
+    requires org.mongodb.bson;
+    requires org.mongodb.driver.core;
+    requires org.mongodb.driver.sync.client;
+    requires org.slf4j;
+    requires software.amazon.awssdk.auth;
+    requires software.amazon.awssdk.awscore;
+    requires software.amazon.awssdk.core;
+    requires software.amazon.awssdk.identity.spi;
+    requires software.amazon.awssdk.regions;
+    requires software.amazon.awssdk.services.s3;
+    requires software.amazon.awssdk.utils;
 }

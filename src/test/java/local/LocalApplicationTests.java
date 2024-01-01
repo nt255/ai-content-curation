@@ -202,6 +202,9 @@ public class LocalApplicationTests extends TestWithInjections {
 
         Integer height = 16;
         Integer width = 16;
+        
+        String localOutputDirectory = 
+                properties.getProperty("local.output.directory");
 
         // -----create-----
         String port = properties.getProperty("javalin.port");
@@ -279,7 +282,8 @@ public class LocalApplicationTests extends TestWithInjections {
         // -----make sure file exists-----
         File outputFile = null;
         try {
-            outputFile = fileServer.downloadFile(outputFilename);
+            outputFile = fileServer.downloadFile(
+                    outputFilename, localOutputDirectory);
         } catch (FileNotFoundException e) {
             fail("unable to download file");
         }
@@ -316,9 +320,9 @@ public class LocalApplicationTests extends TestWithInjections {
         assertEquals(HTTP_NOT_FOUND, response.getCode());
         assertTrue(response.getBody().isEmpty(), "body not empty");
           
-        assertTrue(!outputFile.exists(), "file is not yet deleted");
         assertThrows(
                 FileNotFoundException.class,
-                () -> fileServer.downloadFile(outputFilename));     
+                () -> fileServer.downloadFile(
+                        outputFilename, localOutputDirectory));     
     }
 }
