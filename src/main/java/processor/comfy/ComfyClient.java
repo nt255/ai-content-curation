@@ -97,9 +97,9 @@ public class ComfyClient {
         LOG.info("Checking connection to Comfy.");
         try {
             httpClient.get(historyUrl);
-            LOG.info("Succesfully connected to comfy.");
+            LOG.info("Succesfully connected to Comfy.");
         } catch (RuntimeException e) {
-            LOG.error("Unable to connect to comfy.");
+            LOG.error("Unable to connect to Comfy.");
             e.printStackTrace();
         }
     }

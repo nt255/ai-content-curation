@@ -15,6 +15,11 @@ Automated AI Content Curation Pipeline
 	* --add-opens=io.javalin/io.javalin.validation=com.google.gson
 7. Run `LocalApplication`. Server and Processor can be run separately. VM arguments:
 	* --add-opens=io.javalin/io.javalin.validation=com.google.gson
+	
+# AWS
+
+1. Set environment variables in order to access S3 buckets.
+	* https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
 
 # General Conventions
 
@@ -22,6 +27,8 @@ Automated AI Content Curation Pipeline
 - Restrict visibility as much as possible.
 - Use Lombok and Guice injections.
 - Prefix abstract class names with "Base".
+- Use <ins>implementation</ins> names instead of interface names.
+     * (Use interface name only if there can be more than one impl for that interface.)
 
 # Eclipse Common Issues
 

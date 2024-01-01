@@ -39,11 +39,21 @@ public class LocalFileServer implements FileServer {
     }
 
     @Override
-    public File downloadFile(String name) throws FileNotFoundException {
+    public File downloadFile(String name, String targetPath) throws FileNotFoundException {
         File file = new File(localDirectory + name);
         if (!file.exists())
             throw new FileNotFoundException();
-        return file;
+        
+        if (localDirectory.equals(targetPath))
+            return file;    // no need to copy anything
+
+        File copied = new File(targetPath + name);
+        try {
+            FileUtils.copyFile(file, copied);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return copied;
     }
 
     @Override
