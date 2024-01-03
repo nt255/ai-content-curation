@@ -26,6 +26,8 @@ public class S3FileServer implements FileServer {
 
     private static final Logger LOG = 
             LoggerFactory.getLogger(S3FileServer.class);
+    
+    private static final String NO_SUCH_KEY = "NoSuchKey";
 
     private final String bucketName;
     private final S3Client s3;
@@ -88,7 +90,7 @@ public class S3FileServer implements FileServer {
             e.printStackTrace();
         } catch (S3Exception e) {
             LOG.error(e.awsErrorDetails().errorMessage());
-            if ("NoSuchKey".equals(e.awsErrorDetails().errorCode()))
+            if (NO_SUCH_KEY.equals(e.awsErrorDetails().errorCode()))
                 throw new FileNotFoundException();    
         }
 
@@ -109,7 +111,7 @@ public class S3FileServer implements FileServer {
             LOG.error(e.awsErrorDetails().errorMessage());
         }
 
-        LOG.info("Deleted!");
+        LOG.info("Deleted");
     }
 
 }
