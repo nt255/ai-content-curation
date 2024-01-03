@@ -5,15 +5,21 @@ import java.io.FileNotFoundException;
 
 public interface FileServer {
 
-    public void uploadFile(String name, String sourcePath);
+    /**
+     * Uploads file from sourceAbsolutePath to server as filename.
+     */
+    public void uploadFile(String filename, String sourceAbsolutePath);
 
     /**
-     * Downloads file with given name from source
-     * and copies it over to targetPath/name.
+     * Downloads filename from server and copies it over to 
+     * targetDirectory/name.
      */
-    public File downloadFile(String name, String targetPath) 
+    public File downloadFile(String filename, String targetDirectory) 
             throws FileNotFoundException;
 
-    public void deleteFile(String name);
+    /**
+     * Deletes filename from server.
+     */
+    public void deleteFile(String filename);
 
 }

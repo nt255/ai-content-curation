@@ -11,9 +11,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+/**
+ * Mock local only representation of a file server that just copies and deletes 
+ * files from a specified directory.
+ */
+@Deprecated
 public class LocalFileServer implements FileServer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LocalFileServer.class);
+    private static final Logger LOG = 
+            LoggerFactory.getLogger(LocalFileServer.class);
 
     private final String localDirectory;
 
