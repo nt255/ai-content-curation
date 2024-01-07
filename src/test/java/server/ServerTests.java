@@ -59,9 +59,42 @@ public class ServerTests extends TestWithInjections {
             e.printStackTrace();
         }
     }
+    
+    @Test
+    void textNotFoundResponseTest() {
+        String getUrl = textsUrl + "/" + UUID.randomUUID().toString();
+
+        Response response =  httpClient.get(getUrl);
+        assertEquals(HTTP_NOT_FOUND, response.getCode());
+        assertTrue(response.getBody().isEmpty(), "body not empty");
+    }
+    
+    @Test
+    void multipleStepsNotSupportedTest() {
+        JSONObject body = new JSONObject()
+                .put("type", "TEXT")
+                .put("state", "COMPLETED")
+                .put("params", new JSONArray()
+                        .put(new JSONObject()
+                                .put("type", "CREATE"))
+                        .put(new JSONObject()
+                                .put("type", "CREATE_HASHTAGS")));
+
+        Response response = httpClient.post(textsUrl, body);
+        JSONObject responseBody = new JSONObject(response.getBody());
+        JSONArray errors = responseBody.getJSONArray("errors");
+
+        assertEquals(HTTP_BAD_REQUEST, response.getCode());
+        assertEquals(1, errors.length());
+
+        assertEquals("MULTIPLE_STEPS_NOT_SUPPORTED", 
+                errors.getJSONObject(0).get("code"));
+        assertEquals("multiple steps are not supported", 
+                errors.getJSONObject(0).get("detail"));
+    }
 
     @Test
-    void notFoundResponseTest() {
+    void imageNotFoundResponseTest() {
         String getUrl = imagesUrl + "/" + UUID.randomUUID().toString();
 
         Response response =  httpClient.get(getUrl);
@@ -111,7 +144,7 @@ public class ServerTests extends TestWithInjections {
                 errors.getJSONObject(0).get("detail"));
 
         assertEquals("CREATE_IS_NOT_FIRST", errors.getJSONObject(1).get("code"));
-        assertEquals("create must appear first", 
+        assertEquals("create image must appear first", 
                 errors.getJSONObject(1).get("detail"));
     }
 

@@ -12,11 +12,11 @@ import com.google.inject.Inject;
 import main.java.common.db.dao.TextDao;
 import main.java.common.models.text.TextParams;
 import main.java.common.models.text.TextParamsType;
+import main.java.common.util.text.HashtagCleaner;
+import main.java.common.util.text.PromptBuilder;
 import main.java.processor.MultistepProcessor;
 import main.java.processor.gpt.GPT4AllBinding;
 import main.java.processor.models.ProcessorResult;
-import main.java.processor.text.util.HashtagCleaner;
-import main.java.processor.text.util.PromptBuilder;
 
 public class TextProcessor implements MultistepProcessor<TextParams> {
     

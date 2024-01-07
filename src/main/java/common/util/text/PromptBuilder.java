@@ -1,4 +1,4 @@
-package main.java.processor.text.util;
+package main.java.common.util.text;
 
 import lombok.Builder;
 import main.java.common.models.text.TextParamsType;

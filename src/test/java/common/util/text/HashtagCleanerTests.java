@@ -1,4 +1,4 @@
-package test.java.processor.text.util;
+package test.java.common.util.text;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.inject.Inject;
 
-import main.java.processor.text.util.HashtagCleaner;
+import main.java.common.util.text.HashtagCleaner;
 import test.java.TestWithInjections;
 
 public class HashtagCleanerTests extends TestWithInjections {
