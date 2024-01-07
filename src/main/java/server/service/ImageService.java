@@ -17,9 +17,9 @@ import main.java.server.models.image.PostImageRequest;
 import zmq.util.function.Optional;
 
 public class ImageService extends JobService<GetImageResponse, PostImageRequest, ImageDbModel> {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(ImageService.class);
-    
+
     private final FileServer fileServer;
 
     @Inject
@@ -27,11 +27,18 @@ public class ImageService extends JobService<GetImageResponse, PostImageRequest,
             BaseDao<ImageDbModel> dao, 
             JobMapper<GetImageResponse, PostImageRequest, ImageDbModel> mapper, 
             ZMQProducer producer, FileServer fileServer) {
-        
+
         super(dao, mapper, producer);
         this.fileServer = fileServer;
     }
-    
+
+    @Override
+    public UUID create(PostImageRequest model) {
+        UUID generatedId = super.create(model);
+        submitJob(generatedId, model);
+        return generatedId;
+    }
+
     @Override
     public void delete(UUID id) {
         get(id).ifPresentOrElse(

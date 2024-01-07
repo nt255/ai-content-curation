@@ -1,18 +1,20 @@
-package main.java.server.clients;
+package main.java.server.text;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.inject.Inject;
 
 import main.java.common.clients.HttpClient;
 
-import org.json.JSONArray;
-
-
+/**
+ * @deprecated use {@link TextGenerator TextGenerator.class} instead
+ */
+@Deprecated
 public class ChatGPTClient {
 
     @Inject private Properties properties;

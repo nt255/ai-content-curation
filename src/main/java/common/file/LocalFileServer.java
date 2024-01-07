@@ -14,6 +14,8 @@ import com.google.inject.Inject;
 /**
  * Mock local only representation of a file server that just copies and deletes 
  * files from a specified directory.
+ * 
+ * @deprecated use {@link S3FileServer S3FileServer.class} instead
  */
 @Deprecated
 public class LocalFileServer implements FileServer {

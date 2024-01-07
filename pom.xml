@@ -6,6 +6,7 @@
 	<artifactId>aicontentcuration</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
+		<langchain.version>0.25.0</langchain.version>
 		<logback.version>1.4.14</logback.version>
 		<lombok.version>1.18.30</lombok.version>
 		<mongo.version>4.11.1</mongo.version>
@@ -144,6 +145,16 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.15.1</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.langchain4j</groupId>
+			<artifactId>langchain4j-core</artifactId>
+			<version>${langchain.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.langchain4j</groupId>
+			<artifactId>langchain4j-open-ai</artifactId>
+			<version>${langchain.version}</version>
 		</dependency>
 	</dependencies>
 </project>
