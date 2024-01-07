@@ -33,14 +33,9 @@ U extends JobDbModel> extends BaseService<S, T, U> {
         this.producer = producer;
     }
     
-    @Override
-    public UUID create(T model) {
-        UUID generatedId = super.create(model);
-        
-        LOG.info("submitting job with id: {} to queue", generatedId);
-        producer.send(mapper.mapToZMQModel(generatedId, model));
-        
-        return generatedId;
+    final void submitJob(UUID id, T model) {
+        LOG.info("submitting job with id: {} to queue", id);
+        producer.send(mapper.mapToZMQModel(id, model));
     }
 
 }

@@ -13,6 +13,8 @@ open module aicontentcuration {
     requires io.javalin;
     requires java.desktop;
     requires jeromq;
+    requires langchain4j.core;
+    requires langchain4j.open.ai;
     requires lombok;
     requires org.apache.commons.io;
     requires org.jetbrains.annotations;

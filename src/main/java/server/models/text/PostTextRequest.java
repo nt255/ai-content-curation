@@ -15,5 +15,7 @@ public class PostTextRequest extends BasePostRequest {
     
     // input
     private final List<TextParams> params;
+    
+    private boolean isServiceCall;
 
 }
