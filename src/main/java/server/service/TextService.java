@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 
 import main.java.common.db.dao.TextDao;
 import main.java.common.db.models.TextDbModel;
+import main.java.common.models.text.TextParams;
 import main.java.common.mq.ZMQProducer;
 import main.java.server.mappers.JobMapper;
 import main.java.server.models.text.GetTextResponse;
@@ -37,17 +38,17 @@ public class TextService extends JobService<GetTextResponse, PostTextRequest, Te
         UUID generatedId = super.create(model);
         if (model.isServiceCall()) {
             LOG.info("using service call instead of processor.");
-            String prompt = model.getParams().get(0).getPrompt();
-            generateAndSaveText(generatedId, prompt);
+            generateAndSaveText(generatedId, model.getParams().get(0));
         }  
         else
             submitJob(generatedId, model);
         return generatedId;
     }
     
-    private void generateAndSaveText(UUID id, String prompt) {
+    private void generateAndSaveText(UUID id, TextParams params) {
         CompletableFuture.runAsync(() -> {
-            String outputText = textGenerator.generate(prompt);
+            String outputText = 
+                    textGenerator.generate(params).getOutputText();
             dao.update(id, outputText);
         });
     }

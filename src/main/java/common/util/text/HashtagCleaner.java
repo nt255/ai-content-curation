@@ -1,4 +1,4 @@
-package main.java.processor.text.util;
+package main.java.common.util.text;
 
 import java.util.ArrayList;
 import java.util.Collections;
