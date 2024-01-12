@@ -28,19 +28,24 @@ public class CombinedRequestHandler {
 
     private final TextRequestHandler textRequestHandler;
     private final ImageRequestHandler imageRequestHandler;
+    private final PostRequestHandler postRequestHandler;
+
 
     @Inject
     public CombinedRequestHandler(
             TextRequestHandler textRequestHandler, 
-            ImageRequestHandler imageRequestHandler) {
+            ImageRequestHandler imageRequestHandler,
+            PostRequestHandler postRequestHandler) {
 
         this.textRequestHandler = textRequestHandler;
         this.imageRequestHandler = imageRequestHandler;
+        this.postRequestHandler = postRequestHandler;
     }
 
     public void addRoutes(Javalin server) {
         textRequestHandler.addRoutes(server);
         imageRequestHandler.addRoutes(server);
+        postRequestHandler.addRoutes(server);
     }
 
     public void addExceptionHandler(Javalin server) {

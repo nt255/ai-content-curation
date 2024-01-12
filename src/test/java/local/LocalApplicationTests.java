@@ -41,6 +41,7 @@ import main.java.common.clients.HttpClient.Response;
 import main.java.common.file.FileServer;
 import main.java.common.models.JobState;
 import main.java.server.models.image.GetImageResponse;
+import main.java.server.models.post.GetPostResponse;
 import main.java.server.models.text.GetTextResponse;
 import test.java.TestWithInjections;
 
@@ -325,4 +326,54 @@ public class LocalApplicationTests extends TestWithInjections {
                 () -> fileServer.downloadFile(
                         outputFilename, localOutputDirectory));     
     }
+    
+    
+    @Test
+    void postFullFlowTest() {
+        // -----create-----
+        String port = properties.getProperty("javalin.port");
+        String url = "http://localhost:" + port;
+        String postsUrl = url + "/posts";
+
+        String uuidString = UUID.randomUUID().toString();
+        JSONObject body = new JSONObject()
+                .put("textJobId", uuidString)
+                .put("imageJobId", uuidString);
+
+        Response response = httpClient.post(postsUrl, body);
+        assertEquals(HTTP_ACCEPTED, response.getCode());
+        
+        String generatedId = response.getBody();
+
+
+        // -----get-----
+        String getUrl = postsUrl + "/" + generatedId;
+
+        response =  httpClient.get(getUrl);
+        assertEquals(HTTP_OK, response.getCode());
+        
+        GetPostResponse getResponse = gson.fromJson(
+                response.getBody(), GetPostResponse.class);
+
+        assertEquals(generatedId, getResponse.getId().toString());
+        
+        assertEquals(uuidString, getResponse.getTextJobId().toString());
+        assertEquals(uuidString, getResponse.getImageJobId().toString());
+
+        assertTrue(getResponse.getCreatedOn().isBefore(Instant.now()), 
+                "createdOn is not before current time");
+        assertTrue(getResponse.getLastModifiedOn().isBefore(Instant.now()), 
+                "lastModified is not before current time");
+
+
+        // -----delete-----
+        response = httpClient.delete(getUrl);
+        assertEquals(HTTP_NO_CONTENT, response.getCode());
+        assertTrue(response.getBody().isEmpty(), "body not empty");
+        
+        response = httpClient.get(getUrl);
+        assertEquals(HTTP_NOT_FOUND, response.getCode());
+        assertTrue(response.getBody().isEmpty(), "body not empty");
+    }
+    
 }

@@ -13,11 +13,6 @@ import main.java.common.models.JobState;
 @SuperBuilder
 public abstract class GetJobResponse extends BaseGetResponse {
     
-    final UUID id;
-    
-    final Instant createdOn;
-    final Instant lastModifiedOn;
-    
     final JobState state;
 
 }
