@@ -6,17 +6,29 @@ import com.google.inject.TypeLiteral;
 
 import main.java.common.db.models.ImageDbModel;
 import main.java.common.db.models.TextDbModel;
+import main.java.common.db.models.PostDbModel;
+
 import main.java.common.mq.ZMQProducer;
+
 import main.java.server.mappers.ImageMapper;
 import main.java.server.mappers.JobMapper;
+import main.java.server.mappers.Mapper;
+import main.java.server.mappers.PostMapper;
 import main.java.server.mappers.TextMapper;
-import main.java.server.models.image.GetImageResponse;
+
 import main.java.server.models.image.CreateImageRequest;
+import main.java.server.models.image.GetImageResponse;
+import main.java.server.models.post.CreatePostRequest;
+import main.java.server.models.post.GetPostResponse;
 import main.java.server.models.text.GetTextResponse;
 import main.java.server.models.text.CreateTextRequest;
+
 import main.java.server.request.CombinedRequestHandler;
+
 import main.java.server.validator.ImageValidator;
+import main.java.server.validator.PostValidator;
 import main.java.server.validator.TextValidator;
+
 
 class ServerModule extends AbstractModule {
 
@@ -31,6 +43,7 @@ class ServerModule extends AbstractModule {
         // validators
         bind(TextValidator.class).in(Singleton.class);
         bind(ImageValidator.class).in(Singleton.class);
+        bind(PostValidator.class).in(Singleton.class);
         
         
         // mappers
@@ -41,6 +54,10 @@ class ServerModule extends AbstractModule {
         bind(new TypeLiteral<
                 JobMapper<GetImageResponse, CreateImageRequest, ImageDbModel>>(){})
         .to(ImageMapper.class);
+        
+        bind(new TypeLiteral<
+                Mapper<GetPostResponse, CreatePostRequest, PostDbModel>>(){})
+        .to(PostMapper.class);
         
     }
 
