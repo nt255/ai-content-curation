@@ -20,6 +20,7 @@ Automated AI Content Curation Pipeline
 
 1. Set environment variables in order to access S3 buckets.
 	* https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
+2. If keys are properly set in environment variables but S3 complains that it can't be found, restarting Eclipse may potentially fix the issue.
 
 # General Conventions
 

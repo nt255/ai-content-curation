@@ -8,12 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.javalin.Javalin;
-import main.java.server.models.BasePostRequest;
+import main.java.server.models.BaseCreateRequest;
 import main.java.server.service.BaseService;
 import main.java.server.validator.BaseValidator;
 
 abstract class BaseRequestHandler<
-S extends BasePostRequest,
+S extends BaseCreateRequest,
 T extends BaseService<?, S, ?>, 
 U extends BaseValidator<S>> {
     

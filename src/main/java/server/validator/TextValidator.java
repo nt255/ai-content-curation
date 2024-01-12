@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.common.models.text.TextParams;
-import main.java.server.models.text.PostTextRequest;
+import main.java.server.models.text.CreateTextRequest;
 
-public class TextValidator extends BaseValidator<PostTextRequest> {
+public class TextValidator extends BaseValidator<CreateTextRequest> {
     
     public TextValidator() {
-        super(PostTextRequest.class);
+        super(CreateTextRequest.class);
     }
 
     @Override
-    List<ErrorCode> validate(PostTextRequest body) {
+    List<ErrorCode> validate(CreateTextRequest body) {
         List<ErrorCode> errorCodes = new ArrayList<>();
         
         List<TextParams> params = body.getParams();

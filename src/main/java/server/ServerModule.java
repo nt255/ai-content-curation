@@ -11,9 +11,9 @@ import main.java.server.mappers.ImageMapper;
 import main.java.server.mappers.JobMapper;
 import main.java.server.mappers.TextMapper;
 import main.java.server.models.image.GetImageResponse;
-import main.java.server.models.image.PostImageRequest;
+import main.java.server.models.image.CreateImageRequest;
 import main.java.server.models.text.GetTextResponse;
-import main.java.server.models.text.PostTextRequest;
+import main.java.server.models.text.CreateTextRequest;
 import main.java.server.request.CombinedRequestHandler;
 import main.java.server.validator.ImageValidator;
 import main.java.server.validator.TextValidator;
@@ -35,11 +35,11 @@ class ServerModule extends AbstractModule {
         
         // mappers
         bind(new TypeLiteral<
-                JobMapper<GetTextResponse, PostTextRequest, TextDbModel>>(){})
+                JobMapper<GetTextResponse, CreateTextRequest, TextDbModel>>(){})
         .to(TextMapper.class);
         
         bind(new TypeLiteral<
-                JobMapper<GetImageResponse, PostImageRequest, ImageDbModel>>(){})
+                JobMapper<GetImageResponse, CreateImageRequest, ImageDbModel>>(){})
         .to(ImageMapper.class);
         
     }

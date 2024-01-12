@@ -5,16 +5,16 @@ import java.util.List;
 
 import main.java.common.models.image.ImageParams;
 import main.java.common.models.image.ImageParamsType;
-import main.java.server.models.image.PostImageRequest;
+import main.java.server.models.image.CreateImageRequest;
 
-public class ImageValidator extends BaseValidator<PostImageRequest> {
+public class ImageValidator extends BaseValidator<CreateImageRequest> {
     
     public ImageValidator() {
-        super(PostImageRequest.class);
+        super(CreateImageRequest.class);
     }
 
     @Override
-    List<ErrorCode> validate(PostImageRequest body) {
+    List<ErrorCode> validate(CreateImageRequest body) {
         List<ErrorCode> errorCodes = new ArrayList<>();
         
         List<ImageParams> params = body.getParams();

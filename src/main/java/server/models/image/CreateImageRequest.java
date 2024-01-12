@@ -7,12 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import main.java.common.models.image.ImageParams;
-import main.java.server.models.BasePostRequest;
+import main.java.server.models.BaseCreateRequest;
 
 @Getter
 @Setter
 @SuperBuilder
-public class PostImageRequest extends BasePostRequest {
+public class CreateImageRequest extends BaseCreateRequest {
         
     // input
     private final UUID baseImageId;

@@ -13,9 +13,9 @@ import main.java.common.models.JobType;
 import main.java.common.models.image.ImageParams;
 import main.java.common.mq.ZMQModel;
 import main.java.server.models.image.GetImageResponse;
-import main.java.server.models.image.PostImageRequest;
+import main.java.server.models.image.CreateImageRequest;
 
-public class ImageMapper implements JobMapper<GetImageResponse, PostImageRequest, ImageDbModel> {
+public class ImageMapper implements JobMapper<GetImageResponse, CreateImageRequest, ImageDbModel> {
 
     @Inject private Gson gson;
 
@@ -34,7 +34,7 @@ public class ImageMapper implements JobMapper<GetImageResponse, PostImageRequest
     }
 
     @Override
-    public ImageDbModel mapToDBModel(UUID generatedId, PostImageRequest model) {
+    public ImageDbModel mapToDBModel(UUID generatedId, CreateImageRequest model) {
         return ImageDbModel.builder()
                 .id(generatedId)
                 .createdOn(Instant.now())
@@ -49,7 +49,7 @@ public class ImageMapper implements JobMapper<GetImageResponse, PostImageRequest
     }
 
     @Override
-    public ZMQModel mapToZMQModel(UUID generatedId, PostImageRequest model) {
+    public ZMQModel mapToZMQModel(UUID generatedId, CreateImageRequest model) {
         return ZMQModel.builder()
                 .id(generatedId)
                 .baseJobId(model.getBaseImageId())

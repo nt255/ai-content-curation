@@ -2,12 +2,12 @@ package main.java.server.request;
 
 import com.google.inject.Inject;
 
-import main.java.server.models.text.PostTextRequest;
+import main.java.server.models.text.CreateTextRequest;
 import main.java.server.service.TextService;
 import main.java.server.validator.TextValidator;
 
 class TextRequestHandler extends 
-BaseRequestHandler<PostTextRequest, TextService, TextValidator> {
+BaseRequestHandler<CreateTextRequest, TextService, TextValidator> {
     
     @Inject
     public TextRequestHandler(TextService textService, 

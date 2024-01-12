@@ -11,13 +11,13 @@ import main.java.common.db.dao.BaseDao;
 import main.java.common.db.models.JobDbModel;
 import main.java.common.mq.ZMQProducer;
 import main.java.server.mappers.JobMapper;
-import main.java.server.models.BasePostRequest;
+import main.java.server.models.BaseCreateRequest;
 import main.java.server.models.GetJobResponse;
 
 
 abstract class JobService<
 S extends GetJobResponse, 
-T extends BasePostRequest, 
+T extends BaseCreateRequest, 
 U extends JobDbModel> extends BaseService<S, T, U> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobService.class);

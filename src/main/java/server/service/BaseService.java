@@ -9,11 +9,11 @@ import main.java.common.db.dao.BaseDao;
 import main.java.common.db.models.BaseDbModel;
 import main.java.server.mappers.Mapper;
 import main.java.server.models.BaseGetResponse;
-import main.java.server.models.BasePostRequest;
+import main.java.server.models.BaseCreateRequest;
 
 public abstract class BaseService<
 S extends BaseGetResponse, 
-T extends BasePostRequest, 
+T extends BaseCreateRequest, 
 U extends BaseDbModel> {
 
     private final BaseDao<U> dao;
