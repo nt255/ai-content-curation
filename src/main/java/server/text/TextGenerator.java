@@ -18,14 +18,14 @@ import main.java.common.util.text.PromptBuilder;
 
 public class TextGenerator {
     
+    private static final Logger LOG = 
+            LoggerFactory.getLogger(TextGenerator.class);
+    
     @Builder
     @Getter
     public static class Result {
         private final String outputText;
     }
-    
-    private static final Logger LOG = 
-            LoggerFactory.getLogger(TextGenerator.class);
 
     private final OpenAiChatModel model;
     private final HashtagCleaner hashtagCleaner;

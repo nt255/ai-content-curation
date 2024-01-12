@@ -7,6 +7,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public abstract class BasePostRequest {
+public abstract class BaseCreateRequest {
     
 }

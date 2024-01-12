@@ -12,9 +12,9 @@ import main.java.common.models.JobType;
 import main.java.common.models.text.TextParams;
 import main.java.common.mq.ZMQModel;
 import main.java.server.models.text.GetTextResponse;
-import main.java.server.models.text.PostTextRequest;
+import main.java.server.models.text.CreateTextRequest;
 
-public class TextMapper implements JobMapper<GetTextResponse, PostTextRequest, TextDbModel> {
+public class TextMapper implements JobMapper<GetTextResponse, CreateTextRequest, TextDbModel> {
 
     @Inject private Gson gson;
 
@@ -32,7 +32,7 @@ public class TextMapper implements JobMapper<GetTextResponse, PostTextRequest, T
     }
 
     @Override
-    public TextDbModel mapToDBModel(UUID generatedId, PostTextRequest model) {
+    public TextDbModel mapToDBModel(UUID generatedId, CreateTextRequest model) {
         return TextDbModel.builder()
                 .id(generatedId)
                 .createdOn(Instant.now())
@@ -46,7 +46,7 @@ public class TextMapper implements JobMapper<GetTextResponse, PostTextRequest, T
     }
 
     @Override
-    public ZMQModel mapToZMQModel(UUID generatedId, PostTextRequest model) {
+    public ZMQModel mapToZMQModel(UUID generatedId, CreateTextRequest model) {
         return ZMQModel.builder()
                 .id(generatedId)
                 .jobType(JobType.TEXT)

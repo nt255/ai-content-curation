@@ -6,9 +6,9 @@ import java.util.Map;
 import io.javalin.http.Context;
 import io.javalin.validation.BodyValidator;
 import io.javalin.validation.ValidationError;
-import main.java.server.models.BasePostRequest;
+import main.java.server.models.BaseCreateRequest;
 
-public abstract class BaseValidator<T extends BasePostRequest> {
+public abstract class BaseValidator<T extends BaseCreateRequest> {
     
     private final Class<T> typeParameterClass;
     
@@ -23,15 +23,15 @@ public abstract class BaseValidator<T extends BasePostRequest> {
         // return specific error messages without having a lot of duplicated
         // code (e.g. iterating through List<ImageParams>.
         //
-        // Instead, we unpack postImageRequest from ctx first, run one large
+        // Instead, we unpack createImageRequest from ctx first, run one large
         // validation method, get all the errors, then for each of them add a 
         // check that will always fail to the original ctx. Either this or we'd 
         // have to handle errors manually outside of the exception handler.
         
         BodyValidator<T> bodyValidator = ctx.bodyValidator(typeParameterClass);
         
-        T postRequest = ctx.bodyAsClass(typeParameterClass);
-        List<ErrorCode> errorCodes = validate(postRequest);
+        T createRequest = ctx.bodyAsClass(typeParameterClass);
+        List<ErrorCode> errorCodes = validate(createRequest);
         
         errorCodes.stream()
         .map(this::getValidationError)

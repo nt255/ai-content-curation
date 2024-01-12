@@ -14,10 +14,10 @@ import main.java.common.models.text.TextParams;
 import main.java.common.mq.ZMQProducer;
 import main.java.server.mappers.JobMapper;
 import main.java.server.models.text.GetTextResponse;
-import main.java.server.models.text.PostTextRequest;
+import main.java.server.models.text.CreateTextRequest;
 import main.java.server.text.TextGenerator;
 
-public class TextService extends JobService<GetTextResponse, PostTextRequest, TextDbModel> {
+public class TextService extends JobService<GetTextResponse, CreateTextRequest, TextDbModel> {
     
     private static final Logger LOG = LoggerFactory.getLogger(TextService.class);
     
@@ -26,7 +26,7 @@ public class TextService extends JobService<GetTextResponse, PostTextRequest, Te
 
     @Inject
     public TextService(TextDao dao, 
-            JobMapper<GetTextResponse, PostTextRequest, TextDbModel> mapper, 
+            JobMapper<GetTextResponse, CreateTextRequest, TextDbModel> mapper, 
             ZMQProducer producer, TextGenerator textGenerator) {
         super(dao, mapper, producer);
         this.dao = dao;
@@ -34,7 +34,7 @@ public class TextService extends JobService<GetTextResponse, PostTextRequest, Te
     }
     
     @Override
-    public UUID create(PostTextRequest model) {
+    public UUID create(CreateTextRequest model) {
         UUID generatedId = super.create(model);
         if (model.isServiceCall()) {
             LOG.info("using service call instead of processor.");
