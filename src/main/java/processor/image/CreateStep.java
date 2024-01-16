@@ -27,7 +27,10 @@ class CreateStep implements Step<ImageParams> {
         comfyClient.loadWorkflow(step);
         comfyClient.queuePrompt();
 
-        return comfyFileManager.waitForGeneratedFile();
+        // hard-coded for now, to test
+        // this should always work, given that the directory is cleared after every task
+        // maybe also before the steps start iterating?
+        return comfyFileManager.waitForGeneratedFile("create_0001.jpg");
     }
 
 }

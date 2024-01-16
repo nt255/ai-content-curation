@@ -53,6 +53,7 @@ public class ImageProcessor implements MultistepProcessor<ImageParams> {
     @Override
     public ProcessorResult process(UUID id, List<ImageParams> steps) {
 
+    	comfyFileManager.clearDirectory();
         String localImagePath = "";
 
         for (ImageParams step : steps) {

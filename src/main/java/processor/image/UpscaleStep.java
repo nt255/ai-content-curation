@@ -28,6 +28,6 @@ class UpscaleStep implements Step<ImageParams> {
         comfyClient.loadUpscalerWorkflow(step);
         comfyClient.queuePrompt();
 
-        return comfyFileManager.waitForGeneratedFile();
+        return comfyFileManager.waitForGeneratedFile("upscale_0001.jpg");
     }
 }
