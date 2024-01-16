@@ -24,10 +24,10 @@ class UpscaleStep implements Step<ImageParams> {
             throw new IllegalStateException(
                     "UPSCALE must work on an existing image");
 
+        step.setImagePath(previousOutput);
         comfyClient.loadUpscalerWorkflow(step);
         comfyClient.queuePrompt();
 
         return comfyFileManager.waitForGeneratedFile();
     }
-
 }
