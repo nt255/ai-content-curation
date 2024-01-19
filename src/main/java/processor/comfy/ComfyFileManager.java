@@ -44,6 +44,22 @@ public class ComfyFileManager {
         }
         return Set.of();
     }
+    
+    private Set<String> getFile(String target) {
+        try (Stream<Path> stream = Files.list(Paths.get(workingDirectory))) {
+            return stream
+                    .filter(file -> !Files.isDirectory(file))
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .filter(fileName -> fileName.equals(target))
+                    .map(s -> workingDirectory + s)
+                    .collect(Collectors.toSet());
+        } catch (IOException e) {
+            LOG.error("comfy working directory not found!");
+            e.printStackTrace();
+        }
+        return Set.of();
+    }
 
     /**
      * Returns new files added since last checking working directory.
@@ -52,8 +68,8 @@ public class ComfyFileManager {
      * 
      * @return new files
      */
-    private Set<String> getNewFiles() {
-        Set<String> currentFiles = getCurrentFiles();
+    private Set<String> getNewFiles(String target) {
+    	Set<String> currentFiles = getFile(target);
         Set<String> copy = Set.copyOf(currentFiles);
         currentFiles.removeAll(files);
         files = copy;
@@ -62,7 +78,7 @@ public class ComfyFileManager {
         return currentFiles;
     }
 
-    public String waitForGeneratedFile() {
+    public String waitForGeneratedFile(String target) {
         LOG.info("waiting for new files(s) to be generated..");
         LOG.info("polling every second");
 
@@ -73,7 +89,7 @@ public class ComfyFileManager {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            generatedFiles = getNewFiles();
+            generatedFiles = getNewFiles(target);
         } while (generatedFiles.isEmpty());
         
         if (generatedFiles.size() > 1)

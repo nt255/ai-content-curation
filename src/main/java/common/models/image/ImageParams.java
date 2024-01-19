@@ -16,6 +16,10 @@ public class ImageParams extends BaseParams {
     
     private ImageParamsType type;
     
+    // these are used in upscaling and face-changing operations, respectively
+    private String imagePath;
+    private String faceImagePath;
+    
     private Integer height;
     private Integer width;
     private String checkpoint;

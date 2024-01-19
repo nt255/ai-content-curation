@@ -71,8 +71,8 @@ public class ComfyClient {
                     "Workflow has not been loaded correctly (it is null)! "
                             + "Check to see that workflow names are properly spelled.");
         
-        LOG.info("Deleting history.");
         clearQueueHistory();
+        LOG.info("Sending prompt to ComfyUI.");
         sendTask();
     }
 

@@ -91,7 +91,7 @@
   "14": {
     "inputs": {
       "output_path": "/comfyclient_output",
-      "filename_prefix": "test",
+      "filename_prefix": "create",
       "filename_delimiter": "_",
       "filename_number_padding": 4,
       "filename_number_start": "false",

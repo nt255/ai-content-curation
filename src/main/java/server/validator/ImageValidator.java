@@ -26,8 +26,8 @@ public class ImageValidator extends BaseValidator<CreateImageRequest> {
             ImageParamsType type = step.getType();
             
             if (ImageParamsType.UPSCALE.equals(type)) {
-                if (i == 0 && body.getBaseImageId() == null)
-                    errorCodes.add(ErrorCode.UPSCALE_IMAGE_MISSING);
+                if (i == 0 && body.getBaseImageId() == null) 
+                	errorCodes.add(ErrorCode.UPSCALE_IMAGE_MISSING);
             }
             
             else if (ImageParamsType.CREATE.equals(type)) {
@@ -37,5 +37,4 @@ public class ImageValidator extends BaseValidator<CreateImageRequest> {
         }
         return errorCodes;
     }
-
 }

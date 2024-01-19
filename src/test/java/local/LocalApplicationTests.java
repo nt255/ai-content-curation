@@ -120,7 +120,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
 
-        sleep(10L);
+        sleep(30L);
 
 
         // -----make sure text is updated with results-----
@@ -175,7 +175,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
 
-        sleep(10L);
+        sleep(30L);
 
 
         // -----get-----
@@ -253,7 +253,7 @@ public class LocalApplicationTests extends TestWithInjections {
 
 
 
-        sleep(10L);
+        sleep(30L);
 
 
         // -----make sure image is updated with results-----
