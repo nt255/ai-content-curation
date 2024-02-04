@@ -2,6 +2,15 @@
 
 Automated AI Content Curation Pipeline
 
+# Setup from scratch for Linux (with IntelliJ)
+
+1. Install IntelliJ Community Edition
+2. Install Lombok plugin and enable annotation processing.
+   * Had to go into `File > Project Structure > Module > Dependencies` and remove and re-add Lombok library.
+   * Otherwise, there was that module not found error.
+3. Install new JDK or link to existing one.
+4. Install MongoDB Compass.
+
 # Setup (for Eclipse)
 
 1. Install Eclipse
